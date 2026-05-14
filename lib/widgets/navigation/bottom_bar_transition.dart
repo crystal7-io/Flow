@@ -33,18 +33,23 @@ class _BottomBarTransition extends State<BottomBarTransition> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: DecoratedBox(
-        decoration: BoxDecoration(color: widget.backgroundColor),
-        child: Align(
-          alignment: Alignment.topLeft,
-          heightFactor: heightAnimation.value,
-          child: FractionalTranslation(
-            translation: offsetAnimation.value,
-            child: widget.child,
-          ),
-        ),
-      ),
-    );
+    return AnimatedBuilder(
+        animation: widget.animation,
+        builder: (context, child) {
+          return ClipRect(
+            child: DecoratedBox(
+              decoration: BoxDecoration(color: widget.backgroundColor),
+              child: Align(
+                alignment: Alignment.topLeft,
+                heightFactor: heightAnimation.value,
+                child: FractionalTranslation(
+                  translation: offsetAnimation.value,
+                  child: child,
+                ),
+              ),
+            ),
+          );
+        },
+        child: widget.child);
   }
 }

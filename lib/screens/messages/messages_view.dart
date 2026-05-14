@@ -1,10 +1,12 @@
+import 'package:animations/animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/models.dart';
+import 'package:redesigned/core/services/app_service.dart';
+import 'package:redesigned/core/utils/light_open_container.dart';
 import 'package:redesigned/data/mock_data.dart';
-import 'package:redesigned/widgets/utils/open_container.dart';
 import 'package:redesigned/screens/messages/chat/chat_view.dart';
 import 'package:redesigned/screens/messages/chat/chat_view_model.dart';
 import 'package:redesigned/screens/messages/messages_view_model.dart';
@@ -91,25 +93,22 @@ class MessageScreenMobile extends StatelessWidget {
               ],
             ),
           ),
-          ...viewModel.chatData.map((e) => OpenContainer(
-                useRootNavigator: true,
-                tappable: false,
-                transitionType: ContainerTransitionType.fade,
-                transitionDuration: Durations.medium3,
-                reverseTransitionDuration: Durations.short4,
-                middleColor: Theme.of(context).colorScheme.surface,
-                closedColor: Theme.of(context).colorScheme.surface,
+          ...viewModel.chatData.map((e) => LightOpenContainer(
+                useRootNavigator: false,
                 openColor: Theme.of(context).colorScheme.surface,
-                openElevation: 0,
-                closedElevation: 0,
-                clipBehavior: Clip.none,
+                closedColor: Theme.of(context).colorScheme.surface,
                 closedBuilder: (context, close) => ChatWidget(
                   chat: e,
                   openChat: () {
+                    context.read<AppService>().setNavBarVisible(false);
                     close();
                   },
                 ),
-                openBuilder: (context, _) => ChangeNotifierProvider<ChatViewModel>(
+                onClosed: (_) {
+                  context.read<AppService>().setNavBarVisible(true);
+                },
+                openBuilder: (context, _) =>
+                    ChangeNotifierProvider<ChatViewModel>(
                   create: (_) => ChatViewModel(e.person),
                   child: const ChatView(),
                 ),
@@ -322,39 +321,12 @@ class ChatWidget extends StatelessWidget {
   final VoidCallback openChat;
   final Chat chat;
 
-  Widget _chatBottomSheet(BuildContext context) => ListView(
-        physics: const ClampingScrollPhysics(),
-        shrinkWrap: true,
-        children: [
-          ListTile(
-            onTap: () {},
-            leading: const Icon(Icons.attach_file_outlined),
-            title: const Text("Send Attachment"),
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(Icons.archive_outlined),
-            title: const Text("Archive"),
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(Icons.message_outlined),
-            title: const Text("Mute Messages"),
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(Symbols.delete_outline),
-            title: const Text("Delete"),
-          ),
-        ],
-      );
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: openChat,
       child: Padding(
-          padding: const EdgeInsets.only(left: 8, top: 4, bottom: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: [
               Padding(
@@ -420,19 +392,6 @@ class ChatWidget extends StatelessWidget {
                         fontSize: 12,
                         color: Theme.of(context).colorScheme.onSurfaceVariant),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                          isScrollControlled: true,
-                          useRootNavigator: true,
-                          showDragHandle: true,
-                          isDismissible: true,
-                          enableDrag: true,
-                          context: context,
-                          builder: (context) => _chatBottomSheet(context));
-                    },
-                    icon: const Icon(Icons.more_vert),
-                  )
                 ],
               )
             ],
@@ -446,13 +405,9 @@ class MessageSearchAnchor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OpenContainer(
-        transitionType: ContainerTransitionType.fadeThrough,
-        middleColor: Theme.of(context).colorScheme.surface,
-        closedShape: const CircleBorder(),
-        closedColor: Colors.transparent,
-        openElevation: 0,
-        closedElevation: 0,
+    return LightOpenContainer(
+        openColor: Theme.of(context).colorScheme.surface,
+        closedColor: Theme.of(context).colorScheme.surface,
         closedBuilder: (context, openContainer) => SizedBox(
               height: 45,
               width: 45,
@@ -463,9 +418,10 @@ class MessageSearchAnchor extends StatelessWidget {
                     weight: 600,
                   )),
             ),
-        openBuilder: (context, controller) => ChangeNotifierProvider<SearchMessageViewModel>(
-          create: (_) => SearchMessageViewModel(),
-          child: const SearchMessageView(),
-        ));
+        openBuilder: (context, controller) =>
+            ChangeNotifierProvider<SearchMessageViewModel>(
+              create: (_) => SearchMessageViewModel(),
+              child: const SearchMessageView(),
+            ));
   }
 }

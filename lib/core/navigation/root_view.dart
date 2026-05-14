@@ -52,10 +52,16 @@ class _RootViewState extends State<RootView>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _updateNavigation();
+  }
 
+  void _updateNavigation() {
     final double width = MediaQuery.of(context).size.width;
     final AnimationStatus status = _controller.status;
-    if (width > 600) {
+
+    final bool shouldShow = width > 600;
+
+    if (shouldShow) {
       if (status != AnimationStatus.forward &&
           status != AnimationStatus.completed) {
         _controller.forward();
@@ -68,7 +74,7 @@ class _RootViewState extends State<RootView>
     }
     if (!controllerInitialized) {
       controllerInitialized = true;
-      _controller.value = width > 600 ? 1 : 0;
+      _controller.value = shouldShow ? 1 : 0;
     }
   }
 
@@ -151,52 +157,35 @@ class _RootViewState extends State<RootView>
         child: const Icon(Icons.add),
       );
 
-  Widget messageFAB() => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FloatingActionButton.small(
-            heroTag: "fab2",
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
-            onPressed: () {},
-            child: Icon(
-              Icons.videocam_outlined,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          const SizedBox(height: 8),
-          container_transform.OpenContainer(
-              transitionType:
-                  container_transform.ContainerTransitionType.fadeThrough,
-              transitionDuration: Durations.medium4,
-              reverseTransitionDuration: Durations.short4,
-              openColor: Theme.of(context).colorScheme.surface,
-              middleColor: Theme.of(context).colorScheme.primaryContainer,
-              closedColor: Theme.of(context).colorScheme.primaryContainer,
-              openElevation: 0,
-              clipBehavior: Clip.none,
-              closedShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28)),
-              closedElevation: 0,
-              closedBuilder: (context, openContainer) =>
-                  FloatingActionButton.extended(
-                      heroTag: 'myfab',
-                      onPressed: () {
-                        openContainer();
-                      },
-                      icon: const Icon(Icons.edit_outlined),
-                      label: const Text("Chat")),
-              openBuilder: (context, controller) =>
-                  ChangeNotifierProvider<NewChatViewModel>(
-                      create: (_) => NewChatViewModel(),
-                      child: const NewChatView()))
-        ],
-      );
+  Widget messageFAB() => container_transform.OpenContainer(
+      transitionType: container_transform.ContainerTransitionType.fadeThrough,
+      transitionDuration: Durations.long1,
+      reverseTransitionDuration: Durations.short4,
+      openColor: Theme.of(context).colorScheme.surface,
+      middleColor: Theme.of(context).colorScheme.surface,
+      closedColor: Theme.of(context).colorScheme.primaryContainer,
+      openElevation: 0,
+      clipBehavior: Clip.none,
+      closedShape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      closedElevation: 0,
+      closedBuilder: (context, openContainer) => FloatingActionButton.extended(
+          heroTag: 'myfab',
+          onPressed: () {
+            openContainer();
+          },
+          icon: const Icon(Icons.edit_outlined),
+          label: const Text("Chat")),
+      openBuilder: (context, controller) =>
+          ChangeNotifierProvider<NewChatViewModel>(
+              create: (_) => NewChatViewModel(), child: const NewChatView()));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: MediaQuery.sizeOf(context).width > 600
+      floatingActionButton: !context.watch<AppService>().isNavBarVisible ||
+              // ? const SizedBox()
+              MediaQuery.sizeOf(context).width > 600
           ? null
           : AnimatedSwitcher(
               switchInCurve: Easing.emphasizedDecelerate,
@@ -220,61 +209,88 @@ class _RootViewState extends State<RootView>
                       ? messageFAB()
                       : const SizedBox(),
             ),
-      bottomNavigationBar: DisappearingBottomNavigationBar(
-        barAnimation: _barAnimation,
-        selectedIndex: currentIndex,
-        onDestinationSelected: (int index) {
-          if (currentIndex != index) {
-            switch (index) {
-              case 0:
-                context.go('/home');
-                break;
-              case 1:
-                context.go('/stories');
-              case 2:
-                context.go('/messages');
-                break;
-              case 3:
-                context.go('/notification');
-                break;
-              case 4:
-                context.go('/settings');
-                break;
-            }
-            setState(() {
-              currentIndex = index;
-            });
-          }
-        },
+      bottomNavigationBar: AnimatedSwitcher(
+        duration: Durations.medium3,
+        transitionBuilder: (child, animation) => SizeTransition(
+          sizeFactor: animation,
+          axisAlignment: 1,
+          child: child,
+        ),
+        child: context.watch<AppService>().isNavBarVisible
+            ? RepaintBoundary(
+                child: DisappearingBottomNavigationBar(
+                  key: const ValueKey('bottom_bar'),
+                  barAnimation: _barAnimation,
+                  selectedIndex: currentIndex,
+                  onDestinationSelected: (int index) {
+                    if (currentIndex != index) {
+                      switch (index) {
+                        case 0:
+                          context.go('/home');
+                          break;
+                        case 1:
+                          context.go('/stories');
+                        case 2:
+                          context.go('/messages');
+                          break;
+                        case 3:
+                          context.go('/notification');
+                          break;
+                        case 4:
+                          context.go('/settings');
+                          break;
+                      }
+                      setState(() {
+                        currentIndex = index;
+                      });
+                    }
+                  },
+                ),
+              )
+            : const SizedBox(key: ValueKey('empty_bar')),
       ),
       body: Row(
         children: [
-          DisappearingNavigationRail(
-            railAnimation: _railAnimation,
-            railFabAnimation: _railFabAnimation,
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (index) {
-              setState(() {
-                selectedIndex = index;
-                switch (index) {
-                  case 0:
-                    context.go('/home');
-                    break;
-                  case 1:
-                    context.go('/reels');
-                  case 2:
-                    context.go('/messages');
-                    break;
-                  case 3:
-                    context.go('/notification');
-                    break;
-                  case 4:
-                    context.go('/settings');
-                    break;
-                  default:
-                }
-              });
-            },
+          AnimatedSwitcher(
+            duration: Durations.short4,
+            transitionBuilder: (child, animation) => SizeTransition(
+              sizeFactor: animation,
+              axis: Axis.horizontal,
+              axisAlignment: -1,
+              child: child,
+            ),
+            child: context.watch<AppService>().isNavBarVisible
+                ? RepaintBoundary(
+                    child: DisappearingNavigationRail(
+                      key: const ValueKey('nav_rail'),
+                      railAnimation: _railAnimation,
+                      railFabAnimation: _railFabAnimation,
+                      selectedIndex: selectedIndex,
+                      onDestinationSelected: (index) {
+                        setState(() {
+                          selectedIndex = index;
+                          switch (index) {
+                            case 0:
+                              context.go('/home');
+                              break;
+                            case 1:
+                              context.go('/reels');
+                            case 2:
+                              context.go('/messages');
+                              break;
+                            case 3:
+                              context.go('/notification');
+                              break;
+                            case 4:
+                              context.go('/settings');
+                              break;
+                            default:
+                          }
+                        });
+                      },
+                    ),
+                  )
+                : const SizedBox(key: ValueKey('empty_rail')),
           ),
           Expanded(child: widget.child)
         ],

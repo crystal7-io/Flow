@@ -13,7 +13,18 @@ class ChatViewModel extends ChangeNotifier {
   String _currentInput = "";
   String get currentInput => _currentInput;
 
-  ChatViewModel(this.person);
+  bool _isLoaded = false;
+  bool get isLoaded => _isLoaded;
+
+  ChatViewModel(this.person) {
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    _isLoaded = true;
+    notifyListeners();
+  }
 
   void onInputChanged(String value) {
     _currentInput = value;
@@ -50,7 +61,23 @@ class ChatViewModel extends ChangeNotifier {
   }
 
   List<String> get emojiList => [
-        "❤️", "👍", "🎉", "💀", "😀", "😄", "😁", "😂", "🤣", "😊",
-        "😇", "😉", "😍", "🥰", "🤗", "🤓", "😎", "🥳",
+        "❤️",
+        "👍",
+        "🎉",
+        "💀",
+        "😀",
+        "😄",
+        "😁",
+        "😂",
+        "🤣",
+        "😊",
+        "😇",
+        "😉",
+        "😍",
+        "🥰",
+        "🤗",
+        "🤓",
+        "😎",
+        "🥳",
       ];
 }

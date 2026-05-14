@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -38,10 +35,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return linux;
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -51,10 +45,19 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDx40X9j8dKSw3jn4cLvM4_db_4V24ZhLo',
-    appId: '1:982890941132:android:e9b7c08ec90f914c5c1069',
+    appId: '1:982890941132:android:99051c920519f0d45c1069',
     messagingSenderId: '982890941132',
     projectId: 'flow-xz',
     storageBucket: 'flow-xz.firebasestorage.app',
+  );
+
+  static const FirebaseOptions linux = FirebaseOptions(
+    apiKey: 'AIzaSyBXNZj-lmfHQLGZPUnwZz6VCvqnysxpzK8',
+    appId: '1:982890941132:web:298be5960176e6225c1069',
+    messagingSenderId: '982890941132',
+    projectId: 'flow-xz',
+    storageBucket: 'flow-xz.firebasestorage.app',
+    authDomain: 'flow-xz.firebaseapp.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -63,8 +66,18 @@ class DefaultFirebaseOptions {
     messagingSenderId: '982890941132',
     projectId: 'flow-xz',
     storageBucket: 'flow-xz.firebasestorage.app',
-    iosClientId: '982890941132-0d3acvft2h7vjjbq2ntjppgf15019ivj.apps.googleusercontent.com',
+    iosClientId:
+        '982890941132-0d3acvft2h7vjjbq2ntjppgf15019ivj.apps.googleusercontent.com',
     iosBundleId: 'com.example.redesigned',
   );
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBXNZj-lmfHQLGZPUnwZz6VCvqnysxpzK8',
+    appId: '1:982890941132:web:298be5960176e6225c1069',
+    messagingSenderId: '982890941132',
+    projectId: 'flow-xz',
+    authDomain: 'flow-xz.firebaseapp.com',
+    storageBucket: 'flow-xz.firebasestorage.app',
+    measurementId: 'G-KY314F881C',
+  );
 }

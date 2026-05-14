@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -47,62 +48,42 @@ class SettingsView extends StatelessWidget {
             icon: Icons.data_usage_outlined,
             title: "Activity",
             subtitle: "App usage and your activity",
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ActivityScreen()),
-            ),
+            onTap: () => _pushSharedAxis(context, const ActivityScreen()),
           ),
           _buildSettingsTile(
             context,
             icon: Icons.auto_awesome_outlined,
             title: "Preferences",
             subtitle: "Theme, Language and more",
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const PreferencesScreen()),
-            ),
+            onTap: () => _pushSharedAxis(context, const PreferencesScreen()),
           ),
           _buildSettingsTile(
             context,
             icon: Icons.notifications_outlined,
             title: "Notifications",
             subtitle: "Manage app notifications",
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const NotificationSettingsScreen()),
-            ),
+            onTap: () => _pushSharedAxis(context, const NotificationSettingsScreen()),
           ),
           _buildSettingsTile(
             context,
             icon: Icons.gpp_good_outlined,
             title: "Privacy and Secrecy",
             subtitle: "Who can see your content",
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const PrivacyScreen()),
-            ),
+            onTap: () => _pushSharedAxis(context, const PrivacyScreen()),
           ),
           _buildSettingsTile(
             context,
             icon: MdiIcons.heartMultipleOutline,
             title: "Your Interests",
             subtitle: "Control what you see",
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const InterestsScreen()),
-            ),
+            onTap: () => _pushSharedAxis(context, const InterestsScreen()),
           ),
           _buildSettingsTile(
             context,
             icon: Icons.people_alt_outlined,
             title: "Interactions",
             subtitle: "How others interact with you",
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const InteractionsScreen()),
-            ),
+            onTap: () => _pushSharedAxis(context, const InteractionsScreen()),
           ),
           _buildSettingsTile(
             context,
@@ -140,6 +121,22 @@ class SettingsView extends StatelessWidget {
     );
   }
 
+  void _pushSharedAxis(BuildContext context, Widget screen) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => screen,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return SharedAxisTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.horizontal,
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildSettingsTile(
     BuildContext context, {
     required IconData icon,
@@ -160,3 +157,4 @@ class SettingsView extends StatelessWidget {
     );
   }
 }
+

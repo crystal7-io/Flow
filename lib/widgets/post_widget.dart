@@ -8,12 +8,14 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 // import 'package:media_kit_video/media_kit_video.dart';
 import 'package:redesigned/core/models/account.dart';
 import 'package:redesigned/core/models/post.dart';
+import 'package:redesigned/core/utils/format_post_timestamp.dart';
 import 'package:redesigned/data/mock_data.dart';
 import 'package:redesigned/widgets/save_post_sheet.dart';
 import 'package:redesigned/widgets/comment_sheet.dart';
 import 'package:redesigned/widgets/post_viewer.dart';
 import 'package:redesigned/widgets/profile_bottomsheet.dart';
 import 'package:redesigned/widgets/share_sheet.dart';
+import 'package:redesigned/widgets/utils/m3expressive/expressive_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -33,349 +35,527 @@ class _MobilePostState extends State<MobilePost> {
   bool saved = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(14)),
-          color: Theme.of(context).colorScheme.surfaceContainerLow),
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 8, top: 8, bottom: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                    onTap: () {
-                      Account acc =
-                          getAccountFromUserName(widget.post.person.userName);
-                      showModalBottomSheet(
-                          showDragHandle: true,
-                          useRootNavigator: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return ProfileBottomsheet(acc: acc);
-                          });
-                    },
-                    child: Row(
-                      children: [
-                        CachedNetworkImage(
-                          height: 36,
-                          width: 36,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                          placeholderFadeInDuration: const Duration(seconds: 0),
-                          placeholder: (context, url) => Icon(
-                              Icons.account_circle_rounded,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant),
-                          fit: BoxFit.contain,
-                          imageUrl: widget.post.person.pfpPath,
-                        ),
-                        const SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.post.person.name,
-                              style: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              widget.post.person.userName,
-                              style: const TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600),
-                            )
-                          ],
-                        )
-                      ],
-                    )),
-                Row(
-                  children: [
-                    Text(
-                      "3 hrs",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.outline),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          showModalBottomSheet<void>(
-                              context: context,
-                              isScrollControlled: true,
-                              useRootNavigator: true,
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.surface,
-                              showDragHandle: true,
-                              builder: (BuildContext context) {
-                                return ListView(
-                                  shrinkWrap: true,
-                                  children: [
-                                    Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 12, vertical: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            SizedBox(
-                                                height: 50,
-                                                width: 150,
-                                                child: FilledButton.tonalIcon(
-                                                    onPressed: () {},
-                                                    icon: const Icon(Icons
-                                                        .play_circle_outline),
-                                                    label: const Text(
-                                                      "Remix",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ))),
-                                            const SizedBox(
-                                              width: 16,
-                                            ),
-                                            SizedBox(
-                                                height: 50,
-                                                width: 150,
-                                                child: FilledButton.tonalIcon(
-                                                    onPressed: () {},
-                                                    icon: const Icon(
-                                                        Icons.qr_code),
-                                                    label: const Text(
-                                                      "QR Code",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ))),
-                                          ],
-                                        )),
-                                    const Divider(),
-                                    ListItem(
-                                      leading: const Icon(
-                                          Icons.visibility_off_outlined),
-                                      title: "Not interested",
-                                      onTap: () {},
-                                    ),
-                                    ListItem(
-                                      leading: const Icon(Icons.error_outline),
-                                      title: "About this post",
-                                      onTap: () {},
-                                    ),
-                                    ListItem(
-                                      leading: const Icon(Icons.tune_outlined),
-                                      title: "Manage suggested content",
-                                      onTap: () {},
-                                    ),
-                                    ListItem(
-                                      color:
-                                          Theme.of(context).colorScheme.error,
-                                      leading:
-                                          const Icon(Icons.warning_amber_sharp),
-                                      title: "Report this post",
-                                      onTap: () {},
-                                    ),
-                                  ],
-                                );
-                              });
-                        },
-                        icon: const Icon(Icons.more_vert))
-                  ],
-                )
-              ],
-            ),
-          ),
-          widget.post.type == PostType.image
-              ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
-              : widget.post.type == PostType.carosel
-                  ? CarouselPostWidget(
-                      imagePost: widget.post as CarouselPostObject)
-                  : ReelPost(post: widget.post as ReelPostObject),
-          // : ReelPost(post: widget.post as ReelPostObject),
-          const SizedBox(height: 10),
-          Row(
+    // return Container(
+    //   decoration: BoxDecoration(
+    //       borderRadius: const BorderRadius.all(Radius.circular(14)),
+    //       color: Theme.of(context).colorScheme.surfaceContainerLow),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.center,
+    //     children: <Widget>[
+    //       Padding(
+    //         padding: const EdgeInsets.only(left: 8, top: 8, bottom: 12),
+    //         child: Row(
+    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //           children: [
+    //             GestureDetector(
+    //                 onTap: () {
+    //                   Account acc =
+    //                       getAccountFromUserName(widget.post.person.userName);
+    //                   showModalBottomSheet(
+    //                       showDragHandle: true,
+    //                       useRootNavigator: true,
+    //                       context: context,
+    //                       builder: (BuildContext context) {
+    //                         return ProfileBottomsheet(acc: acc);
+    //                       });
+    //                 },
+    //                 child: Row(
+    //                   children: [
+    //                     CachedNetworkImage(
+    //                       height: 36,
+    //                       width: 36,
+    //                       errorWidget: (context, url, error) =>
+    //                           const Icon(Icons.error),
+    //                       placeholderFadeInDuration: const Duration(seconds: 0),
+    //                       placeholder: (context, url) => Icon(
+    //                           Icons.account_circle_rounded,
+    //                           color: Theme.of(context)
+    //                               .colorScheme
+    //                               .onSurfaceVariant),
+    //                       fit: BoxFit.contain,
+    //                       imageUrl: widget.post.person.pfpPath,
+    //                     ),
+    //                     const SizedBox(width: 8),
+    //                     Column(
+    //                       crossAxisAlignment: CrossAxisAlignment.start,
+    //                       children: [
+    //                         Text(
+    //                           widget.post.person.name,
+    //                           style: const TextStyle(
+    //                               fontSize: 14, fontWeight: FontWeight.w600),
+    //                         ),
+    //                         Text(
+    //                           widget.post.person.userName,
+    //                           style: const TextStyle(
+    //                               fontSize: 12, fontWeight: FontWeight.w600),
+    //                         )
+    //                       ],
+    //                     )
+    //                   ],
+    //                 )),
+    //             Row(
+    //               children: [
+    //                 Text(
+    //                   "3 hrs",
+    //                   style: TextStyle(
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w600,
+    //                       color: Theme.of(context).colorScheme.outline),
+    //                 ),
+    //                 const SizedBox(
+    //                   width: 8,
+    //                 ),
+    //                 IconButton(
+    //                     onPressed: () {
+    //                       showModalBottomSheet<void>(
+    //                           context: context,
+    //                           isScrollControlled: true,
+    //                           useRootNavigator: true,
+    //                           backgroundColor:
+    //                               Theme.of(context).colorScheme.surface,
+    //                           showDragHandle: true,
+    //                           builder: (BuildContext context) {
+    //                             return ListView(
+    //                               shrinkWrap: true,
+    //                               children: [
+    //                                 Padding(
+    //                                     padding: const EdgeInsets.symmetric(
+    //                                         horizontal: 12, vertical: 8),
+    //                                     child: Row(
+    //                                       mainAxisAlignment:
+    //                                           MainAxisAlignment.spaceEvenly,
+    //                                       children: [
+    //                                         SizedBox(
+    //                                             height: 50,
+    //                                             width: 150,
+    //                                             child: FilledButton.tonalIcon(
+    //                                                 onPressed: () {},
+    //                                                 icon: const Icon(Icons
+    //                                                     .play_circle_outline),
+    //                                                 label: const Text(
+    //                                                   "Remix",
+    //                                                   style: TextStyle(
+    //                                                       fontWeight:
+    //                                                           FontWeight.w600),
+    //                                                 ))),
+    //                                         const SizedBox(
+    //                                           width: 16,
+    //                                         ),
+    //                                         SizedBox(
+    //                                             height: 50,
+    //                                             width: 150,
+    //                                             child: FilledButton.tonalIcon(
+    //                                                 onPressed: () {},
+    //                                                 icon: const Icon(
+    //                                                     Icons.qr_code),
+    //                                                 label: const Text(
+    //                                                   "QR Code",
+    //                                                   style: TextStyle(
+    //                                                       fontWeight:
+    //                                                           FontWeight.w600),
+    //                                                 ))),
+    //                                       ],
+    //                                     )),
+    //                                 const Divider(),
+    //                                 ListItem(
+    //                                   leading: const Icon(
+    //                                       Icons.visibility_off_outlined),
+    //                                   title: "Not interested",
+    //                                   onTap: () {},
+    //                                 ),
+    //                                 ListItem(
+    //                                   leading: const Icon(Icons.error_outline),
+    //                                   title: "About this post",
+    //                                   onTap: () {},
+    //                                 ),
+    //                                 ListItem(
+    //                                   leading: const Icon(Icons.tune_outlined),
+    //                                   title: "Manage suggested content",
+    //                                   onTap: () {},
+    //                                 ),
+    //                                 ListItem(
+    //                                   color:
+    //                                       Theme.of(context).colorScheme.error,
+    //                                   leading:
+    //                                       const Icon(Icons.warning_amber_sharp),
+    //                                   title: "Report this post",
+    //                                   onTap: () {},
+    //                                 ),
+    //                               ],
+    //                             );
+    //                           });
+    //                     },
+    //                     icon: const Icon(Icons.more_vert))
+    //               ],
+    //             )
+    //           ],
+    //         ),
+    //       ),
+    //       widget.post.type == PostType.image
+    //           ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
+    //           : widget.post.type == PostType.carosel
+    //               ? CarouselPostWidget(
+    //                   imagePost: widget.post as CarouselPostObject)
+    //               : ReelPost(post: widget.post as ReelPostObject),
+    //       // : ReelPost(post: widget.post as ReelPostObject),
+    //       const SizedBox(height: 10),
+    //       Row(
+    //         children: [
+    //           const SizedBox(width: 12),
+    //           Expanded(
+    //             child: Text(
+    //               textAlign: TextAlign.left,
+    //               maxLines: 2,
+    //               overflow: TextOverflow.ellipsis,
+    //               widget.post.subTitle,
+    //               style: const TextStyle(
+    //                   fontSize: 14,
+    //                   fontWeight: FontWeight.w500,
+    //                   letterSpacing: 0),
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //       const SizedBox(height: 12),
+    //       Row(
+    //         mainAxisSize: MainAxisSize.max,
+    //         children: [
+    //           const SizedBox(width: 12),
+    //           SelectButton(
+    //             isSelected: liked,
+    //             selectedColor: Colors.red,
+    //             onPressed: () {
+    //               setState(() {
+    //                 liked = !liked;
+    //               });
+    //             },
+    //             title: "2.3K",
+    //             selectedIcon: Icons.favorite,
+    //             unselectedIcon: Icons.favorite_outline,
+    //           ),
+    //           const SizedBox(width: 12),
+    //           SizedBox(
+    //               height: 40,
+    //               child: IconButton.filledTonal(
+    //                   onPressed: () {
+    //                     showFlexibleBottomSheet(
+    //                         useRootNavigator: true,
+    //                         context: context,
+    //                         anchors: [0, 0.6, 1],
+    //                         bottomSheetBorderRadius:
+    //                             const BorderRadius.vertical(
+    //                                 top: Radius.circular(24)),
+    //                         maxHeight: 1,
+    //                         initHeight: 0.6,
+    //                         bottomSheetColor: Theme.of(context)
+    //                             .colorScheme
+    //                             .surfaceContainerLow,
+    //                         minHeight: 0,
+    //                         useRootScaffold: true,
+    //                         isSafeArea: true,
+    //                         builder: (BuildContext context,
+    //                                 ScrollController controller, double d) =>
+    //                             CommentSheet(
+    //                               controller: controller,
+    //                             ));
+    //                   },
+    //                   // label: const Text("2.3K"),
+    //                   icon: Icon(MdiIcons.commentTextOutline))),
+    //           const SizedBox(width: 12),
+    //           SizedBox(
+    //               height: 40,
+    //               child: IconButton.filledTonal(
+    //                   onPressed: () {
+    //                     showFlexibleBottomSheet(
+    //                         useRootNavigator: true,
+    //                         context: context,
+    //                         anchors: [0, 0.6, 1],
+    //                         bottomSheetBorderRadius:
+    //                             const BorderRadius.vertical(
+    //                                 top: Radius.circular(24)),
+    //                         maxHeight: 1,
+    //                         initHeight: 0.6,
+    //                         bottomSheetColor: Theme.of(context)
+    //                             .colorScheme
+    //                             .surfaceContainerLow,
+    //                         minHeight: 0,
+    //                         useRootScaffold: true,
+    //                         isSafeArea: true,
+    //                         builder: (BuildContext context,
+    //                                 ScrollController controller, double d) =>
+    //                             ShareSheet(
+    //                               controller: controller,
+    //                             ));
+    //                   },
+    //                   // label: const Text("Share"),
+    //                   icon: Icon(MdiIcons.sendVariantOutline))),
+    //           const Spacer(),
+    //           SizedBox(
+    //               height: 40,
+    //               child: IconButton.filledTonal(
+    //                 onPressed: () {
+    //                   showFlexibleBottomSheet(
+    //                     useRootNavigator: true,
+    //                     isCollapsible: true,
+    //                     maxHeight: 1,
+    //                     initHeight: 1,
+    //                     isExpand: false,
+    //                     isSafeArea: true,
+    //                     bottomSheetBorderRadius: const BorderRadius.vertical(
+    //                         top: Radius.circular(24)),
+    //                     context: context,
+    //                     builder:
+    //                         (context, scrollController, bottomSheetOffset) =>
+    //                             SavePostSheet(
+    //                       controller: scrollController,
+    //                     ),
+    //                   );
+    //                 },
+    //                 icon: const Icon(Icons.bookmark_outline),
+    //               )
+    //               //  SelectButton(
+    //               //   isSelected: saved,
+    //               //   title: "Save",
+    //               //   onPressed: () {
+    //               //     setState(() {
+    //               //       saved = !saved;
+    //               //     });
+    //               //   },
+    //               //   selectedIcon: Icons.bookmark,
+    //               //   unselectedIcon: Icons.bookmark_outline,
+    //               // )
+    //               ),
+    //           const SizedBox(width: 12)
+    //         ],
+    //       ),
+    //       const SizedBox(height: 12),
+    //       Row(
+    //         children: [
+    //           TextButton(
+    //               onPressed: () {},
+    //               // icon: Stack(
+    //               //   children: [
+    //               //     ClipRRect(
+    //               //       borderRadius: BorderRadius.circular(24),
+    //               //       child: CachedNetworkImage(
+    //               //         height: 24,
+    //               //         width: 24,
+    //               //         errorWidget: (context, url, error) =>
+    //               //             const Icon(Icons.error),
+    //               //         placeholderFadeInDuration: const Duration(seconds: 0),
+    //               //         placeholder: (context, url) => Icon(
+    //               //             Icons.account_circle_rounded,
+    //               //             color: Theme.of(context)
+    //               //                 .colorScheme
+    //               //                 .onSurfaceVariant),
+    //               //         fit: BoxFit.contain,
+    //               //         imageUrl: accounts[21].person.pfpPath,
+    //               //       ),
+    //               //     ),
+    //               //     Padding(
+    //               //       padding: const EdgeInsets.only(top: 3, left: 3),
+    //               //       child: ClipRRect(
+    //               //         borderRadius: BorderRadius.circular(24),
+    //               //         child: CachedNetworkImage(
+    //               //           height: 24,
+    //               //           width: 24,
+    //               //           errorWidget: (context, url, error) =>
+    //               //               const Icon(Icons.error),
+    //               //           placeholderFadeInDuration:
+    //               //               const Duration(seconds: 0),
+    //               //           placeholder: (context, url) => Icon(
+    //               //               Icons.account_circle_rounded,
+    //               //               color: Theme.of(context)
+    //               //                   .colorScheme
+    //               //                   .onSurfaceVariant),
+    //               //           fit: BoxFit.contain,
+    //               //           imageUrl: accounts[24].person.pfpPath,
+    //               //         ),
+    //               //       ),
+    //               //     )
+    //               //   ],
+    //               // ),
+    //               child: const Text("23.5K Likes")),
+    //           const SizedBox(height: 4),
+    //           const Text("6.4K Replies")
+    //         ],
+    //       ),
+    //       Row(
+    //         mainAxisSize: MainAxisSize.min,
+    //         children: [
+    //           ExpressiveButton(
+    //               isSelected: liked,
+    //               icon: Symbols.comment,
+    //               onTap: () {
+    //                 setState(() {
+    //                   liked = !liked;
+    //                 });
+    //               },
+    //               selectedBg: Theme.of(context).colorScheme.primary,
+    //               unselectedBg:
+    //                   Theme.of(context).colorScheme.surfaceContainerHigh,
+    //               selectedContent: Theme.of(context).colorScheme.onPrimary,
+    //               unselectedContent: Theme.of(context).colorScheme.onSurface),
+    //           SizedBox(width: 4),
+    //           ExpressiveButton(
+    //               isSelected: !liked,
+    //               icon: Symbols.favorite,
+    //               onTap: () {
+    //                 setState(() {
+    //                   liked = !liked;
+    //                 });
+    //               },
+    //               selectedBg: Theme.of(context).colorScheme.primary,
+    //               unselectedBg:
+    //                   Theme.of(context).colorScheme.surfaceContainerHigh,
+    //               selectedContent: Theme.of(context).colorScheme.onPrimary,
+    //               unselectedContent: Theme.of(context).colorScheme.onSurface),
+    //           SizedBox(width: 4),
+    //           ExpressiveButton(
+    //               icon: Icons.home,
+    //               isSelected: saved,
+    //               onTap: () {
+    //                 setState(() {
+    //                   saved = !saved;
+    //                 });
+    //               },
+    //               text: "Hello",
+    //               selectedBg: Theme.of(context).colorScheme.primary,
+    //               unselectedBg:
+    //                   Theme.of(context).colorScheme.surfaceContainerHigh,
+    //               selectedContent: Theme.of(context).colorScheme.onPrimary,
+    //               unselectedContent: Theme.of(context).colorScheme.onSurface),
+    //         ],
+    //       )
+    //     ],
+    //   ),
+    // );
+    return Padding(
+      padding: EdgeInsetsGeometry.only(
+        bottom: 8,
+      ),
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          Column(
             children: [
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  textAlign: TextAlign.left,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  widget.post.subTitle,
-                  style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0),
+              Padding(
+                padding: EdgeInsetsGeometry.all(4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CachedNetworkImage(
+                      height: 42,
+                      width: 42,
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                      placeholderFadeInDuration: const Duration(seconds: 0),
+                      placeholder: (context, url) => Icon(
+                          Icons.account_circle_rounded,
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant),
+                      fit: BoxFit.contain,
+                      imageUrl: widget.post.person.pfpPath,
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            widget.post.person.name,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).colorScheme.outline,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            widget.post.subTitle,
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(width: 12),
-              SelectButton(
-                isSelected: liked,
-                selectedColor: Colors.red,
-                onPressed: () {
-                  setState(() {
-                    liked = !liked;
-                  });
-                },
-                title: "2.3K",
-                selectedIcon: Icons.favorite,
-                unselectedIcon: Icons.favorite_outline,
+              SizedBox(height: 6),
+              widget.post.type == PostType.image
+                  ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
+                  : widget.post.type == PostType.carosel
+                      ? CarouselPostWidget(
+                          imagePost: widget.post as CarouselPostObject)
+                      : ReelPost(post: widget.post as ReelPostObject),
+              SizedBox(height: 4),
+              Padding(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 18),
+                child: Row(
+                  children: [
+                    Text(
+                      formatPostTimestamp(widget.post.dateTime),
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.outline),
+                    )
+                  ],
+                ),
               ),
-              const SizedBox(width: 12),
-              SizedBox(
-                  height: 40,
-                  child: IconButton.filledTonal(
-                      onPressed: () {
-                        showFlexibleBottomSheet(
-                            useRootNavigator: true,
-                            context: context,
-                            anchors: [0, 0.6, 1],
-                            bottomSheetBorderRadius:
-                                const BorderRadius.vertical(
-                                    top: Radius.circular(24)),
-                            maxHeight: 1,
-                            initHeight: 0.6,
-                            bottomSheetColor: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerLow,
-                            minHeight: 0,
-                            useRootScaffold: true,
-                            isSafeArea: true,
-                            builder: (BuildContext context,
-                                    ScrollController controller, double d) =>
-                                CommentSheet(
-                                  controller: controller,
-                                ));
-                      },
-                      // label: const Text("2.3K"),
-                      icon: Icon(MdiIcons.commentTextOutline))),
-              const SizedBox(width: 12),
-              SizedBox(
-                  height: 40,
-                  child: IconButton.filledTonal(
-                      onPressed: () {
-                        showFlexibleBottomSheet(
-                            useRootNavigator: true,
-                            context: context,
-                            anchors: [0, 0.6, 1],
-                            bottomSheetBorderRadius:
-                                const BorderRadius.vertical(
-                                    top: Radius.circular(24)),
-                            maxHeight: 1,
-                            initHeight: 0.6,
-                            bottomSheetColor: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerLow,
-                            minHeight: 0,
-                            useRootScaffold: true,
-                            isSafeArea: true,
-                            builder: (BuildContext context,
-                                    ScrollController controller, double d) =>
-                                ShareSheet(
-                                  controller: controller,
-                                ));
-                      },
-                      // label: const Text("Share"),
-                      icon: Icon(MdiIcons.sendVariantOutline))),
-              const Spacer(),
-              SizedBox(
-                  height: 40,
-                  child: IconButton.filledTonal(
-                    onPressed: () {
-                      showFlexibleBottomSheet(
-                        useRootNavigator: true,
-                        isCollapsible: true,
-                        maxHeight: 1,
-                        initHeight: 1,
-                        isExpand: false,
-                        isSafeArea: true,
-                        bottomSheetBorderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(24)),
-                        context: context,
-                        builder:
-                            (context, scrollController, bottomSheetOffset) =>
-                                SavePostSheet(
-                          controller: scrollController,
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.bookmark_outline),
-                  )
-                  //  SelectButton(
-                  //   isSelected: saved,
-                  //   title: "Save",
-                  //   onPressed: () {
-                  //     setState(() {
-                  //       saved = !saved;
-                  //     });
-                  //   },
-                  //   selectedIcon: Icons.bookmark,
-                  //   unselectedIcon: Icons.bookmark_outline,
-                  // )
-                  ),
-              const SizedBox(width: 12)
+              SizedBox(height: 8),
             ],
           ),
-          const SizedBox(height: 12),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              TextButton(
-                  onPressed: () {},
-                  // icon: Stack(
-                  //   children: [
-                  //     ClipRRect(
-                  //       borderRadius: BorderRadius.circular(24),
-                  //       child: CachedNetworkImage(
-                  //         height: 24,
-                  //         width: 24,
-                  //         errorWidget: (context, url, error) =>
-                  //             const Icon(Icons.error),
-                  //         placeholderFadeInDuration: const Duration(seconds: 0),
-                  //         placeholder: (context, url) => Icon(
-                  //             Icons.account_circle_rounded,
-                  //             color: Theme.of(context)
-                  //                 .colorScheme
-                  //                 .onSurfaceVariant),
-                  //         fit: BoxFit.contain,
-                  //         imageUrl: accounts[21].person.pfpPath,
-                  //       ),
-                  //     ),
-                  //     Padding(
-                  //       padding: const EdgeInsets.only(top: 3, left: 3),
-                  //       child: ClipRRect(
-                  //         borderRadius: BorderRadius.circular(24),
-                  //         child: CachedNetworkImage(
-                  //           height: 24,
-                  //           width: 24,
-                  //           errorWidget: (context, url, error) =>
-                  //               const Icon(Icons.error),
-                  //           placeholderFadeInDuration:
-                  //               const Duration(seconds: 0),
-                  //           placeholder: (context, url) => Icon(
-                  //               Icons.account_circle_rounded,
-                  //               color: Theme.of(context)
-                  //                   .colorScheme
-                  //                   .onSurfaceVariant),
-                  //           fit: BoxFit.contain,
-                  //           imageUrl: accounts[24].person.pfpPath,
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-
-                  child: const Text("23.5K Likes")),
-              const SizedBox(height: 4),
-              const Text("6.4K Replies")
+              SizedBox(
+                  width: 48,
+                  height: 56,
+                  child: IconButton.filledTonal(
+                      style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                              Theme.of(context).colorScheme.surfaceContainer)),
+                      onPressed: () {},
+                      icon: Icon(
+                        size: 24,
+                        Symbols.forward,
+                        weight: 600,
+                      ))),
+              SizedBox(width: 4),
+              SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: IconButton.filledTonal(
+                      style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                              Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer)),
+                      onPressed: () {},
+                      icon: Icon(
+                        size: 24,
+                        Symbols.comment,
+                        weight: 600,
+                      ))),
+              SizedBox(width: 4),
+              ExpressiveButton(
+                  icon: liked ? Icons.favorite : Icons.favorite_border_outlined,
+                  persistText: true,
+                  text: "24K",
+                  isSelected: liked,
+                  onTap: () {
+                    setState(() {
+                      liked = !liked;
+                    });
+                  },
+                  selectedBg: Theme.of(context).colorScheme.onPrimaryContainer,
+                  unselectedBg: Theme.of(context).colorScheme.inversePrimary,
+                  selectedContent: Theme.of(context).colorScheme.inversePrimary,
+                  unselectedContent:
+                      Theme.of(context).colorScheme.onPrimaryContainer),
             ],
           ),
         ],

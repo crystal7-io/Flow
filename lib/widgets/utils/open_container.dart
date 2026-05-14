@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:redesigned/core/utils/curves.dart';
 
 typedef CloseContainerActionCallback<S> = void Function({S? returnValue});
 
@@ -24,8 +25,8 @@ typedef ClosedCallback<S> = void Function(S data);
 class OpenContainer<T extends Object?> extends StatefulWidget {
   const OpenContainer({
     super.key,
-    this.closedColor = Colors.white,
-    this.openColor = Colors.white,
+    this.closedColor = Colors.transparent,
+    this.openColor = Colors.transparent,
     this.middleColor,
     this.closedElevation = 1.0,
     this.openElevation = 4.0,
@@ -550,7 +551,7 @@ class _OpenContainerRoute<T> extends ModalRoute<T> {
 
           final Animation<double> curvedAnimation = CurvedAnimation(
             parent: animation,
-            curve: Curves.easeInOutCubicEmphasized,
+            curve: Easing.emphasizedDecelerate,
             reverseCurve:
                 _transitionWasInterrupted ? null : Easing.emphasizedAccelerate,
           );

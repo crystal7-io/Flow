@@ -40,64 +40,117 @@ class MobileHomeView extends StatelessWidget {
                     closedShape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(55)),
                     useRootNavigator: true,
-                    closedBuilder: (context, action) => SearchBar(
-                      elevation: const WidgetStatePropertyAll(0),
-                      shadowColor:
-                          const WidgetStatePropertyAll(Colors.transparent),
-                      backgroundColor: WidgetStatePropertyAll(Theme.of(context)
-                          .colorScheme
-                          .surfaceContainerHighest),
-                      padding: const WidgetStatePropertyAll(
-                          EdgeInsets.symmetric(horizontal: 16)),
-                      leading: const Icon(
-                        Symbols.search,
-                        opticalSize: 24,
-                        weight: 400,
-                      ),
-                      trailing: <Widget>[
-                        Tooltip(
-                          message: 'Change brightness mode',
-                          child: IconButton(
-                            icon: const Icon(Icons.mic_none_outlined),
-                            onPressed: viewModel.onMicPressed,
-                            selectedIcon:
-                                const Icon(Icons.brightness_2_outlined),
-                          ),
-                        ),
-                        ClipRRect(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          child: CachedNetworkImage(
-                            height: 36,
-                            width: 36,
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            placeholderFadeInDuration:
-                                const Duration(seconds: 0),
-                            placeholder: (context, url) => Icon(
-                              Icons.account_circle_rounded,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                    closedBuilder: (context, action) => Material(
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerHighest,
+                      child: InkWell(
+                          onTap: () {
+                            viewModel.onSearchTap();
+                            action();
+                          },
+                          child: Padding(
+                            padding: EdgeInsetsGeometry.symmetric(
+                                horizontal: 20, vertical: 12),
+                            child: Row(
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Symbols.search,
+                                      opticalSize: 24,
+                                      weight: 400,
+                                    ),
+                                    SizedBox(
+                                      width: 14,
+                                    ),
+                                    Text("Search Flow")
+                                  ],
+                                ),
+                                Spacer(),
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20)),
+                                  child: CachedNetworkImage(
+                                    height: 36,
+                                    width: 36,
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                    placeholderFadeInDuration:
+                                        const Duration(seconds: 0),
+                                    placeholder: (context, url) => Icon(
+                                      Icons.account_circle_rounded,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
+                                    fit: BoxFit.contain,
+                                    imageUrl: viewModel.profilePictureLink,
+                                  ),
+                                )
+                              ],
                             ),
-                            fit: BoxFit.contain,
-                            imageUrl: viewModel.profilePictureLink,
-                          ),
-                        )
-                      ],
-                      hintStyle: WidgetStatePropertyAll(TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          letterSpacing: 0.5,
-                          fontWeight: FontWeight.w500)),
-                      hintText: "Search Flow",
-                      textStyle:
-                          const WidgetStatePropertyAll(TextStyle(height: 1.2)),
-                      onTap: () {
-                        viewModel.onSearchTap();
-                        action();
-                      },
+                          )),
                     ),
+                    //  SearchBar(
+                    //   elevation: const WidgetStatePropertyAll(0),
+                    //   shadowColor:
+                    //       const WidgetStatePropertyAll(Colors.transparent),
+                    //   backgroundColor: WidgetStatePropertyAll(Theme.of(context)
+                    //       .colorScheme
+                    //       .surfaceContainerHighest),
+                    //   padding: const WidgetStatePropertyAll(
+                    //       EdgeInsets.symmetric(horizontal: 16)),
+                    //   leading: const Icon(
+                    //     Symbols.search,
+                    //     opticalSize: 24,
+                    //     weight: 400,
+                    //   ),
+                    //   trailing: <Widget>[
+                    //     Tooltip(
+                    //       message: 'Change brightness mode',
+                    //       child: IconButton(
+                    //         icon: const Icon(Icons.mic_none_outlined),
+                    //         onPressed: viewModel.onMicPressed,
+                    //         selectedIcon:
+                    //             const Icon(Icons.brightness_2_outlined),
+                    //       ),
+                    //     ),
+                    //     ClipRRect(
+                    //       borderRadius:
+                    //           const BorderRadius.all(Radius.circular(20)),
+                    //       child: CachedNetworkImage(
+                    //         height: 36,
+                    //         width: 36,
+                    //         errorWidget: (context, url, error) =>
+                    //             const Icon(Icons.error),
+                    //         placeholderFadeInDuration:
+                    //             const Duration(seconds: 0),
+                    //         placeholder: (context, url) => Icon(
+                    //           Icons.account_circle_rounded,
+                    //           color: Theme.of(context)
+                    //               .colorScheme
+                    //               .onSurfaceVariant,
+                    //         ),
+                    //         fit: BoxFit.contain,
+                    //         imageUrl: viewModel.profilePictureLink,
+                    //       ),
+                    //     )
+                    //   ],
+                    //   hintStyle: WidgetStatePropertyAll(TextStyle(
+                    //       color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    //       fontSize: 16,
+                    //       letterSpacing: 0.5,
+                    //       fontWeight: FontWeight.w500)),
+                    //   hintText: "Search Flow",
+                    //   textStyle:
+                    //       const WidgetStatePropertyAll(TextStyle(height: 1.2)),
+                    //   onTap: () {
+                    //     viewModel.onSearchTap();
+                    //     action();
+                    //   },
+                    // ),
+
                     openBuilder: (context, action) =>
                         ChangeNotifierProvider<SearchViewModel>(
                       create: (_) => SearchViewModel(),

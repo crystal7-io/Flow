@@ -35,6 +35,16 @@ class AppService extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isNavBarVisible = true;
+  bool get isNavBarVisible => _isNavBarVisible;
+
+  void setNavBarVisible(bool visible) {
+    if (_isNavBarVisible != visible) {
+      _isNavBarVisible = visible;
+      notifyListeners();
+    }
+  }
+
   final List<Person> _myFollowers = [
     accounts[3].person,
     accounts[4].person,
