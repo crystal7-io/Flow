@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:redesigned/core/constants/app_config.dart';
 import 'package:redesigned/core/constants/route_names.dart';
 import 'package:redesigned/core/services/auth_service.dart';
 import 'package:redesigned/core/services/navigation_service.dart';
@@ -25,7 +26,7 @@ class SignInViewModel extends ChangeNotifier {
 
   User? get user => _user;
   bool get isLoading => _isLoading;
-  bool get isAuthenticated => _user != null;
+  bool get isAuthenticated => _user != null || !AppConfig.useAuth;
 
   /// Text editing controller for username
   final TextEditingController emailController = TextEditingController(text: "");
@@ -37,12 +38,18 @@ class SignInViewModel extends ChangeNotifier {
   /// Login using user entered credentials
   Future<void> onLoginPress() async {
     if (emailController.text.isNotEmpty || passwordController.text.isNotEmpty) {
+      if (!AppConfig.useAuth) {
+        _navService.go(RouteNames.HOME_SCREEN);
+        return;
+      }
       _isLoading = true;
       notifyListeners();
       try {
-        UserCredential creds = await _authService.signInWithEmailAndPassword(
+        UserCredential? creds = await _authService.signInWithEmailAndPassword(
             emailController.text, passwordController.text);
-        await _userDataService.fetchData(creds.user!.uid);
+        if (creds != null) {
+          await _userDataService.fetchData(creds.user!.uid);
+        }
       } catch (e) {
         rethrow;
       } finally {
