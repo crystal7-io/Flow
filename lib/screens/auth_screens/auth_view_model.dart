@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:redesigned/core/constants/app_config.dart';
 import 'package:redesigned/core/constants/route_names.dart';
 import 'package:redesigned/core/services/auth_service.dart';
 import 'package:redesigned/core/services/navigation_service.dart';
@@ -32,6 +33,13 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   bool proceedEmail() {
+    if (!AppConfig.useAuth) {
+      _currentStep = AuthStep.password;
+      _errorMessage = null;
+      notifyListeners();
+      return true;
+    }
+
     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(_email)) {
       _errorMessage = 'Invalid email format';
       notifyListeners();
@@ -49,7 +57,7 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   void verifyOtp(String otp) {
-    if (otp == '111222') {
+    if (!AppConfig.useAuth || otp == '111222') {
       _currentStep = AuthStep.signup;
       _errorMessage = null;
     } else {
@@ -63,9 +71,11 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> validatePassword() async {
-    if (_password == '123456') {
+    if (!AppConfig.useAuth || _password == '123456') {
       // Logic for successful login
-      await _authService.signInWithEmailAndPassword(_email, _password);
+      if (AppConfig.useAuth) {
+        await _authService.signInWithEmailAndPassword(_email, _password);
+      }
       _errorMessage = null;
       _navService.go(RouteNames.HOME_SCREEN);
     } else {
