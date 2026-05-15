@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 // import 'package:media_kit_video/media_kit_video.dart';
 import 'package:redesigned/core/models/account.dart';
 import 'package:redesigned/core/models/post.dart';
+import 'package:redesigned/core/utils/curves.dart';
 import 'package:redesigned/core/utils/format_post_timestamp.dart';
 import 'package:redesigned/data/mock_data.dart';
 import 'package:redesigned/widgets/post_viewer.dart';
@@ -442,29 +444,42 @@ class _MobilePostState extends State<MobilePost> {
                   children: [
                     GestureDetector(
                         onTap: () {
-                          Account acc = getAccountFromUserName(
-                              widget.post.person.userName);
-                          showModalBottomSheet(
-                              showDragHandle: true,
-                              useRootNavigator: true,
-                              context: context,
-                              builder: (BuildContext context) {
-                                return ProfileBottomsheet(acc: acc);
-                              });
+                          Navigator.of(context, rootNavigator: true).push(
+                            PageRouteBuilder(
+                              opaque: false,
+                              barrierDismissible: true,
+                              transitionDuration: Durations.long1,
+                              reverseTransitionDuration: Durations.short4,
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return _ProfilePictureViewer(
+                                  post: widget.post,
+                                  animation: animation,
+                                );
+                              },
+                            ),
+                          );
                         },
-                        child: CachedNetworkImage(
-                          height: 42,
-                          width: 42,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                          placeholderFadeInDuration: const Duration(seconds: 0),
-                          placeholder: (context, url) => Icon(
-                              Icons.account_circle_rounded,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant),
-                          fit: BoxFit.contain,
-                          imageUrl: widget.post.person.pfpPath,
+                        child: Hero(
+                          tag: 'pfp_${widget.post.postId}',
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(21),
+                            child: CachedNetworkImage(
+                              height: 42,
+                              width: 42,
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                              placeholderFadeInDuration:
+                                  const Duration(seconds: 0),
+                              placeholder: (context, url) => Icon(
+                                  Icons.account_circle_rounded,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant),
+                              fit: BoxFit.contain,
+                              imageUrl: widget.post.person.pfpPath,
+                            ),
+                          ),
                         )),
                     SizedBox(width: 12),
                     Expanded(
@@ -1040,3 +1055,55 @@ class _SelectButtonState extends State<SelectButton>
 //   imgData(name: "raiden", id: "1NzFWd6g29p7n-96bOBQFagS6Q1NlGviL"),
 //   imgData(name: "furina", id: "1JpcQdKOF3N2MJe00fSvvjSxAvhdbLAo4")
 // ];
+
+class _ProfilePictureViewer extends StatelessWidget {
+  final Post post;
+  final Animation<double> animation;
+
+  const _ProfilePictureViewer({
+    required this.post,
+    required this.animation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          final blurValue = CurvedAnimation(
+                parent: animation,
+                curve: Easing.emphasizedDecelerate,
+              ).value *
+              15.0;
+
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: blurValue, sigmaY: blurValue),
+            child: Container(
+              color: Colors.black.withValues(alpha: animation.value * 0.4),
+              child: Center(
+                child: child,
+              ),
+            ),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(48.0),
+          child: Hero(
+            tag: 'pfp_${post.postId}',
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(200),
+              child: CachedNetworkImage(
+                imageUrl: post.person.pfpPath,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.error, size: 100),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
