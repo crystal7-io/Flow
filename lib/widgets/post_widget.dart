@@ -1,4 +1,3 @@
-import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,11 +9,8 @@ import 'package:redesigned/core/models/account.dart';
 import 'package:redesigned/core/models/post.dart';
 import 'package:redesigned/core/utils/format_post_timestamp.dart';
 import 'package:redesigned/data/mock_data.dart';
-import 'package:redesigned/widgets/save_post_sheet.dart';
-import 'package:redesigned/widgets/comment_sheet.dart';
 import 'package:redesigned/widgets/post_viewer.dart';
 import 'package:redesigned/widgets/profile_bottomsheet.dart';
-import 'package:redesigned/widgets/share_sheet.dart';
 import 'package:redesigned/widgets/utils/m3expressive/expressive_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -444,19 +440,32 @@ class _MobilePostState extends State<MobilePost> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CachedNetworkImage(
-                      height: 42,
-                      width: 42,
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      placeholderFadeInDuration: const Duration(seconds: 0),
-                      placeholder: (context, url) => Icon(
-                          Icons.account_circle_rounded,
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
-                      fit: BoxFit.contain,
-                      imageUrl: widget.post.person.pfpPath,
-                    ),
+                    GestureDetector(
+                        onTap: () {
+                          Account acc = getAccountFromUserName(
+                              widget.post.person.userName);
+                          showModalBottomSheet(
+                              showDragHandle: true,
+                              useRootNavigator: true,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return ProfileBottomsheet(acc: acc);
+                              });
+                        },
+                        child: CachedNetworkImage(
+                          height: 42,
+                          width: 42,
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                          placeholderFadeInDuration: const Duration(seconds: 0),
+                          placeholder: (context, url) => Icon(
+                              Icons.account_circle_rounded,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant),
+                          fit: BoxFit.contain,
+                          imageUrl: widget.post.person.pfpPath,
+                        )),
                     SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -787,6 +796,8 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
             maxHeight: (1 / widget.imagePost.aspectRatio) *
                 (MediaQuery.of(context).size.width - 80)),
         child: CarouselView(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(24)),
           onTap: (int i) {
             Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
                 transitionDuration: Durations.medium1,

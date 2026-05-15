@@ -6,7 +6,19 @@ class UserDataService extends ChangeNotifier {
   bool _isLoaded = false;
   User? _user;
 
-  UserDataService(this._userRepository);
+  UserDataService(this._userRepository) {
+    _loadLocalUser();
+  }
+
+  Future<void> _loadLocalUser() async {
+    try {
+      _user = await _userRepository.getUserData('');
+      _isLoaded = true;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error loading local user: $e');
+    }
+  }
 
   /// Data fetching check
   bool get isLoaded => _isLoaded;

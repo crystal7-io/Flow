@@ -1,12 +1,8 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:redesigned/screens/profile/user_profile_view.dart';
 import 'package:redesigned/screens/settings/settings_view_model.dart';
-import 'package:redesigned/screens/settings/sub_screens/activity_screen.dart';
-import 'package:redesigned/screens/settings/sub_screens/interactions_screen.dart';
-import 'package:redesigned/screens/settings/sub_screens/interests_screen.dart';
 import 'package:redesigned/screens/settings/sub_screens/notification_settings_screen.dart';
 import 'package:redesigned/screens/settings/sub_screens/preferences_screen.dart';
 import 'package:redesigned/screens/settings/sub_screens/privacy_screen.dart';
@@ -45,63 +41,44 @@ class SettingsView extends StatelessWidget {
           const SizedBox(height: 8),
           _buildSettingsTile(
             context,
-            icon: Icons.data_usage_outlined,
-            title: "Activity",
-            subtitle: "App usage and your activity",
-            onTap: () => _pushSharedAxis(context, const ActivityScreen()),
+            icon: Icons.account_circle_outlined,
+            title: "Profile",
+            subtitle: "View and edit your profile",
+            onTap: () => _pushSharedAxis(context, const UserProfileView()),
           ),
           _buildSettingsTile(
             context,
             icon: Icons.auto_awesome_outlined,
             title: "Preferences",
-            subtitle: "Theme, Language and more",
+            subtitle: "Customize your theme and app",
             onTap: () => _pushSharedAxis(context, const PreferencesScreen()),
           ),
           _buildSettingsTile(
             context,
             icon: Icons.notifications_outlined,
             title: "Notifications",
-            subtitle: "Manage app notifications",
-            onTap: () => _pushSharedAxis(context, const NotificationSettingsScreen()),
+            subtitle: "Control your alerts and messaging sounds.",
+            onTap: () =>
+                _pushSharedAxis(context, const NotificationSettingsScreen()),
           ),
           _buildSettingsTile(
             context,
             icon: Icons.gpp_good_outlined,
-            title: "Privacy and Secrecy",
-            subtitle: "Who can see your content",
+            title: "Privacy and Security",
+            subtitle: "Manage data visibility and safety settings.",
             onTap: () => _pushSharedAxis(context, const PrivacyScreen()),
-          ),
-          _buildSettingsTile(
-            context,
-            icon: MdiIcons.heartMultipleOutline,
-            title: "Your Interests",
-            subtitle: "Control what you see",
-            onTap: () => _pushSharedAxis(context, const InterestsScreen()),
-          ),
-          _buildSettingsTile(
-            context,
-            icon: Icons.people_alt_outlined,
-            title: "Interactions",
-            subtitle: "How others interact with you",
-            onTap: () => _pushSharedAxis(context, const InteractionsScreen()),
-          ),
-          _buildSettingsTile(
-            context,
-            icon: Icons.pending_outlined,
-            title: "Other",
-            subtitle: "Families, professional, payments and more",
           ),
           _buildSettingsTile(
             context,
             icon: Icons.help_outline,
             title: "Support",
-            subtitle: "Help, support and account status",
+            subtitle: "Help and support for you",
           ),
           _buildSettingsTile(
             context,
             icon: Icons.account_circle_outlined,
             title: "Account login",
-            subtitle: "Manages accounts on this device",
+            subtitle: "Manages your account data",
           ),
           _buildSettingsTile(
             context,
@@ -123,17 +100,7 @@ class SettingsView extends StatelessWidget {
 
   void _pushSharedAxis(BuildContext context, Widget screen) {
     Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => screen,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return SharedAxisTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            transitionType: SharedAxisTransitionType.horizontal,
-            child: child,
-          );
-        },
-      ),
+      MaterialPageRoute(builder: (context) => screen),
     );
   }
 
@@ -157,4 +124,3 @@ class SettingsView extends StatelessWidget {
     );
   }
 }
-

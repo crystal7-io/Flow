@@ -99,16 +99,6 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             subtitle: const Text("English"),
           ),
           SwitchListTile(
-              title: const Text("Hide like & share counts"),
-              subtitle: const Text("These settings also apply on Threads"),
-              secondary: const Icon(Icons.visibility_off_outlined),
-              value: hideLikeAndShare,
-              onChanged: (bool value) {
-                setState(() {
-                  hideLikeAndShare = value;
-                });
-              }),
-          SwitchListTile(
               title: const Text("Floating Searchbar"),
               subtitle:
                   const Text("Make search bar reappears when you scroll up"),

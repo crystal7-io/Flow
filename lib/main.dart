@@ -5,14 +5,19 @@ import 'package:redesigned/core/constants/app_config.dart';
 import 'package:redesigned/core/navigation/router.dart';
 import 'package:redesigned/core/services/app_provider.dart';
 import 'package:redesigned/core/services/app_service.dart';
+import 'package:redesigned/data/local/local_user_data_source.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   if (AppConfig.useAuth) {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  } else {
+    // Ensure default user is initialized for local development
+    await LocalUserDataSource().initializeDefaultUser();
   }
   // debugRepaintRainbowEnabled = true;
   runApp(Provider<GoRouter>(create: (_) => router, child: const MainApp()));
