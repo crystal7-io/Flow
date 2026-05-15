@@ -6,13 +6,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 // import 'package:media_kit/media_kit.dart';
 // import 'package:media_kit_video/media_kit_video.dart';
-import 'package:redesigned/core/models/account.dart';
 import 'package:redesigned/core/models/post.dart';
-import 'package:redesigned/core/utils/curves.dart';
 import 'package:redesigned/core/utils/format_post_timestamp.dart';
-import 'package:redesigned/data/mock_data.dart';
 import 'package:redesigned/widgets/post_viewer.dart';
-import 'package:redesigned/widgets/profile_bottomsheet.dart';
+import 'package:redesigned/widgets/profile_picture_viewer.dart';
 import 'package:redesigned/widgets/utils/m3expressive/expressive_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -448,13 +445,17 @@ class _MobilePostState extends State<MobilePost> {
                             PageRouteBuilder(
                               opaque: false,
                               barrierDismissible: true,
-                              transitionDuration: Durations.long1,
-                              reverseTransitionDuration: Durations.short4,
+                              transitionDuration: Durations.long4,
+                              reverseTransitionDuration: Durations.medium3,
                               pageBuilder:
                                   (context, animation, secondaryAnimation) {
-                                return _ProfilePictureViewer(
+                                return ProfilePictureViewer(
                                   post: widget.post,
-                                  animation: animation,
+                                  animation: CurvedAnimation(
+                                    parent: animation,
+                                    curve: Easing.emphasizedDecelerate,
+                                    reverseCurve: Easing.emphasizedAccelerate,
+                                  ),
                                 );
                               },
                             ),
@@ -462,6 +463,8 @@ class _MobilePostState extends State<MobilePost> {
                         },
                         child: Hero(
                           tag: 'pfp_${widget.post.postId}',
+                          createRectTween: (begin, end) =>
+                              ExpressiveRectTween(begin: begin, end: end),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(21),
                             child: CachedNetworkImage(
@@ -1039,71 +1042,5 @@ class _SelectButtonState extends State<SelectButton>
                     : widget.unselectedColor,
               )),
         ));
-  }
-}
-
-// https://drive.google.com/uc?export=view&id=1NzFWd6g29p7n-96bOBQFagS6Q1NlGviL
-// https://drive.google.com/file/d/1JpcQdKOF3N2MJe00fSvvjSxAvhdbLAo4/view?usp=drive_link
-
-// class imgData {
-//   imgData({required this.name, required this.id});
-//   final String name;
-//   final String id;
-// }
-
-// var imgDataList = <imgData>[
-//   imgData(name: "raiden", id: "1NzFWd6g29p7n-96bOBQFagS6Q1NlGviL"),
-//   imgData(name: "furina", id: "1JpcQdKOF3N2MJe00fSvvjSxAvhdbLAo4")
-// ];
-
-class _ProfilePictureViewer extends StatelessWidget {
-  final Post post;
-  final Animation<double> animation;
-
-  const _ProfilePictureViewer({
-    required this.post,
-    required this.animation,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pop(),
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          final blurValue = CurvedAnimation(
-                parent: animation,
-                curve: Easing.emphasizedDecelerate,
-              ).value *
-              15.0;
-
-          return BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: blurValue, sigmaY: blurValue),
-            child: Container(
-              color: Colors.black.withValues(alpha: animation.value * 0.4),
-              child: Center(
-                child: child,
-              ),
-            ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(48.0),
-          child: Hero(
-            tag: 'pfp_${post.postId}',
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(200),
-              child: CachedNetworkImage(
-                imageUrl: post.person.pfpPath,
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) =>
-                    const Icon(Icons.error, size: 100),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
