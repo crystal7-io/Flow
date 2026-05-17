@@ -3,9 +3,25 @@ import 'package:flutter/material.dart';
 class ProfilePictureViewerModel extends ChangeNotifier {
   final ScrollController scrollController = ScrollController();
   double _expansionProgress = 0.0;
+  
+  bool _isFollowing = false;
+  bool _isStarred = false;
+
+  bool get isFollowing => _isFollowing;
+  bool get isStarred => _isStarred;
 
   ProfilePictureViewerModel() {
     scrollController.addListener(_onScroll);
+  }
+
+  void toggleFollowing() {
+    _isFollowing = !_isFollowing;
+    notifyListeners();
+  }
+
+  void toggleStar() {
+    _isStarred = !_isStarred;
+    notifyListeners();
   }
 
   double get expansionProgress => _expansionProgress;

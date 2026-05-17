@@ -8,6 +8,7 @@ import 'package:material_shapes/material_shapes.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/post.dart';
 import 'package:redesigned/widgets/profile_picture_viewer_model.dart';
+import 'package:redesigned/widgets/utils/m3expressive/expressive_button.dart';
 
 class ExpressiveRectTween extends MaterialRectArcTween {
   ExpressiveRectTween({super.begin, super.end});
@@ -90,7 +91,7 @@ class ProfilePictureViewer extends StatelessWidget {
                         color: Colors.transparent,
                         child: SizedBox(
                           width: size.width,
-                          height: size.height * 0.7,
+                          height: size.height * 0.74,
                           child: Stack(
                             clipBehavior: Clip.none,
                             alignment: Alignment.center,
@@ -105,7 +106,7 @@ class ProfilePictureViewer extends StatelessWidget {
                                       post.person.pfpPath,
                                     )),
                               ),
-                              _buildMetadata(context, animation, model),
+                              ..._buildMetadata(context, animation, model),
                             ],
                           ),
                         ),
@@ -118,7 +119,7 @@ class ProfilePictureViewer extends StatelessWidget {
                       opacity: model.expansionProgress,
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 80,
                           ),
                           SvgPicture.asset(
@@ -131,8 +132,6 @@ class ProfilePictureViewer extends StatelessWidget {
                             children: [
                               _buildStatColumn(context, "1.2K", "Followers"),
                               _buildStatColumn(context, "456", "Following"),
-                              // _buildStatButton(
-                              //     context, Icons.star_outline, "Star"),
                             ],
                           ),
                           const SizedBox(height: 48),
@@ -202,113 +201,143 @@ class ProfilePictureViewer extends StatelessWidget {
     );
   }
 
-  Widget _buildMetadata(BuildContext context, Animation<double> animation,
+  List<Widget> _buildMetadata(BuildContext context, Animation<double> animation,
       ProfilePictureViewerModel model) {
+    final size = MediaQuery.of(context).size;
     final nameAnim = CurvedAnimation(
       parent: animation,
-      curve: const Interval(0.70, 0.85, curve: Easing.emphasizedDecelerate),
+      curve: const Interval(0.86, 0.95, curve: Easing.emphasizedDecelerate),
       reverseCurve:
           const Interval(0.20, 0.30, curve: Easing.standardAccelerate),
     );
     final followingAnim = CurvedAnimation(
       parent: animation,
-      curve: const Interval(0.75, 0.90, curve: Easing.emphasizedDecelerate),
+      curve: const Interval(0.9, 0.97, curve: Easing.emphasizedDecelerate),
       reverseCurve:
           const Interval(0.15, 0.25, curve: Easing.standardAccelerate),
     );
     final profileAnim = CurvedAnimation(
       parent: animation,
-      curve: const Interval(0.80, 0.95, curve: Easing.emphasizedDecelerate),
+      curve: const Interval(0.92, 0.99, curve: Easing.emphasizedDecelerate),
       reverseCurve:
           const Interval(0.05, 0.15, curve: Easing.standardAccelerate),
     );
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // Name Bubble
-        Positioned(
-          top: 40,
-          left: 40,
-          child: Opacity(
-            opacity: (1.0 - model.expansionProgress).clamp(0.0, 1.0),
-            child: _StaggeredBubble(
-              animation: nameAnim,
-              alignment: Alignment.centerLeft,
-              child: _Bubble(
-                supportText: post.person.userName,
-                text: post.person.name,
-                backgroundColor:
-                    Theme.of(context).colorScheme.surfaceContainerHigh,
-                textColor: Theme.of(context).colorScheme.onSurface,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
+    final initialProfileWidth = (size.width - 32 - 4) / 2;
+    final targetProfileWidth = 64.0;
+    final currentProfileWidth = lerpDouble(
+        initialProfileWidth, targetProfileWidth, model.expansionProgress);
+
+    final profileLabelOpacity =
+        (1.0 - model.expansionProgress * 3).clamp(0.0, 1.0);
+    final profileIcon =
+        model.expansionProgress > 0.6 ? Icons.star : Icons.north_east;
+
+    return [
+      // Name Bubble
+      Positioned(
+        top: (size.height * 0.15) + 40,
+        left: 40,
+        child: Opacity(
+          opacity: (1.0 - model.expansionProgress).clamp(0.0, 1.0),
+          child: _StaggeredBubble(
+            animation: nameAnim,
+            alignment: Alignment.centerLeft,
+            child: _Bubble(
+              supportText: post.person.userName,
+              text: post.person.name,
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerHigh,
+              textColor: Theme.of(context).colorScheme.onSurface,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
           ),
         ),
-        // Actions
-        Positioned(
+      ),
+      // Actions
+      Positioned(
           left: 0,
           right: 0,
           bottom: 20,
-          child: Center(
-              child: Column(
-            children: [
-              Opacity(
-                  opacity: model.expansionProgress,
-                  child: Column(
-                    children: [
-                      Text(
-                        post.person.name,
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-                      Text(
-                        post.person.userName,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
-                  )),
-              SizedBox(
-                height: 24,
-              ),
-              Row(
-                spacing: 8,
-                children: [
-                  Expanded(
-                    child: _StaggeredBubble(
-                      animation: followingAnim,
-                      alignment: Alignment.centerRight,
-                      child: _ActionBubble(
-                        label: 'Following',
-                        icon: Icons.done,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.onPrimaryContainer,
-                        textColor: Theme.of(context).colorScheme.inversePrimary,
-                      ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+            ),
+            child: Column(
+              children: [
+                Opacity(
+                    opacity: model.expansionProgress,
+                    child: Column(
+                      children: [
+                        Text(
+                          post.person.name,
+                          style: Theme.of(context).textTheme.displaySmall,
+                        ),
+                        Text(
+                          post.person.userName,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    )),
+                const SizedBox(
+                  height: 24,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: SizedBox(
+                    width: size.width - 24,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 8,
+                      children: [
+                        Expanded(
+                          child: _StaggeredBubble(
+                            animation: followingAnim,
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              height: 64,
+                              child: ExpressiveButton(
+                                isSelected: model.isFollowing,
+                                persistText: true,
+                                selectedBg: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
+                                onTap: model.toggleFollowing,
+                                icon: Icons.done,
+                                text: 'Following',
+                              ),
+                            ),
+                          ),
+                        ),
+                        _StaggeredBubble(
+                          animation: profileAnim,
+                          alignment: Alignment.centerRight,
+                          child: SizedBox(
+                            height: 64,
+                            width: currentProfileWidth,
+                            child: ExpressiveButton(
+                              isSelected: model.isStarred,
+                              persistText: profileLabelOpacity > 0,
+                              selectedBg: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                              onTap: model.expansionProgress > 0.6
+                                  ? model.toggleStar
+                                  : model.expandToProfile,
+                              icon: profileIcon,
+                              text: 'Profile',
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                      child: _StaggeredBubble(
-                    animation: profileAnim,
-                    alignment: Alignment.centerRight,
-                    child: _ActionBubble(
-                      onTap: model.expandToProfile,
-                      label: 'Profile',
-                      icon: Icons.north_east,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
-                      textColor:
-                          Theme.of(context).colorScheme.onSecondaryContainer,
-                    ),
-                  )),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           )),
-        ),
-      ],
-    );
+    ];
   }
 }
 
@@ -389,81 +418,6 @@ class _Bubble extends StatelessWidget {
                   ),
             ),
           ],
-        ));
-  }
-}
-
-class _UserNameBubble extends StatelessWidget {
-  final String text;
-  final Color backgroundColor;
-  final Color textColor;
-
-  const _UserNameBubble({
-    required this.text,
-    required this.backgroundColor,
-    required this.textColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(8)),
-      ),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: textColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-      ),
-    );
-  }
-}
-
-class _ActionBubble extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color backgroundColor;
-  final Color textColor;
-  final VoidCallback? onTap;
-
-  const _ActionBubble({
-    required this.label,
-    required this.icon,
-    required this.backgroundColor,
-    required this.textColor,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 64,
-        width: double.infinity,
-        child: FilledButton.icon(
-          style: ButtonStyle(
-            elevation: const WidgetStatePropertyAll(0),
-            backgroundColor: WidgetStatePropertyAll(backgroundColor),
-          ),
-          onPressed: onTap ?? () {},
-          icon: Icon(icon, color: textColor, size: 18),
-          label: Text(
-            label,
-            style: GoogleFonts.manjari(
-              height: 4.3,
-              color: textColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-          ),
         ));
   }
 }
