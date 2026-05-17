@@ -447,8 +447,8 @@ class _MobilePostState extends State<MobilePost> {
                             PageRouteBuilder(
                               opaque: false,
                               barrierDismissible: true,
-                              transitionDuration: Durations.long3,
-                              reverseTransitionDuration: Durations.short4,
+                              transitionDuration: Durations.long4,
+                              reverseTransitionDuration: Durations.medium4,
                               pageBuilder:
                                   (context, animation, secondaryAnimation) {
                                 return ChangeNotifierProvider(

@@ -1,6 +1,9 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_shapes/material_shapes.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/post.dart';
@@ -61,14 +64,16 @@ class ProfilePictureViewer extends StatelessWidget {
         },
         child: Stack(
           children: [
-            NotificationListener<ScrollEndNotification>(
+            NotificationListener<UserScrollNotification>(
               onNotification: (notification) {
-                model.handleScrollEnd();
-                return true;
+                if (notification.direction == ScrollDirection.idle) {
+                  model.handleScrollEnd();
+                }
+                return false;
               },
               child: CustomScrollView(
                 controller: model.scrollController,
-                physics: const BouncingScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 slivers: [
                   // Top Spacer to initialy center the image
                   SliverToBoxAdapter(
@@ -85,14 +90,14 @@ class ProfilePictureViewer extends StatelessWidget {
                         color: Colors.transparent,
                         child: SizedBox(
                           width: size.width,
-                          height: size.height * 0.6,
+                          height: size.height * 0.7,
                           child: Stack(
                             clipBehavior: Clip.none,
                             alignment: Alignment.center,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(48.0),
-                                child: MaterialShapes.pentagon(
+                                child: MaterialShapes.fourLeafClover(
                                     color: Colors.transparent,
                                     size: size.width - 120,
                                     imageFit: BoxFit.cover,
@@ -111,35 +116,37 @@ class ProfilePictureViewer extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: Opacity(
                       opacity: model.expansionProgress,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 32),
-                        child: Column(
-                          children: [
-                            const Divider(),
-                            const SizedBox(height: 24),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildStatColumn(context, "1.2K", "Followers"),
-                                _buildStatColumn(context, "456", "Following"),
-                                _buildStatButton(
-                                    context, Icons.star_outline, "Star"),
-                              ],
-                            ),
-                            const SizedBox(height: 48),
-                            Text(
-                              "User's posts and other information will appear here.",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                            ),
-                            const SizedBox(height: 500),
-                          ],
-                        ),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 80,
+                          ),
+                          SvgPicture.asset(
+                            'assets/zigzag.svg',
+                            width: size.width - 120,
+                          ),
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _buildStatColumn(context, "1.2K", "Followers"),
+                              _buildStatColumn(context, "456", "Following"),
+                              // _buildStatButton(
+                              //     context, Icons.star_outline, "Star"),
+                            ],
+                          ),
+                          const SizedBox(height: 48),
+                          Text(
+                            "User's posts and other information will appear here.",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                          const SizedBox(height: 400),
+                        ],
                       ),
                     ),
                   ),
@@ -160,12 +167,20 @@ class ProfilePictureViewer extends StatelessWidget {
                 child: Opacity(
                   opacity: model.expansionProgress,
                   child: Transform.scale(
-                    scale: model.expansionProgress,
-                    child: IconButton.filledTonal(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close),
-                    ),
-                  ),
+                      scale: model.expansionProgress,
+                      child: SizedBox(
+                        height: 48,
+                        width: 56,
+                        child: IconButton(
+                          style: ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHigh)),
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(Icons.close),
+                        ),
+                      )),
                 ),
               ),
             ),
@@ -179,20 +194,10 @@ class ProfilePictureViewer extends StatelessWidget {
     return Column(
       children: [
         Text(value,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold)),
-        Text(label, style: Theme.of(context).textTheme.labelMedium),
-      ],
-    );
-  }
-
-  Widget _buildStatButton(BuildContext context, IconData icon, String label) {
-    return Column(
-      children: [
-        IconButton.filledTonal(onPressed: () {}, icon: Icon(icon)),
-        Text(label, style: Theme.of(context).textTheme.labelMedium),
+            style: GoogleFonts.audiowide(
+                textStyle: (Theme.of(context).textTheme.displayMedium),
+                fontWeight: FontWeight.bold)),
+        Text(label, style: Theme.of(context).textTheme.headlineSmall),
       ],
     );
   }
@@ -225,16 +230,20 @@ class ProfilePictureViewer extends StatelessWidget {
         Positioned(
           top: 40,
           left: 40,
-          child: _StaggeredBubble(
-            animation: nameAnim,
-            alignment: Alignment.centerLeft,
-            child: _Bubble(
-              supportText: post.person.userName,
-              text: post.person.name,
-              backgroundColor:
-                  Theme.of(context).colorScheme.surfaceContainerHigh,
-              textColor: Theme.of(context).colorScheme.onSurface,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          child: Opacity(
+            opacity: (1.0 - model.expansionProgress).clamp(0.0, 1.0),
+            child: _StaggeredBubble(
+              animation: nameAnim,
+              alignment: Alignment.centerLeft,
+              child: _Bubble(
+                supportText: post.person.userName,
+                text: post.person.name,
+                backgroundColor:
+                    Theme.of(context).colorScheme.surfaceContainerHigh,
+                textColor: Theme.of(context).colorScheme.onSurface,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
             ),
           ),
         ),
@@ -242,40 +251,61 @@ class ProfilePictureViewer extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          bottom: 40,
+          bottom: 20,
           child: Center(
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              alignment: WrapAlignment.center,
-              children: [
-                _StaggeredBubble(
-                  animation: followingAnim,
-                  alignment: Alignment.centerRight,
-                  child: _ActionBubble(
-                    label: 'Following',
-                    icon: Icons.done,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.onPrimaryContainer,
-                    textColor: Theme.of(context).colorScheme.inversePrimary,
+              child: Column(
+            children: [
+              Opacity(
+                  opacity: model.expansionProgress,
+                  child: Column(
+                    children: [
+                      Text(
+                        post.person.name,
+                        style: Theme.of(context).textTheme.displaySmall,
+                      ),
+                      Text(
+                        post.person.userName,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ],
+                  )),
+              SizedBox(
+                height: 24,
+              ),
+              Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: _StaggeredBubble(
+                      animation: followingAnim,
+                      alignment: Alignment.centerRight,
+                      child: _ActionBubble(
+                        label: 'Following',
+                        icon: Icons.done,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                        textColor: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
                   ),
-                ),
-                _StaggeredBubble(
-                  animation: profileAnim,
-                  alignment: Alignment.centerRight,
-                  child: _ActionBubble(
-                    onTap: model.expandToProfile,
-                    label: 'Profile',
-                    icon: Icons.north_east,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.secondaryContainer,
-                    textColor:
-                        Theme.of(context).colorScheme.onSecondaryContainer,
-                  ),
-                ),
-              ],
-            ),
-          ),
+                  Expanded(
+                      child: _StaggeredBubble(
+                    animation: profileAnim,
+                    alignment: Alignment.centerRight,
+                    child: _ActionBubble(
+                      onTap: model.expandToProfile,
+                      label: 'Profile',
+                      icon: Icons.north_east,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
+                      textColor:
+                          Theme.of(context).colorScheme.onSecondaryContainer,
+                    ),
+                  )),
+                ],
+              ),
+            ],
+          )),
         ),
       ],
     );
@@ -417,7 +447,7 @@ class _ActionBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
         height: 64,
-        width: 140,
+        width: double.infinity,
         child: FilledButton.icon(
           style: ButtonStyle(
             elevation: const WidgetStatePropertyAll(0),
@@ -427,11 +457,12 @@ class _ActionBubble extends StatelessWidget {
           icon: Icon(icon, color: textColor, size: 18),
           label: Text(
             label,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: textColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
+            style: GoogleFonts.manjari(
+              height: 4.3,
+              color: textColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
           ),
         ));
   }
