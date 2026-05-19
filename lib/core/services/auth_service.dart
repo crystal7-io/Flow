@@ -3,14 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'package:redesigned/core/constants/app_config.dart';
 
 class AuthService extends ChangeNotifier {
-  final FirebaseAuth? _firebaseAuth = AppConfig.useAuth ? FirebaseAuth.instance : null;
+  final FirebaseAuth? _firebaseAuth =
+      AppConfig.useAuth ? FirebaseAuth.instance : null;
 
   /// Currently signed in User
   User? _currentUser;
 
   AuthService._() {
     if (AppConfig.useAuth && _firebaseAuth != null) {
-      _firebaseAuth!.authStateChanges().listen((user) {
+      _firebaseAuth.authStateChanges().listen((user) {
         _currentUser = user;
         notifyListeners();
       });
@@ -29,7 +30,7 @@ class AuthService extends ChangeNotifier {
 
   // Stream to listen to authentication state changes
   Stream<User?> get userChanges => AppConfig.useAuth && _firebaseAuth != null
-      ? _firebaseAuth!.authStateChanges() 
+      ? _firebaseAuth.authStateChanges()
       : const Stream.empty();
 
   // Sign in with email and password
@@ -37,7 +38,7 @@ class AuthService extends ChangeNotifier {
       String email, String password) async {
     if (!AppConfig.useAuth || _firebaseAuth == null) return null;
     try {
-      final userCredential = await _firebaseAuth!.signInWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -54,7 +55,7 @@ class AuthService extends ChangeNotifier {
       String email, String password) async {
     if (!AppConfig.useAuth || _firebaseAuth == null) return null;
     try {
-      final userCredential = await _firebaseAuth!.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -67,6 +68,6 @@ class AuthService extends ChangeNotifier {
   // Sign out
   Future<void> signOut() async {
     if (!AppConfig.useAuth || _firebaseAuth == null) return;
-    await _firebaseAuth!.signOut();
+    await _firebaseAuth.signOut();
   }
 }

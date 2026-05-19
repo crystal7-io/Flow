@@ -12,7 +12,7 @@ class RemoteUserDataSource {
     if (!AppConfig.useAuth || _firestore == null) return null;
     try {
       final userSnapShot =
-          await _firestore!.collection('users').doc(userID).get();
+          await _firestore.collection('users').doc(userID).get();
       if (userSnapShot.exists) {
         /// Return user object if user is found
         return User.fromJson(userSnapShot.data()!);

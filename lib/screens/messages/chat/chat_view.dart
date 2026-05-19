@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/chat.dart';
 import 'package:redesigned/screens/messages/chat/chat_view_model.dart';
