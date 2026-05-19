@@ -112,6 +112,23 @@ class ProfilePictureViewer extends StatelessWidget {
       reverseCurve:
           const Interval(0.05, 0.15, curve: Easing.standardAccelerate),
     );
+    final followersAnim = CurvedAnimation(
+      parent: animation,
+      curve: const Interval(0.92, 1.0, curve: Easing.emphasizedDecelerate),
+      reverseCurve:
+          const Interval(0.02, 0.12, curve: Easing.standardAccelerate),
+    );
+    final followingAnimStat = CurvedAnimation(
+      parent: animation,
+      curve: const Interval(0.94, 1.0, curve: Easing.emphasizedDecelerate),
+      reverseCurve: const Interval(0.0, 0.10, curve: Easing.standardAccelerate),
+    );
+    final svgRevealAnim = CurvedAnimation(
+      parent: animation,
+      curve: const Interval(0.75, 0.90, curve: Easing.emphasizedDecelerate),
+      reverseCurve:
+          const Interval(0.25, 0.35, curve: Easing.standardAccelerate),
+    );
 
     return Column(
       children: [
@@ -176,35 +193,74 @@ class ProfilePictureViewer extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 28),
-        SvgPicture.asset("assets/zigzag.svg"),
-        SizedBox(height: 28),
-        _StaggeredBubble(
-          animation: animation,
-          alignment: Alignment.topCenter,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildStatColumn(context, "24K", "Followers"),
-              _buildStatColumn(context, "14", "Following")
-            ],
-          ),
+        const SizedBox(height: 28),
+        _HorizontalReveal(
+          animation: svgRevealAnim,
+          child: SvgPicture.asset("assets/zigzag.svg"),
+        ),
+        const SizedBox(height: 28),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildStatPill(
+              context,
+              icon: Icons.groups_rounded,
+              value: "24K",
+              label: "Followers",
+              animation: followersAnim,
+            ),
+            const SizedBox(width: 12),
+            _buildStatPill(
+              context,
+              icon: Icons.person_add_rounded,
+              value: "14",
+              label: "Following",
+              animation: followingAnimStat,
+            ),
+          ],
         )
       ],
     );
   }
 
-  Widget _buildStatColumn(BuildContext context, String value, String label) {
-    return Column(
-      children: [
-        Text(value,
-            style: GoogleFonts.audiowide(
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .displayMedium
-                    ?.copyWith(fontWeight: FontWeight.bold))),
-        Text(label, style: Theme.of(context).textTheme.bodyLarge),
-      ],
+  Widget _buildStatPill(
+    BuildContext context, {
+    required IconData icon,
+    required String value,
+    required String label,
+    required Animation<double> animation,
+  }) {
+    final theme = Theme.of(context);
+    return _StaggeredBubble(
+      animation: animation,
+      alignment: Alignment.center,
+      child: Material(
+        color: theme.colorScheme.surfaceContainerHigh,
+        shape: const StadiumBorder(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                value,
+                style: GoogleFonts.audiowide(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+              Text(
+                label,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -229,6 +285,33 @@ class _StaggeredBubble extends StatelessWidget {
           scale: animation.value,
           alignment: alignment,
           child: child,
+        );
+      },
+      child: child,
+    );
+  }
+}
+
+class _HorizontalReveal extends StatelessWidget {
+  final Animation<double> animation;
+  final Widget child;
+
+  const _HorizontalReveal({
+    required this.animation,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        return ClipRect(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            widthFactor: animation.value,
+            child: child,
+          ),
         );
       },
       child: child,
