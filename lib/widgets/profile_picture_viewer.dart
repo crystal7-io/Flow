@@ -159,13 +159,14 @@ class ProfilePictureViewer extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Column(
             children: [
-              Text(
-                post.person.name,
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                    ),
-              ),
+              Text(post.person.name,
+                  style: GoogleFonts.permanentMarker(
+                    textStyle:
+                        Theme.of(context).textTheme.headlineLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.onSurface,
+                            ),
+                  )),
               const SizedBox(height: 4),
               Text(
                 post.person.userName,
@@ -180,36 +181,52 @@ class ProfilePictureViewer extends StatelessWidget {
         // Action Buttons
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Wrap(
+          child: Row(
             children: [
-              _StaggeredBubble(
-                  animation: followingAnim,
-                  alignment: Alignment.center,
-                  child: SizedBox(
-                    width: MediaQuery.widthOf(context) - 124,
-                    child: ExpressiveButton(
-                      thickness: 64,
-                      icon: model.isFollowing ? Icons.done : Icons.add,
-                      text: model.isFollowing ? "Followed" : "Follow",
-                      unselectedContentColor: colorScheme.primaryContainer,
-                      unselectedBackgroundColor: colorScheme.primary,
-                      selectedContentColor: colorScheme.onSecondaryContainer,
-                      selectedBackgroundColor: colorScheme.secondaryContainer,
-                      isSelected: model.isFollowing,
-                      onTap: model.toggleFollowing,
-                    ),
-                  )),
+              Expanded(
+                  child: _StaggeredBubble(
+                      animation: followingAnim,
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        height: 72,
+                        child: FilledButton.icon(
+                          icon: Icon(
+                            model.isFollowing ? Symbols.done : Symbols.add,
+                            size: 24,
+                            weight: 800,
+                          ),
+                          label: Text(
+                            model.isFollowing ? "Followed" : "Follow",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          style: ButtonStyle(
+                              shape: WidgetStatePropertyAll(model.isFollowing
+                                  ? RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14))
+                                  : StadiumBorder()),
+                              foregroundColor: WidgetStatePropertyAll(
+                                  model.isFollowing
+                                      ? colorScheme.onSecondaryContainer
+                                      : colorScheme.primaryContainer),
+                              backgroundColor: WidgetStatePropertyAll(
+                                  model.isFollowing
+                                      ? colorScheme.secondaryContainer
+                                      : colorScheme.primary)),
+                          onPressed: model.toggleFollowing,
+                        ),
+                      ))),
               const SizedBox(width: 4),
               _StaggeredBubble(
                 animation: profileAnim,
                 alignment: Alignment.center,
                 child: SizedBox(
-                  height: 64,
+                  height: 72,
                   child: ExpressiveSpringIconButton(
                     selectedBg: colorScheme.tertiaryContainer,
                     selectedContent: colorScheme.onTertiaryContainer,
-                    unselectedLength: 58,
-                    selectedLength: 72,
+                    unselectedLength: 64,
+                    selectedLength: 78,
                     isSelected: model.isStarred,
                     onTap: model.toggleStar,
                     icon: model.isStarred ? Icons.star : Icons.star_outline,
@@ -277,8 +294,8 @@ class ProfilePictureViewer extends StatelessWidget {
           children: [
             Text(
               value,
-              style: GoogleFonts.audiowide(
-                textStyle: Theme.of(context).textTheme.displayMedium?.copyWith(
+              style: GoogleFonts.limelight(
+                textStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
                 fontWeight: FontWeight.bold,
@@ -287,7 +304,7 @@ class ProfilePictureViewer extends StatelessWidget {
             ),
             Text(
               label,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
             ),
