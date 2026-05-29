@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:redesigned/core/services/navigation_service.dart';
 import 'package:redesigned/core/utils/animations.dart';
 import 'package:redesigned/widgets/utils/open_container.dart'
     as container_transform;
@@ -389,7 +388,7 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
     super.dispose();
   }
 
-  void _handleClose() {
+  void _handleClose([VoidCallback? onClosed]) {
     if (_isClosing) return;
     setState(() {
       _isClosing = true;
@@ -398,6 +397,9 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
     _localCloseController.forward().then((_) {
       if (mounted) {
         Navigator.of(context).pop();
+        if (onClosed != null) {
+          onClosed();
+        }
       }
     });
   }
@@ -424,7 +426,7 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
 
     return RepaintBoundary(
       child: GestureDetector(
-        onTap: _handleClose,
+        onTap: () => _handleClose(),
         child: Stack(
           children: [
             // Dark Backdrop Layer with decoupled timing tracks
@@ -486,7 +488,7 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(borderRadiusValue),
                       ),
-                      onPressed: _handleClose,
+                      onPressed: () => _handleClose(),
                       child: RotationTransition(
                         turns: AlwaysStoppedAnimation(currentRotation),
                         child: const Icon(
@@ -542,8 +544,10 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
                       exitAnimation: _exitAnimation,
                       theme: theme,
                       onPressed: () {
-                        // _handleClose();
-                        context.push('/create-post');
+                        final router = GoRouter.of(context);
+                        _handleClose(() {
+                          router.push('/create-post');
+                        });
                       },
                     ),
                   ],
