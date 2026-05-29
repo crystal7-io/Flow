@@ -5,6 +5,7 @@ import 'package:redesigned/core/services/app_service.dart';
 import 'package:redesigned/core/services/auth_service.dart';
 import 'package:redesigned/core/services/navigation_service.dart';
 import 'package:redesigned/core/services/user_data_service.dart';
+import 'package:redesigned/core/navigation/create_post_transition_provider.dart';
 import 'package:redesigned/data/local/local_user_data_source.dart';
 import 'package:redesigned/data/remote/remote_user_data_source.dart';
 import 'package:redesigned/data/repositories/user_repository.dart';
@@ -23,6 +24,9 @@ class AppProvider extends StatelessWidget {
         ),
         ChangeNotifierProvider<AuthService>(
           create: (_) => AuthService(),
+        ),
+        ChangeNotifierProvider<CreatePostTransitionProvider>(
+          create: (_) => CreatePostTransitionProvider(),
         ),
         ChangeNotifierProvider<UserDataService>(
           create: (_) => UserDataService(

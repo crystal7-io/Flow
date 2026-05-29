@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:redesigned/core/services/navigation_service.dart';
 import 'package:redesigned/core/utils/animations.dart';
 import 'package:redesigned/widgets/utils/open_container.dart'
     as container_transform;
@@ -11,6 +12,7 @@ import 'package:redesigned/widgets/navigation/navigation_rail.dart';
 import 'package:redesigned/screens/messages/new_chat/new_chat_view.dart';
 import 'package:redesigned/screens/messages/new_chat/new_chat_view_model.dart';
 import 'package:redesigned/core/services/app_service.dart';
+import 'package:redesigned/core/navigation/create_post_transition_provider.dart';
 import 'package:provider/provider.dart';
 
 class RootView extends StatefulWidget {
@@ -184,7 +186,10 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final createPostTransition = context.watch<CreatePostTransitionProvider>();
+    final animation = createPostTransition.animation;
+
+    Widget content = Scaffold(
       floatingActionButton: AnimatedSwitcher(
         switchInCurve: Easing.emphasizedDecelerate,
         switchOutCurve: Easing.emphasizedAccelerate,
@@ -306,6 +311,35 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
         ],
       ),
     );
+
+    if (animation != null) {
+      final rootAnimation = CurvedAnimation(
+        parent: animation,
+        curve: const Interval(0.0, 0.8, curve: Easing.standard),
+        reverseCurve:
+            const Interval(0.0, 0.8, curve: Easing.emphasizedAccelerate),
+      );
+
+      return SlideTransition(
+        position: rootAnimation.drive(
+          Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(-1.0, 0.0),
+          ),
+        ),
+        child: ScaleTransition(
+          scale: rootAnimation.drive(
+            Tween<double>(
+              begin: 1.0,
+              end: 0.9,
+            ),
+          ),
+          child: content,
+        ),
+      );
+    }
+
+    return content;
   }
 }
 
@@ -485,6 +519,7 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
                       index: 2,
                       exitAnimation: _exitAnimation,
                       theme: theme,
+                      onPressed: () {},
                     ),
                     const SizedBox(height: 4),
                     _buildStaggeredButton(
@@ -494,6 +529,9 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
                       index: 0,
                       exitAnimation: _exitAnimation,
                       theme: theme,
+                      onPressed: () {
+                        _handleClose();
+                      },
                     ),
                     const SizedBox(height: 4),
                     _buildStaggeredButton(
@@ -503,6 +541,10 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
                       index: 1,
                       exitAnimation: _exitAnimation,
                       theme: theme,
+                      onPressed: () {
+                        // _handleClose();
+                        context.push('/create-post');
+                      },
                     ),
                   ],
                 ),
@@ -521,6 +563,7 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
     required int index,
     required Animation<double> exitAnimation,
     required ThemeData theme,
+    VoidCallback? onPressed,
   }) {
     return AnimatedBuilder(
       animation:
@@ -573,7 +616,7 @@ class _ModalMenuOverlayState extends State<_ModalMenuOverlay>
                   backgroundColor: WidgetStatePropertyAll(Colors.transparent),
                   elevation: WidgetStatePropertyAll(0),
                 ),
-                onPressed: () {},
+                onPressed: onPressed ?? () {},
                 label: Text(
                   label,
                   style: GoogleFonts.manrope(

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/story.dart';
@@ -24,8 +25,12 @@ import 'package:redesigned/screens/stories/stories_view.dart';
 import 'package:redesigned/screens/stories/stories_view_model.dart';
 import 'package:redesigned/screens/story_view/story_view.dart';
 import 'package:redesigned/screens/story_view/story_view_model.dart';
+import 'package:redesigned/screens/create_post/create_post_view.dart';
+
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/home',
     // Redirect User to Sign-in screen if user is not signed in
     // or if user logs out
@@ -134,4 +139,12 @@ final router = GoRouter(
                   child: const StoryView(),
                 ));
           })),
+      GoRoute(
+        path: '/create-post',
+        parentNavigatorKey: rootNavigatorKey,
+        pageBuilder: (context, state) => ZoomTransitionPage(
+          child: const CreatePostView(),
+          key: state.pageKey,
+        ),
+      ),
     ]);
