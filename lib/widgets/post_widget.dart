@@ -833,7 +833,7 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
           itemSnapping: true,
           itemExtent: widget.imagePost.aspectRatio *
               (MediaQuery.of(context).size.width),
-          shrinkExtent: 120,
+          shrinkExtent: 0,
           children: widget.imagePost.imagePaths
               .map((e) => Builder(
                     builder: (BuildContext context) => CachedNetworkImage(
