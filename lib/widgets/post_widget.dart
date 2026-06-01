@@ -10,6 +10,7 @@ import 'package:redesigned/core/models/post.dart';
 import 'package:redesigned/core/utils/format_post_timestamp.dart';
 import 'package:redesigned/widgets/post_viewer.dart';
 import 'package:redesigned/widgets/profile_picture_viewer.dart';
+import 'package:redesigned/widgets/utils/m3expressive/button_group.dart';
 import 'package:redesigned/widgets/utils/m3expressive/expressive_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -535,58 +536,82 @@ class _MobilePostState extends State<MobilePost> {
               SizedBox(height: 8),
             ],
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                  width: 48,
-                  height: 56,
-                  child: IconButton.filledTonal(
-                      style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                              Theme.of(context).colorScheme.surfaceContainer)),
-                      onPressed: () {},
-                      icon: Icon(
-                        size: 24,
-                        Symbols.forward,
-                        weight: 600,
-                      ))),
-              SizedBox(width: 4),
-              SizedBox(
-                  width: 56,
-                  height: 56,
-                  child: IconButton.filledTonal(
-                      style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                              Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer)),
-                      onPressed: () {},
-                      icon: Icon(
-                        size: 24,
-                        Symbols.comment,
-                        weight: 600,
-                      ))),
-              SizedBox(width: 4),
-              ExpressiveSpringButton(
-                  unselectedLength: 32,
-                  selectedLength: 46,
-                  icon: liked ? Icons.favorite : Icons.favorite_border_outlined,
-                  persistText: true,
-                  text: "24K",
-                  isSelected: liked,
-                  onTap: () {
-                    setState(() {
-                      liked = !liked;
-                    });
-                  },
-                  selectedBg: Theme.of(context).colorScheme.onPrimaryContainer,
-                  unselectedBg: Theme.of(context).colorScheme.inversePrimary,
-                  selectedContent: Theme.of(context).colorScheme.inversePrimary,
-                  unselectedContent:
-                      Theme.of(context).colorScheme.onPrimaryContainer),
-            ],
-          ),
+          // Row(
+          //   mainAxisSize: MainAxisSize.min,
+          //   children: [
+          //     SizedBox(
+          //         width: 48,
+          //         height: 56,
+          //         child: IconButton.filledTonal(
+          //             style: ButtonStyle(
+          //                 backgroundColor: WidgetStatePropertyAll(
+          //                     Theme.of(context)
+          //                         .colorScheme
+          //                         .surfaceContainerHigh)),
+          //             onPressed: () {},
+          //             icon: Icon(
+          //               size: 24,
+          //               Symbols.forward,
+          //               weight: 600,
+          //             ))),
+          //     SizedBox(width: 4),
+          //     SizedBox(
+          //         width: 56,
+          //         height: 56,
+          //         child: IconButton.filledTonal(
+          //             style: ButtonStyle(
+          //                 backgroundColor: WidgetStatePropertyAll(
+          //                     Theme.of(context)
+          //                         .colorScheme
+          //                         .surfaceContainerHigh)),
+          //             onPressed: () {},
+          //             icon: Icon(
+          //               size: 24,
+          //               Symbols.comment,
+          //               weight: 600,
+          //             ))),
+          //     SizedBox(width: 4),
+          //     ExpressiveSpringButton(
+          //         keepRound: true,
+          //         unselectedLength: 32,
+          //         selectedLength: 46,
+          //         icon: liked ? Icons.favorite : Icons.favorite_border_outlined,
+          //         persistText: true,
+          //         text: "24K",
+          //         isSelected: liked,
+          //         onTap: () {
+          //           setState(() {
+          //             liked = !liked;
+          //           });
+          //         },
+          //         selectedBg: Theme.of(context).colorScheme.onPrimaryContainer,
+          //         selectedContent: Theme.of(context).colorScheme.inversePrimary,
+          //         unselectedBg:
+          //             Theme.of(context).colorScheme.onPrimaryFixedVariant,
+          //         unselectedContent:
+          //             Theme.of(context).colorScheme.primaryFixed),
+          //   ],
+          // ),
+
+          StandardButtonGroup(alignment: MainAxisAlignment.end, items: [
+            ButtonGroupItem(
+                width: 44, height: 56, onPressed: () {}, icon: Symbols.forward),
+            ButtonGroupItem(
+                width: 56, height: 56, onPressed: () {}, icon: Symbols.comment),
+            ButtonGroupItem(
+                backgroundColor:
+                    liked ? Theme.of(context).colorScheme.primaryFixed : null,
+                foregroundColor:
+                    liked ? Theme.of(context).colorScheme.onPrimaryFixed : null,
+                height: 56,
+                onPressed: () {
+                  setState(() {
+                    liked = !liked;
+                  });
+                },
+                icon: liked ? Icons.favorite : Icons.favorite_border_outlined,
+                label: const Text("24K"))
+          ])
         ],
       ),
     );

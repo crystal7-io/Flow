@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:redesigned/core/utils/expressive_physics.dart';
 
-/// Configuration schema for independent items inside the group.
 class ButtonGroupItem {
   final Widget? label;
   final IconData? icon;
@@ -25,67 +25,159 @@ class ButtonGroupItem {
             'An item must contain at least a label or an icon.');
 }
 
-/// The master Standard Button Group container.
-class StandardButtonGroup extends StatelessWidget {
+class StandardButtonGroup extends StatefulWidget {
   final List<ButtonGroupItem> items;
   final double spacing;
-  final MainAxisAlignment alignment; // Added alignment parameter
+  final MainAxisAlignment alignment;
+  final bool expandEqually;
 
   const StandardButtonGroup({
     super.key,
     required this.items,
     this.spacing = 4.0,
-    this.alignment = MainAxisAlignment.center, // Defaults to center alignment
+    this.alignment = MainAxisAlignment.center,
+    this.expandEqually = false,
   });
 
   @override
+  State<StandardButtonGroup> createState() => _StandardButtonGroupState();
+}
+
+class _StandardButtonGroupState extends State<StandardButtonGroup>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  int _activeIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    // A single controller orchestrates the entire row's layout math
+    _controller = AnimationController(
+      vsync: this,
+      lowerBound: 0.0,
+      upperBound: 2.0,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handlePress(int index) {
+    setState(() {
+      _activeIndex = index;
+    });
+
+    _controller.stop();
+    final springSimulation = SpringSimulation(
+      ExpressivePhysics.expressiveFastSpatial,
+      0.0,
+      0.0,
+      22.0,
+    );
+
+    _controller.animateWith(springSimulation);
+    widget.items[index].onPressed();
+  }
+
+  /// Calculates exact pixel distribution so only immediate neighbors squash.
+  /// Net total width change across the row is always exactly 0.0.
+  double _getDeltaForIndex(int index, double maxStretch) {
+    if (_activeIndex == -1) return 0.0;
+
+    final int n = widget.items.length;
+    final double currentStretch = maxStretch * _controller.value;
+
+    if (index == _activeIndex) {
+      return currentStretch; // Active button grows
+    }
+
+    if (index == _activeIndex - 1) {
+      // If active is the very last item, this single neighbor absorbs all compression
+      return (_activeIndex == n - 1) ? -currentStretch : -currentStretch / 2.0;
+    }
+
+    if (index == _activeIndex + 1) {
+      // If active is the very first item, this single neighbor absorbs all compression
+      return (_activeIndex == 0) ? -currentStretch : -currentStretch / 2.0;
+    }
+
+    return 0.0; // Distant buttons are completely unaffected
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize
-          .max, // Allows the Row to occupy full width to respect alignment parameters
-      mainAxisAlignment: alignment, // Applied dynamic alignment parameter here
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: List.generate(items.length, (index) {
-        return Padding(
-          padding: EdgeInsets.only(
-            right: index != items.length - 1 ? spacing : 0.0,
-          ),
-          child: _ExpressiveGroupButton(item: items[index]),
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: widget.alignment,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: List.generate(widget.items.length, (index) {
+            final item = widget.items[index];
+
+            // Calculate math for both modes in real-time
+            final double deltaWidth = _getDeltaForIndex(index, 24.0);
+            final double deltaFlex = _getDeltaForIndex(index, 350.0);
+
+            final buttonWidget = Padding(
+              padding: EdgeInsets.only(
+                right: index != widget.items.length - 1 ? widget.spacing : 0.0,
+              ),
+              child: _ExpressiveGroupButton(
+                item: item,
+                deltaWidth: deltaWidth,
+                onPressed: () => _handlePress(index),
+                expandEqually: widget.expandEqually,
+              ),
+            );
+
+            if (widget.expandEqually) {
+              return Expanded(
+                flex: (1000 + deltaFlex).toInt(),
+                child: buttonWidget,
+              );
+            }
+
+            return buttonWidget;
+          }),
         );
-      }),
+      },
     );
   }
 }
 
 class _ExpressiveGroupButton extends StatefulWidget {
   final ButtonGroupItem item;
+  final double deltaWidth;
+  final VoidCallback onPressed;
+  final bool expandEqually;
 
-  const _ExpressiveGroupButton({required this.item});
+  const _ExpressiveGroupButton({
+    required this.item,
+    required this.deltaWidth,
+    required this.onPressed,
+    required this.expandEqually,
+  });
 
   @override
   State<_ExpressiveGroupButton> createState() => _ExpressiveGroupButtonState();
 }
 
-class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
   final GlobalKey _contentKey = GlobalKey();
-
   double _baseContentWidth = 0.0;
   bool _isWidthCalculated = false;
-
-  static const double _kSpringExtensionPixels = 16.0;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      lowerBound: -0.2,
-      upperBound: 1.5,
-    );
-
-    if (widget.item.width != null) {
+    if (widget.expandEqually) {
+      _isWidthCalculated = true;
+    } else if (widget.item.width != null) {
       _baseContentWidth = widget.item.width!;
       _isWidthCalculated = true;
     } else {
@@ -95,7 +187,7 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton>
   }
 
   void _measureFreshBounds() {
-    if (widget.item.width != null) return;
+    if (widget.item.width != null || widget.expandEqually) return;
 
     final renderBox =
         _contentKey.currentContext?.findRenderObject() as RenderBox?;
@@ -108,45 +200,6 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton>
   }
 
   @override
-  void didUpdateWidget(_ExpressiveGroupButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.item.width != null) {
-      setState(() {
-        _baseContentWidth = widget.item.width!;
-        _isWidthCalculated = true;
-      });
-    } else {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _measureFreshBounds());
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _fireExpressiveSpring() {
-    _controller.stop();
-
-    const springDescription = SpringDescription(
-      mass: 1.0,
-      stiffness: 480.0,
-      damping: 17,
-    );
-
-    final springSimulation = SpringSimulation(
-      springDescription,
-      1.0,
-      0.0,
-      0.0,
-    );
-
-    _controller.animateWith(springSimulation);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final item = widget.item;
     final hasText = item.label != null;
@@ -155,10 +208,8 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton>
 
     final resolvedBgColor = item.backgroundColor ??
         Theme.of(context).colorScheme.surfaceContainerHigh;
-
     final resolvedFgColor =
         item.foregroundColor ?? Theme.of(context).colorScheme.onSurface;
-
     final resolvedIconColor =
         item.foregroundColor ?? Theme.of(context).colorScheme.onSurfaceVariant;
 
@@ -168,94 +219,77 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton>
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
           );
 
-    EdgeInsets padding;
-    double minTargetWidth = 0.0;
-
+    EdgeInsets basePadding;
     if (hasText && hasIcon) {
-      padding = const EdgeInsets.only(left: 16.0, right: 24.0);
+      basePadding = const EdgeInsets.only(left: 16.0, right: 24.0);
     } else if (hasText) {
-      padding = const EdgeInsets.symmetric(horizontal: 24.0);
+      basePadding = const EdgeInsets.symmetric(horizontal: 24.0);
     } else {
-      padding = const EdgeInsets.symmetric(horizontal: 11.0);
-      minTargetWidth = item.width ?? 40.0;
+      basePadding = const EdgeInsets.symmetric(horizontal: 11.0);
     }
 
-    Widget buttonContent = Padding(
-      key: item.width == null ? _contentKey : null,
-      padding: item.width != null ? EdgeInsets.zero : padding,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (hasIcon) ...[
-            Icon(
-              item.icon,
-              size: 18.0,
-              color: resolvedIconColor,
-            ),
-            if (hasText) const SizedBox(width: 8.0),
-          ],
-          if (hasText)
-            Flexible(
-              child: DefaultTextStyle(
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: resolvedFgColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                child: item.label!,
-              ),
-            ),
+    Widget buttonContent = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (hasIcon) ...[
+          Icon(
+            item.icon,
+            size: 18.0,
+            color: resolvedIconColor,
+            weight: 700,
+          ),
+          if (hasText) const SizedBox(width: 8.0),
         ],
-      ),
+        if (hasText)
+          Text(
+            (item.label as Text).data ?? '', // Assuming label is a Text widget
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  color: resolvedFgColor,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+      ],
     );
 
-    if (minTargetWidth > 0 && item.width == null) {
-      buttonContent = Container(
-        constraints: BoxConstraints(minWidth: minTargetWidth),
-        alignment: Alignment.center,
-        child: buttonContent,
-      );
-    }
-
     if (!_isWidthCalculated) {
+      // Invisible render pass to extract exact native pixel width
       return Opacity(
         opacity: 0.0,
-        child: SizedBox(height: targetHeight, child: buttonContent),
+        child: SizedBox(
+          height: targetHeight,
+          child: Padding(
+            key: _contentKey,
+            padding: basePadding,
+            child: buttonContent,
+          ),
+        ),
       );
     }
 
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        final double extraWidth = _kSpringExtensionPixels * _controller.value;
-        final double finalDynamicWidth = _baseContentWidth + extraWidth;
-
-        return SizedBox(
-          width: finalDynamicWidth < minTargetWidth
-              ? minTargetWidth
-              : finalDynamicWidth,
-          height: targetHeight,
-          child: child,
-        );
-      },
+    return SizedBox(
+      width:
+          widget.expandEqually ? null : (_baseContentWidth + widget.deltaWidth),
+      height: targetHeight,
       child: Material(
         color: resolvedBgColor,
         shape: resolvedShape,
-        clipBehavior: Clip.antiAlias,
+        clipBehavior: Clip.antiAlias, // Ensures cleanly masked squashing
         child: InkWell(
-          onTap: () {
-            _fireExpressiveSpring();
-            item.onPressed();
-          },
+          onTap: widget.onPressed,
           splashColor: resolvedFgColor.withOpacity(0.08),
           highlightColor: resolvedFgColor.withOpacity(0.04),
           child: Center(
+            // OverflowBox provides infinite internal layout bounds.
+            // This prevents the text from wrapping or throwing NaN errors when the neighbor buttons compress smaller than their base width!
             child: OverflowBox(
-              minWidth: _baseContentWidth,
-              maxWidth: _baseContentWidth,
-              child: buttonContent,
+              maxWidth: double.infinity,
+              maxHeight: targetHeight,
+              alignment: Alignment.center,
+              child: Padding(
+                padding: basePadding,
+                child: buttonContent,
+              ),
             ),
           ),
         ),
