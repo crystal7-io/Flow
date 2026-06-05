@@ -83,10 +83,10 @@ class _CreatePostViewContentState extends State<_CreatePostViewContent> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leadingWidth: 88,
+        leadingWidth: 80,
         toolbarHeight: 56,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
+          padding: const EdgeInsets.only(left: 8.0),
           child: IconButton(
             style: ButtonStyle(
               backgroundColor: WidgetStatePropertyAll(
@@ -208,15 +208,23 @@ class _CreatePostViewContentState extends State<_CreatePostViewContent> {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: TextField(
               minLines: 1,
-              maxLines: 2,
+              maxLines: 4,
               onTapOutside: (event) =>
                   FocusManager.instance.primaryFocus?.unfocus(),
               onChanged: model.setComment,
+              style: GoogleFonts.abel(
+                fontSize: 22,
+                height: 1.4,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               decoration: InputDecoration(
-                  hintText: 'Add a comment',
-                  alignLabelWithHint: true,
-                  border: OutlineInputBorder()
-                      .copyWith(borderRadius: BorderRadius.circular(50))),
+                hintText: 'Add a comment. . .',
+                hintStyle: GoogleFonts.abel(
+                  fontSize: 22,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+                border: InputBorder.none,
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -362,7 +370,7 @@ class _CreatePostViewContentState extends State<_CreatePostViewContent> {
                 model.setSelectedAspectRatio(ratio['value'] as double),
             style: FilledButton.styleFrom(
               backgroundColor: isSelected
-                  ? Theme.of(context).colorScheme.primary
+                  ? Theme.of(context).colorScheme.inverseSurface
                   : Colors.transparent,
               foregroundColor: isSelected
                   ? Theme.of(context).colorScheme.onPrimary

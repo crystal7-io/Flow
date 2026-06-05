@@ -21,8 +21,7 @@ List<Post> get dummyPosts => <Post>[
       CarouselPostObject(
         postId: 001,
         person: accounts[8].person,
-        subTitle:
-            "Lost in the intricate details of this architectural masterpiece",
+        subTitle: "Lost in the intricate details of this architectural masterpiece",
         aspectRatio: 1 / 1,
         imagePaths: [
           "1swN0I0kJVE-YogucSzCcObVkdQ-ORnh2",
@@ -33,15 +32,15 @@ List<Post> get dummyPosts => <Post>[
         type: PostType.carosel,
         dateTime: DateTime(2024, 3, 24, 4, 25, 34),
       ),
-      ReelPostObject(
-        aspectRatio: 5 / 4,
-        postId: 002,
-        person: accounts[22].person,
-        subTitle: "Beautiful cloud mountain scenery",
-        sourcePath: "1n6UUe6Yk1ZTB5DKP55lP6CNZia7_r7KE",
-        type: PostType.reel,
-        dateTime: DateTime(2024, 3, 16, 5, 24, 54),
-      ),
+      // ReelPostObject(
+      //   aspectRatio: 5 / 4,
+      //   postId: 002,
+      //   person: accounts[22].person,
+      //   subTitle: "Beautiful cloud mountain scenery",
+      //   sourcePath: "1n6UUe6Yk1ZTB5DKP55lP6CNZia7_r7KE",
+      //   type: PostType.reel,
+      //   dateTime: DateTime(2024, 3, 16, 5, 24, 54),
+      // ),
       ImagePostObject(
         postId: 003,
         aspectRatio: 1,
@@ -87,8 +86,7 @@ List<Post> get dummyPosts => <Post>[
       ImagePostObject(
         postId: 005,
         person: accounts[10].person,
-        subTitle:
-            "A wonderful scenery of hot air balloon . I wish I could visit there someday.",
+        subTitle: "A wonderful scenery of hot air balloon . I wish I could visit there someday.",
         imagePath: "1VyZJ9yYhXcw-wCxsItBulgl3ARzTjALo",
         aspectRatio: 4 / 5,
         type: PostType.image,

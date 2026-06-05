@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -41,7 +40,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           ),
           ListItem(
             title: "Comments",
-            iconData: MdiIcons.commentTextOutline,
+            iconData: Icons.comment_outlined,
             onTap: () {},
           ),
           ListItem(

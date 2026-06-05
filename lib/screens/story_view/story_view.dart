@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/screens/story_view/story_view_model.dart';
 
@@ -18,8 +17,7 @@ class _StoryViewState extends State<StoryView> with TickerProviderStateMixin {
 
   void createController() {
     final viewModel = context.read<StoryViewModel>();
-    _controller = AnimationController(
-        vsync: this, duration: viewModel.currentStory.duration)
+    _controller = AnimationController(vsync: this, duration: viewModel.currentStory.duration)
       ..addListener(() {
         setState(() {});
       })
@@ -70,8 +68,7 @@ class _StoryViewState extends State<StoryView> with TickerProviderStateMixin {
               },
               child: Listener(
                   onPointerUp: (event) {
-                    if (event.position.dx >
-                        MediaQuery.of(context).size.width / 2) {
+                    if (event.position.dx > MediaQuery.of(context).size.width / 2) {
                       viewModel.nextStory(() {
                         context.pop();
                       });
@@ -84,13 +81,10 @@ class _StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                   },
                   child: Center(
                     child: CachedNetworkImage(
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       placeholderFadeInDuration: const Duration(seconds: 0),
-                      placeholder: (context, url) => Icon(
-                          Icons.account_circle_rounded,
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
+                      placeholder: (context, url) => Icon(Icons.account_circle_rounded,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant),
                       fit: BoxFit.contain,
                       imageUrl: viewModel.currentStory.pathToMedia,
                     ),
@@ -111,13 +105,10 @@ class _StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     child: CachedNetworkImage(
                       height: 45,
                       width: 45,
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       placeholderFadeInDuration: const Duration(seconds: 0),
-                      placeholder: (context, url) => Icon(
-                          Icons.account_circle_rounded,
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
+                      placeholder: (context, url) => Icon(Icons.account_circle_rounded,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant),
                       fit: BoxFit.contain,
                       imageUrl: viewModel.person.pfpPath,
                     ),
@@ -139,8 +130,7 @@ class _StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     ],
                   ),
                   const Spacer(),
-                  IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.more_vert))
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
                 ],
               ),
               const SizedBox(
@@ -173,21 +163,17 @@ class _StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                   SizedBox(
                       width: MediaQuery.of(context).size.width - 90,
                       child: SearchBar(
-                        textStyle: const WidgetStatePropertyAll(
-                            TextStyle(height: 1.2)),
-                        shadowColor:
-                            const WidgetStatePropertyAll(Colors.transparent),
-                        padding: const WidgetStatePropertyAll(
-                            EdgeInsets.symmetric(horizontal: 12)),
-                        leading: Icon(MdiIcons.replyOutline),
+                        textStyle: const WidgetStatePropertyAll(TextStyle(height: 1.2)),
+                        shadowColor: const WidgetStatePropertyAll(Colors.transparent),
+                        padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 12)),
+                        leading: Icon(Icons.reply_outlined),
                         hintText: "Reply to this story",
                       )),
                   SizedBox(
                       height: 56,
                       width: 56,
                       child: IconButton.filledTonal(
-                          onPressed: () {},
-                          icon: const Icon(Icons.favorite_outline)))
+                          onPressed: () {}, icon: const Icon(Icons.favorite_outline)))
                 ],
               ),
               const SizedBox(

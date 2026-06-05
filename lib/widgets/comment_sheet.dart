@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:redesigned/widgets/utils/expansion_view.dart';
 import 'package:redesigned/core/models/models.dart';
@@ -58,8 +57,8 @@ class _CommentSheetState extends State<CommentSheet> {
                   .mapIndexed((index, comment) => ExpansionView(
                       backgroundColor: Colors.transparent,
                       isExpanded: isReplyOpen[index],
-                      headerBuilder: (context, isExpanded) => CommentWidget(
-                          expand: expandComment, comment: comment),
+                      headerBuilder: (context, isExpanded) =>
+                          CommentWidget(expand: expandComment, comment: comment),
                       body: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -67,12 +66,10 @@ class _CommentSheetState extends State<CommentSheet> {
                           separatorBuilder: (context, index) => Divider(
                                 indent: 36,
                                 endIndent: 12,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant,
+                                color: Theme.of(context).colorScheme.outlineVariant,
                               ),
-                          itemBuilder: (context, index) => CommentReplyWidget(
-                              reply: comment.replies[index]))))
+                          itemBuilder: (context, index) =>
+                              CommentReplyWidget(reply: comment.replies[index]))))
                   .toList()),
         ])),
         Align(
@@ -87,13 +84,10 @@ class _CommentSheetState extends State<CommentSheet> {
                     child: CachedNetworkImage(
                         height: 40,
                         width: 40,
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                         placeholderFadeInDuration: const Duration(seconds: 0),
-                        placeholder: (context, url) => Icon(
-                            Icons.account_circle_rounded,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant),
+                        placeholder: (context, url) => Icon(Icons.account_circle_rounded,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant),
                         fit: BoxFit.contain,
                         imageUrl: linkToPfp),
                   ),
@@ -155,11 +149,9 @@ class _CommentWidgetState extends State<CommentWidget> {
                   child: CachedNetworkImage(
                     height: 45,
                     width: 45,
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                     placeholderFadeInDuration: const Duration(seconds: 0),
-                    placeholder: (context, url) => Icon(
-                        Icons.account_circle_rounded,
+                    placeholder: (context, url) => Icon(Icons.account_circle_rounded,
                         color: Theme.of(context).colorScheme.onSurfaceVariant),
                     fit: BoxFit.contain,
                     imageUrl: widget.comment.person.pfpPath,
@@ -225,9 +217,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                             });
                           },
                           icon: Icon(
-                            widget.comment.isLiked
-                                ? Icons.favorite
-                                : Icons.favorite_outline,
+                            widget.comment.isLiked ? Icons.favorite : Icons.favorite_outline,
                             size: 22,
                           )),
                       const SizedBox(width: 8),
@@ -237,7 +227,7 @@ class _CommentWidgetState extends State<CommentWidget> {
                           ),
                           onPressed: () {},
                           icon: Icon(
-                            MdiIcons.replyOutline,
+                            Icons.reply_outlined,
                             size: 24,
                           )),
                     ],
@@ -296,26 +286,20 @@ class _CommentReplyWidgetState extends State<CommentReplyWidget> {
             children: [
               Text(
                 widget.reply.person.userName,
-                style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurface),
+                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface),
               ),
               const SizedBox(height: 4),
               Text(
                 overflow: TextOverflow.clip,
                 widget.reply.text,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.onSurface),
+                style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
               ),
               Row(
                 children: [
                   TextButton.icon(
                       style: ButtonStyle(
                           iconColor: WidgetStatePropertyAll(
-                        widget.reply.isLiked
-                            ? Colors.red
-                            : Theme.of(context).colorScheme.primary,
+                        widget.reply.isLiked ? Colors.red : Theme.of(context).colorScheme.primary,
                       )),
                       label: Text(
                         widget.reply.likes.toString(),
@@ -332,9 +316,7 @@ class _CommentReplyWidgetState extends State<CommentReplyWidget> {
                         });
                       },
                       icon: Icon(
-                        widget.reply.isLiked
-                            ? Icons.favorite
-                            : Icons.favorite_outline,
+                        widget.reply.isLiked ? Icons.favorite : Icons.favorite_outline,
                         size: 22,
                       )),
                   const SizedBox(width: 8),
@@ -344,7 +326,7 @@ class _CommentReplyWidgetState extends State<CommentReplyWidget> {
                       ),
                       onPressed: () {},
                       icon: Icon(
-                        MdiIcons.replyOutline,
+                        Icons.reply_outlined,
                         size: 24,
                       )),
                 ],
