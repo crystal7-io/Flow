@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:redesigned/core/utils/expressive_physics.dart';
 
+/// Configuration schema for an individual button within a [StandardButtonGroup].
+///
+/// Holds layout bounds, styling, icons, text, and operational hooks.
 class ButtonGroupItem {
   final Widget? label;
   final IconData? icon;
@@ -24,7 +27,8 @@ class ButtonGroupItem {
   }) : assert(label != null || icon != null, 'An item must contain at least a label or an icon.');
 }
 
-// Constant name preserved as per system configuration
+/// A highly expressive row-bound button cluster utilizing spring physics
+/// to scale items reactively on user interaction.
 class StandardButtonGroup extends StatefulWidget {
   final List<ButtonGroupItem> items;
   final double spacing;
@@ -47,15 +51,8 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   int _activeIndex = -1;
-
-  // M3E Style Motion Profiles
-
-  // 2. Smooth Retract: Balanced spatial physics for a fluid, natural return journey
-  final SpringDescription _smoothRetractSpring = const SpringDescription(
-    mass: 1.0,
-    stiffness: 350.0,
-    damping: 28.0,
-  );
+  DateTime? _tapStartTime;
+  bool _isReleasePending = false;
 
   @override
   void initState() {
@@ -72,19 +69,25 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
     super.dispose();
   }
 
+  /// Triggers a high-velocity forward spring transformation when a button is pressed down.
   void _handleTapDown(int index) {
-    setState(() => _activeIndex = index);
+    setState(() {
+      _activeIndex = index;
+      _isReleasePending = false;
+      _tapStartTime = DateTime.now();
+    });
 
-    // Rocket forward instantly using the high-stiffness press spring
     final simulation = SpringSimulation(
       ExpressiveMotionSpring.fastSpatial,
       _controller.value,
-      1.0, // Target full expansion
-      _controller.velocity,
+      1.0,
+      24.0,
     );
     _controller.animateWith(simulation);
   }
 
+  /// Manages release events, preserving frame runtime to ensure Android touch
+  /// interactions capture visual expansion states.
   void _handleTapRelease({required bool executeClick}) {
     if (_activeIndex == -1) return;
 
@@ -92,21 +95,40 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
       widget.items[_activeIndex].onPressed();
     }
 
-    // Hand off the current position and residual momentum to the smooth return spring
+    _isReleasePending = true;
+    final elapsed = DateTime.now().difference(_tapStartTime ?? DateTime.now());
+    final remainingDelay = const Duration(milliseconds: 60) - elapsed;
+
+    if (remainingDelay.isNegative) {
+      _startRetractSimulation();
+    } else {
+      Future.delayed(remainingDelay, () {
+        if (mounted && _isReleasePending) {
+          _startRetractSimulation();
+        }
+      });
+    }
+  }
+
+  /// Reverses the active physics simulation to gracefully snap components back to resting size bounds.
+  void _startRetractSimulation() {
+    _isReleasePending = false;
+
     final simulation = SpringSimulation(
-      _smoothRetractSpring,
+      ExpressiveMotionSpring.fastSpatial,
       _controller.value,
-      0.0, // Target rest state
+      0.0,
       _controller.velocity,
     );
 
     _controller.animateWith(simulation).orCancel.then((_) {
-      if (mounted && _controller.value == 0.0) {
+      if (mounted && _controller.value == 0.0 && !_isReleasePending) {
         setState(() => _activeIndex = -1);
       }
     }, onError: (_) {});
   }
 
+  /// Computes geometric scale adjustments across adjacent nodes to preserve visual conservation of mass.
   double _getDeltaForIndex(int index, double maxStretch) {
     if (_activeIndex == -1) return 0.0;
     final int n = widget.items.length;
@@ -165,6 +187,7 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
   }
 }
 
+/// An unexposed, atomized layout node that applies structural styling metrics and captures sub-pixel boundaries.
 class _ExpressiveGroupButton extends StatefulWidget {
   final ButtonGroupItem item;
   final double deltaWidth;
@@ -204,6 +227,7 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
     }
   }
 
+  /// Executes a zero-latency offscreen baseline measurement to prevent layout thrashing on variable text string nodes.
   void _measureFreshBounds() {
     if (widget.item.width != null || widget.expandEqually) return;
 
@@ -233,14 +257,11 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
         ? const StadiumBorder()
         : const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)));
 
-    EdgeInsets basePadding;
-    if (hasText && hasIcon) {
-      basePadding = const EdgeInsets.only(left: 16.0, right: 24.0);
-    } else if (hasText) {
-      basePadding = const EdgeInsets.symmetric(horizontal: 24.0);
-    } else {
-      basePadding = const EdgeInsets.symmetric(horizontal: 11.0);
-    }
+    final EdgeInsets basePadding = hasText && hasIcon
+        ? const EdgeInsets.only(left: 16.0, right: 24.0)
+        : hasText
+            ? const EdgeInsets.symmetric(horizontal: 24.0)
+            : const EdgeInsets.symmetric(horizontal: 11.0);
 
     Widget buttonContent = Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -261,7 +282,6 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
       ],
     );
 
-    // Two-pass rendering layer for zero-latency frame parsing
     if (!_isWidthCalculated) {
       return Opacity(
         opacity: 0.0,
@@ -287,8 +307,6 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
           onTapDown: (_) => widget.onTapDown(),
           onTap: widget.onTap,
           onTapCancel: widget.onTapCancel,
-          splashColor: resolvedFgColor.withOpacity(0.08),
-          highlightColor: resolvedFgColor.withOpacity(0.04),
           child: Center(
             child: OverflowBox(
               maxWidth: double.infinity,

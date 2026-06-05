@@ -12,7 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   if (AppConfig.useAuth) {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } else {
@@ -34,7 +34,7 @@ class MainApp extends StatelessWidget {
           return MaterialApp.router(
             routerConfig: context.read<GoRouter>(),
             theme: ThemeData.from(
-              textTheme: GoogleFonts.manropeTextTheme(
+              textTheme: GoogleFonts.googleSansFlexTextTheme(
                 ThemeData.light().textTheme,
               ),
               colorScheme: ColorScheme.fromSeed(
@@ -43,7 +43,7 @@ class MainApp extends StatelessWidget {
               useMaterial3: true,
             ),
             darkTheme: ThemeData.from(
-              textTheme: GoogleFonts.manropeTextTheme(
+              textTheme: GoogleFonts.googleSansFlexTextTheme(
                 ThemeData.dark().textTheme,
               ),
               colorScheme: ColorScheme.fromSeed(

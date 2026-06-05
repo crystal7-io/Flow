@@ -621,7 +621,7 @@ class ListItem extends StatelessWidget {
       title: Text(title),
       iconColor: color,
       onTap: onTap,
-      titleTextStyle: GoogleFonts.manrope(
+      titleTextStyle: GoogleFonts.googleSansFlex(
           fontSize: 14,
           fontWeight: FontWeight.w500,
           color: color ?? Theme.of(context).colorScheme.onSurface),
@@ -691,12 +691,12 @@ class _DesktopPostState extends State<DesktopPost> {
                             children: [
                               Text(
                                 widget.post.person.name,
-                                style:
-                                    GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w600),
+                                style: GoogleFonts.googleSansFlex(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 widget.post.person.userName,
-                                style: GoogleFonts.manrope(
+                                style: GoogleFonts.googleSansFlex(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                     color: Theme.of(context).colorScheme.onSurfaceVariant),
@@ -764,7 +764,7 @@ class _DesktopPostState extends State<DesktopPost> {
                             widget.post.tags.isNotEmpty
                                 ? Text(
                                     "Tags",
-                                    style: GoogleFonts.manrope(
+                                    style: GoogleFonts.googleSansFlex(
                                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                                         fontWeight: FontWeight.w600),
                                   )

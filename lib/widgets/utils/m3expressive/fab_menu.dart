@@ -350,7 +350,7 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
           const SizedBox(width: 14),
           Text(
             widget.label,
-            style: GoogleFonts.manrope(
+            style: GoogleFonts.googleSansFlex(
               decoration: TextDecoration.none,
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontSize: 16,

@@ -27,8 +27,7 @@ class _UserProfileContent extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Profile",
-            style: GoogleFonts.manrope(fontWeight: FontWeight.w600)),
+        title: Text("Edit Profile", style: GoogleFonts.googleSansFlex(fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
               onPressed: viewModel.isDirty ? viewModel.saveProfile : null,
@@ -46,8 +45,7 @@ class _UserProfileContent extends StatelessWidget {
                   CircleAvatar(
                     radius: 64,
                     backgroundColor: colorScheme.surfaceContainerHighest,
-                    child:
-                        Icon(Icons.person, size: 64, color: colorScheme.primary),
+                    child: Icon(Icons.person, size: 64, color: colorScheme.primary),
                   ),
                   Positioned(
                     bottom: 0,
@@ -92,9 +90,8 @@ class _UserProfileContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label,
-            style: GoogleFonts.manrope(
-                fontWeight: FontWeight.w500,
-                color: colorScheme.onSurfaceVariant)),
+            style: GoogleFonts.googleSansFlex(
+                fontWeight: FontWeight.w500, color: colorScheme.onSurfaceVariant)),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
