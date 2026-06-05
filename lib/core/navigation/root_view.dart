@@ -31,10 +31,8 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
   late final _railAnimation = RailAnimation(parent: _controller);
   late final _railFabAnimation = RailFabAnimation(parent: _controller);
 
-  final GlobalKey _fabKey = GlobalKey();
   int selectedIndex = 0;
   bool controllerInitialized = false;
-  bool _isHomeFABMenuOpen = false;
 
   @override
   void initState() {
@@ -135,9 +133,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
           if (currentChild != null) currentChild,
         ],
       ),
-      child: !context.watch<AppService>().isNavBarVisible ||
-              MediaQuery.sizeOf(context).width > 600 ||
-              _isHomeFABMenuOpen
+      child: !context.watch<AppService>().isNavBarVisible || MediaQuery.sizeOf(context).width > 600
           ? const SizedBox(key: ValueKey('fab_empty'))
           : currentIndex == 0
               ? FloatingActionButtonMenu(
@@ -226,7 +222,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
                 transitionBuilder: (child, animation) => SizeTransition(
                   sizeFactor: animation,
                   axis: Axis.horizontal,
-                  axisAlignment: -1,
+                  alignment: Alignment.centerLeft,
                   child: child,
                 ),
                 child: context.watch<AppService>().isNavBarVisible

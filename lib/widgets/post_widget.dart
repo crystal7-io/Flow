@@ -1,8 +1,6 @@
-import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 // import 'package:media_kit/media_kit.dart';
 // import 'package:media_kit_video/media_kit_video.dart';
@@ -11,7 +9,6 @@ import 'package:redesigned/core/utils/format_post_timestamp.dart';
 import 'package:redesigned/widgets/post_viewer.dart';
 import 'package:redesigned/widgets/profile_picture_viewer.dart';
 import 'package:redesigned/widgets/utils/m3expressive/button_group.dart';
-import 'package:redesigned/widgets/utils/m3expressive/expressive_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -448,8 +445,7 @@ class _MobilePostState extends State<MobilePost> {
                               barrierDismissible: true,
                               transitionDuration: Durations.extralong1,
                               reverseTransitionDuration: Durations.medium4,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
+                              pageBuilder: (context, animation, secondaryAnimation) {
                                 return ProfilePictureViewer(
                                   post: widget.post,
                                   animation: CurvedAnimation(
@@ -471,15 +467,10 @@ class _MobilePostState extends State<MobilePost> {
                             child: CachedNetworkImage(
                               height: 42,
                               width: 42,
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                              placeholderFadeInDuration:
-                                  const Duration(seconds: 0),
-                              placeholder: (context, url) => Icon(
-                                  Icons.account_circle_rounded,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                              placeholderFadeInDuration: const Duration(seconds: 0),
+                              placeholder: (context, url) => Icon(Icons.account_circle_rounded,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant),
                               fit: BoxFit.contain,
                               imageUrl: widget.post.person.pfpPath,
                             ),
@@ -516,8 +507,7 @@ class _MobilePostState extends State<MobilePost> {
               widget.post.type == PostType.image
                   ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
                   : widget.post.type == PostType.carosel
-                      ? CarouselPostWidget(
-                          imagePost: widget.post as CarouselPostObject)
+                      ? CarouselPostWidget(imagePost: widget.post as CarouselPostObject)
                       : ReelPost(post: widget.post as ReelPostObject),
               SizedBox(height: 4),
               Padding(
@@ -526,9 +516,7 @@ class _MobilePostState extends State<MobilePost> {
                   children: [
                     Text(
                       formatPostTimestamp(widget.post.dateTime),
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).colorScheme.outline),
+                      style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.outline),
                     )
                   ],
                 ),
@@ -594,15 +582,11 @@ class _MobilePostState extends State<MobilePost> {
           // ),
 
           StandardButtonGroup(alignment: MainAxisAlignment.end, items: [
+            ButtonGroupItem(width: 44, height: 56, onPressed: () {}, icon: Symbols.forward),
+            ButtonGroupItem(width: 56, height: 56, onPressed: () {}, icon: Symbols.comment),
             ButtonGroupItem(
-                width: 44, height: 56, onPressed: () {}, icon: Symbols.forward),
-            ButtonGroupItem(
-                width: 56, height: 56, onPressed: () {}, icon: Symbols.comment),
-            ButtonGroupItem(
-                backgroundColor:
-                    liked ? Theme.of(context).colorScheme.primaryFixed : null,
-                foregroundColor:
-                    liked ? Theme.of(context).colorScheme.onPrimaryFixed : null,
+                backgroundColor: liked ? Theme.of(context).colorScheme.primaryFixed : null,
+                foregroundColor: liked ? Theme.of(context).colorScheme.onPrimaryFixed : null,
                 height: 56,
                 onPressed: () {
                   setState(() {
@@ -660,8 +644,7 @@ class _DesktopPostState extends State<DesktopPost> {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(
-          maxHeight: MediaQuery.sizeOf(context).width /
-              (2.5 * widget.post.aspectRatio)),
+          maxHeight: MediaQuery.sizeOf(context).width / (2.5 * widget.post.aspectRatio)),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Theme.of(context).colorScheme.surfaceContainer,
@@ -676,8 +659,7 @@ class _DesktopPostState extends State<DesktopPost> {
                     imagePost: widget.post as ImagePostObject,
                   )
                 : widget.post.type == PostType.carosel
-                    ? CarouselPostWidget(
-                        imagePost: widget.post as CarouselPostObject)
+                    ? CarouselPostWidget(imagePost: widget.post as CarouselPostObject)
                     : ReelPost(post: widget.post as ReelPostObject),
           ),
           Expanded(
@@ -693,15 +675,13 @@ class _DesktopPostState extends State<DesktopPost> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(24),
                             child: CachedNetworkImage(
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                                placeholderFadeInDuration:
-                                    const Duration(seconds: 0),
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) => Center(
-                                          child: CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                        ),
+                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                                placeholderFadeInDuration: const Duration(seconds: 0),
+                                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                          value: downloadProgress.progress),
+                                    ),
                                 fit: BoxFit.contain,
                                 imageUrl: widget.post.person.pfpPath),
                           ),
@@ -711,17 +691,15 @@ class _DesktopPostState extends State<DesktopPost> {
                             children: [
                               Text(
                                 widget.post.person.name,
-                                style: GoogleFonts.manrope(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                style:
+                                    GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 widget.post.person.userName,
                                 style: GoogleFonts.manrope(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant),
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant),
                               ),
                             ],
                           )
@@ -753,7 +731,7 @@ class _DesktopPostState extends State<DesktopPost> {
                                     height: 40,
                                     child: FilledButton.tonalIcon(
                                         onPressed: () {},
-                                        icon: Icon(MdiIcons.replyOutline),
+                                        icon: Icon(Icons.reply_outlined),
                                         label: const Text("16K"))),
                                 const SizedBox(width: 12),
                                 SizedBox(
@@ -787,9 +765,7 @@ class _DesktopPostState extends State<DesktopPost> {
                                 ? Text(
                                     "Tags",
                                     style: GoogleFonts.manrope(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                                         fontWeight: FontWeight.w600),
                                   )
                                 : const SizedBox(),
@@ -800,13 +776,10 @@ class _DesktopPostState extends State<DesktopPost> {
                               children: widget.post.tags
                                   .map((e) => ActionChip(
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          side: const BorderSide(
-                                              color: Colors.transparent)),
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .surfaceContainerHighest,
+                                          borderRadius: BorderRadius.circular(8),
+                                          side: const BorderSide(color: Colors.transparent)),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.surfaceContainerHighest,
                                       onPressed: () {},
                                       label: Text(e)))
                                   .toList(),
@@ -836,18 +809,14 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
       tag: widget.imagePost.postId.toString(),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-            maxWidth: (widget.imagePost.aspectRatio *
-                (MediaQuery.of(context).size.width)),
-            maxHeight: (1 / widget.imagePost.aspectRatio) *
-                (MediaQuery.of(context).size.width)),
+            maxWidth: (widget.imagePost.aspectRatio * (MediaQuery.of(context).size.width)),
+            maxHeight: (1 / widget.imagePost.aspectRatio) * (MediaQuery.of(context).size.width)),
         child: CarouselView(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(24)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(24)),
           onTap: (int i) {
             Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
                 transitionDuration: Durations.medium1,
-                pageBuilder: (context, animation, secondAnimtion) =>
-                    FadeTransition(
+                pageBuilder: (context, animation, secondAnimtion) => FadeTransition(
                       opacity: animation,
                       child: CarouselPostViewer(
                           initPage: i,
@@ -856,23 +825,18 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
                     )));
           },
           itemSnapping: true,
-          itemExtent: widget.imagePost.aspectRatio *
-              (MediaQuery.of(context).size.width),
+          itemExtent: widget.imagePost.aspectRatio * (MediaQuery.of(context).size.width),
           shrinkExtent: 0,
           children: widget.imagePost.imagePaths
               .map((e) => Builder(
                     builder: (BuildContext context) => CachedNetworkImage(
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                         placeholderFadeInDuration: const Duration(seconds: 0),
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) => Center(
-                                  child: CircularProgressIndicator(
-                                      value: downloadProgress.progress),
-                                ),
+                        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(value: downloadProgress.progress),
+                            ),
                         fit: BoxFit.cover,
-                        imageUrl:
-                            "https://drive.google.com/uc?export=view&id=$e"),
+                        imageUrl: "https://drive.google.com/uc?export=view&id=$e"),
                   ))
               .toList(),
         ),
@@ -901,8 +865,7 @@ class _ImagePostWidgetState extends State<ImagePostWidget> {
           onTap: () {
             Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
                 transitionDuration: Durations.medium1,
-                pageBuilder: (context, animation, secondAnimtion) =>
-                    FadeTransition(
+                pageBuilder: (context, animation, secondAnimtion) => FadeTransition(
                       opacity: animation,
                       child: ImagePostViewer(
                           imageTag: widget.imagePost.postId.toString(),
@@ -914,10 +877,8 @@ class _ImagePostWidgetState extends State<ImagePostWidget> {
             child: CachedNetworkImage(
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 placeholderFadeInDuration: const Duration(seconds: 0),
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(
-                      child: CircularProgressIndicator(
-                          value: downloadProgress.progress),
+                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(value: downloadProgress.progress),
                     ),
                 fit: BoxFit.contain,
                 imageUrl:
@@ -942,8 +903,8 @@ class _ReelPostState extends State<ReelPost> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.networkUrl(Uri.parse(
-        "https://drive.google.com/uc?export=view&id=${widget.post.sourcePath}"))
+    controller = VideoPlayerController.networkUrl(
+        Uri.parse("https://drive.google.com/uc?export=view&id=${widget.post.sourcePath}"))
       ..initialize().then((_) {
         //  // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {
@@ -979,9 +940,7 @@ class _ReelPostState extends State<ReelPost> {
                     child: VideoPlayer(controller),
                     onVisibilityChanged: (vibility) {
                       setState(() {
-                        vibility.visibleFraction > 0.5
-                            ? controller.play()
-                            : controller.pause();
+                        vibility.visibleFraction > 0.5 ? controller.play() : controller.pause();
                       });
                     }),
                 Column(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -996,8 +955,8 @@ class _ReelPostState extends State<ReelPost> {
                         )),
                   ),
                   VideoProgressIndicator(controller,
-                      colors: VideoProgressColors(
-                          playedColor: Theme.of(context).colorScheme.primary),
+                      colors:
+                          VideoProgressColors(playedColor: Theme.of(context).colorScheme.primary),
                       allowScrubbing: true)
                 ]),
               ],
@@ -1030,8 +989,7 @@ class SelectButton extends StatefulWidget {
   State<SelectButton> createState() => _SelectButtonState();
 }
 
-class _SelectButtonState extends State<SelectButton>
-    with TickerProviderStateMixin {
+class _SelectButtonState extends State<SelectButton> with TickerProviderStateMixin {
   double scaleValue = 1;
 
   void onTap() {
@@ -1058,9 +1016,7 @@ class _SelectButtonState extends State<SelectButton>
               scale: scaleValue,
               child: Icon(
                 widget.isSelected ? widget.selectedIcon : widget.unselectedIcon,
-                color: widget.isSelected
-                    ? widget.selectedColor
-                    : widget.unselectedColor,
+                color: widget.isSelected ? widget.selectedColor : widget.unselectedColor,
               )),
         ));
   }

@@ -21,22 +21,22 @@ class ButtonGroupItem {
     this.backgroundColor,
     this.foregroundColor,
     this.roundBorder = true,
-  }) : assert(label != null || icon != null,
-            'An item must contain at least a label or an icon.');
+  }) : assert(label != null || icon != null, 'An item must contain at least a label or an icon.');
 }
 
+// Constant name preserved as per system configuration
 class StandardButtonGroup extends StatefulWidget {
   final List<ButtonGroupItem> items;
   final double spacing;
-  final MainAxisAlignment alignment;
   final bool expandEqually;
+  final MainAxisAlignment alignment;
 
   const StandardButtonGroup({
     super.key,
     required this.items,
-    this.spacing = 4.0,
-    this.alignment = MainAxisAlignment.center,
+    this.spacing = 8.0,
     this.expandEqually = false,
+    this.alignment = MainAxisAlignment.start,
   });
 
   @override
@@ -48,14 +48,21 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
   late AnimationController _controller;
   int _activeIndex = -1;
 
+  // M3E Style Motion Profiles
+
+  // 2. Smooth Retract: Balanced spatial physics for a fluid, natural return journey
+  final SpringDescription _smoothRetractSpring = const SpringDescription(
+    mass: 1.0,
+    stiffness: 350.0,
+    damping: 28.0,
+  );
+
   @override
   void initState() {
     super.initState();
-    // A single controller orchestrates the entire row's layout math
-    _controller = AnimationController(
+    _controller = AnimationController.unbounded(
       vsync: this,
-      lowerBound: 0.0,
-      upperBound: 2.0,
+      value: 0.0,
     );
   }
 
@@ -65,46 +72,54 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
     super.dispose();
   }
 
-  void _handlePress(int index) {
-    setState(() {
-      _activeIndex = index;
-    });
+  void _handleTapDown(int index) {
+    setState(() => _activeIndex = index);
 
-    _controller.stop();
-    final springSimulation = SpringSimulation(
-      ExpressivePhysics.expressiveFastSpatial,
-      0.0,
-      0.0,
-      22.0,
+    // Rocket forward instantly using the high-stiffness press spring
+    final simulation = SpringSimulation(
+      ExpressiveMotionSpring.fastSpatial,
+      _controller.value,
+      1.0, // Target full expansion
+      _controller.velocity,
     );
-
-    _controller.animateWith(springSimulation);
-    widget.items[index].onPressed();
+    _controller.animateWith(simulation);
   }
 
-  /// Calculates exact pixel distribution so only immediate neighbors squash.
-  /// Net total width change across the row is always exactly 0.0.
+  void _handleTapRelease({required bool executeClick}) {
+    if (_activeIndex == -1) return;
+
+    if (executeClick) {
+      widget.items[_activeIndex].onPressed();
+    }
+
+    // Hand off the current position and residual momentum to the smooth return spring
+    final simulation = SpringSimulation(
+      _smoothRetractSpring,
+      _controller.value,
+      0.0, // Target rest state
+      _controller.velocity,
+    );
+
+    _controller.animateWith(simulation).orCancel.then((_) {
+      if (mounted && _controller.value == 0.0) {
+        setState(() => _activeIndex = -1);
+      }
+    }, onError: (_) {});
+  }
+
   double _getDeltaForIndex(int index, double maxStretch) {
     if (_activeIndex == -1) return 0.0;
-
     final int n = widget.items.length;
     final double currentStretch = maxStretch * _controller.value;
 
-    if (index == _activeIndex) {
-      return currentStretch; // Active button grows
-    }
-
+    if (index == _activeIndex) return currentStretch;
     if (index == _activeIndex - 1) {
-      // If active is the very last item, this single neighbor absorbs all compression
       return (_activeIndex == n - 1) ? -currentStretch : -currentStretch / 2.0;
     }
-
     if (index == _activeIndex + 1) {
-      // If active is the very first item, this single neighbor absorbs all compression
       return (_activeIndex == 0) ? -currentStretch : -currentStretch / 2.0;
     }
-
-    return 0.0; // Distant buttons are completely unaffected
+    return 0.0;
   }
 
   @override
@@ -118,10 +133,8 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: List.generate(widget.items.length, (index) {
             final item = widget.items[index];
-
-            // Calculate math for both modes in real-time
-            final double deltaWidth = _getDeltaForIndex(index, 24.0);
-            final double deltaFlex = _getDeltaForIndex(index, 350.0);
+            final double deltaWidth = _getDeltaForIndex(index, 12.0);
+            final double deltaFlex = _getDeltaForIndex(index, 175.0);
 
             final buttonWidget = Padding(
               padding: EdgeInsets.only(
@@ -130,8 +143,10 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
               child: _ExpressiveGroupButton(
                 item: item,
                 deltaWidth: deltaWidth,
-                onPressed: () => _handlePress(index),
                 expandEqually: widget.expandEqually,
+                onTapDown: () => _handleTapDown(index),
+                onTap: () => _handleTapRelease(executeClick: true),
+                onTapCancel: () => _handleTapRelease(executeClick: false),
               ),
             );
 
@@ -153,14 +168,18 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
 class _ExpressiveGroupButton extends StatefulWidget {
   final ButtonGroupItem item;
   final double deltaWidth;
-  final VoidCallback onPressed;
   final bool expandEqually;
+  final VoidCallback onTapDown;
+  final VoidCallback onTap;
+  final VoidCallback onTapCancel;
 
   const _ExpressiveGroupButton({
     required this.item,
     required this.deltaWidth,
-    required this.onPressed,
     required this.expandEqually,
+    required this.onTapDown,
+    required this.onTap,
+    required this.onTapCancel,
   });
 
   @override
@@ -181,16 +200,14 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
       _baseContentWidth = widget.item.width!;
       _isWidthCalculated = true;
     } else {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _measureFreshBounds());
+      WidgetsBinding.instance.addPostFrameCallback((_) => _measureFreshBounds());
     }
   }
 
   void _measureFreshBounds() {
     if (widget.item.width != null || widget.expandEqually) return;
 
-    final renderBox =
-        _contentKey.currentContext?.findRenderObject() as RenderBox?;
+    final renderBox = _contentKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox != null && mounted) {
       setState(() {
         _baseContentWidth = renderBox.size.width;
@@ -206,18 +223,15 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
     final hasIcon = item.icon != null;
     final targetHeight = item.height ?? 40.0;
 
-    final resolvedBgColor = item.backgroundColor ??
-        Theme.of(context).colorScheme.surfaceContainerHigh;
-    final resolvedFgColor =
-        item.foregroundColor ?? Theme.of(context).colorScheme.onSurface;
+    final resolvedBgColor =
+        item.backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHigh;
+    final resolvedFgColor = item.foregroundColor ?? Theme.of(context).colorScheme.onSurface;
     final resolvedIconColor =
         item.foregroundColor ?? Theme.of(context).colorScheme.onSurfaceVariant;
 
     final ShapeBorder resolvedShape = item.roundBorder
         ? const StadiumBorder()
-        : const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          );
+        : const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0)));
 
     EdgeInsets basePadding;
     if (hasText && hasIcon) {
@@ -233,17 +247,12 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (hasIcon) ...[
-          Icon(
-            item.icon,
-            size: 18.0,
-            color: resolvedIconColor,
-            weight: 700,
-          ),
+          Icon(item.icon, size: 18.0, color: resolvedIconColor, weight: 700),
           if (hasText) const SizedBox(width: 8.0),
         ],
         if (hasText)
           Text(
-            (item.label as Text).data ?? '', // Assuming label is a Text widget
+            (item.label as Text).data ?? '',
             style: Theme.of(context).textTheme.labelLarge!.copyWith(
                   color: resolvedFgColor,
                   fontWeight: FontWeight.w600,
@@ -252,8 +261,8 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
       ],
     );
 
+    // Two-pass rendering layer for zero-latency frame parsing
     if (!_isWidthCalculated) {
-      // Invisible render pass to extract exact native pixel width
       return Opacity(
         opacity: 0.0,
         child: SizedBox(
@@ -268,20 +277,19 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
     }
 
     return SizedBox(
-      width:
-          widget.expandEqually ? null : (_baseContentWidth + widget.deltaWidth),
+      width: widget.expandEqually ? null : (_baseContentWidth + widget.deltaWidth),
       height: targetHeight,
       child: Material(
         color: resolvedBgColor,
         shape: resolvedShape,
-        clipBehavior: Clip.antiAlias, // Ensures cleanly masked squashing
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: widget.onPressed,
+          onTapDown: (_) => widget.onTapDown(),
+          onTap: widget.onTap,
+          onTapCancel: widget.onTapCancel,
           splashColor: resolvedFgColor.withOpacity(0.08),
           highlightColor: resolvedFgColor.withOpacity(0.04),
           child: Center(
-            // OverflowBox provides infinite internal layout bounds.
-            // This prevents the text from wrapping or throwing NaN errors when the neighbor buttons compress smaller than their base width!
             child: OverflowBox(
               maxWidth: double.infinity,
               maxHeight: targetHeight,

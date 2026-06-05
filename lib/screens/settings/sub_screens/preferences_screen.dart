@@ -1,9 +1,7 @@
-import 'package:button_group_m3e/button_group_m3e.dart';
-import 'package:button_m3e/button_m3e.dart';
 import 'package:flutter/material.dart';
+import 'package:m3e_buttons/m3e_buttons.dart';
 import 'package:redesigned/core/services/app_service.dart';
 import 'package:provider/provider.dart';
-import 'package:redesigned/widgets/utils/m3expressive/button_group.dart';
 
 class PreferencesScreen extends StatefulWidget {
   const PreferencesScreen({super.key});
@@ -93,51 +91,49 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           //         });
           //   },
           // ),
-          Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
-            child: ButtonGroupM3E(
-              size: ButtonGroupM3ESize.md,
-              type: ButtonGroupM3EType.connected,
-              selectedIndex: themeMode == ThemeMode.system
-                  ? 0
-                  : themeMode == ThemeMode.light
-                      ? 1
-                      : 2,
-              equalizeWidths: true,
-              actions: [
-                ButtonGroupM3EAction(
-                    style: themeMode == ThemeMode.system
-                        ? ButtonM3EStyle.filled
-                        : ButtonM3EStyle.tonal,
-                    label: const Text('System'),
-                    onPressed: () => appService.changeTheme(ThemeMode.system)),
-                ButtonGroupM3EAction(
-                    style: themeMode == ThemeMode.light
-                        ? ButtonM3EStyle.filled
-                        : ButtonM3EStyle.tonal,
-                    label: const Text('Light'),
-                    onPressed: () => appService.changeTheme(ThemeMode.light)),
-                ButtonGroupM3EAction(
-                    style: themeMode == ThemeMode.dark
-                        ? ButtonM3EStyle.filled
-                        : ButtonM3EStyle.tonal,
-                    label: const Text('Dark'),
-                    onPressed: () => appService.changeTheme(ThemeMode.dark)),
-              ],
-            ),
+
+          Center(
+            child: Padding(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
+                child: M3EToggleButtonGroup(
+                    spacing: 4,
+                    size: M3EButtonSize.md,
+                    type: M3EButtonGroupType.connected,
+                    onSelectedIndexChanged: (value) => appService.changeTheme(value == 0
+                        ? ThemeMode.system
+                        : value == 1
+                            ? ThemeMode.light
+                            : ThemeMode.dark),
+                    selectedIndex: themeMode == ThemeMode.system
+                        ? 0
+                        : themeMode == ThemeMode.light
+                            ? 1
+                            : 2,
+                    actions: [
+                      M3EToggleButtonGroupAction(
+                        width: (MediaQuery.widthOf(context) - 36) / 3,
+                        label: const Text('System'),
+                      ),
+                      M3EToggleButtonGroupAction(
+                        width: (MediaQuery.widthOf(context) - 36) / 3,
+                        label: const Text('Light'),
+                      ),
+                      M3EToggleButtonGroupAction(
+                        width: (MediaQuery.widthOf(context) - 36) / 3,
+                        label: const Text('Dark'),
+                      )
+                    ])),
           ),
           ListTile(
             onTap: () {},
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             leading: const Icon(Icons.translate_outlined),
             title: const Text("Language"),
             subtitle: const Text("English"),
           ),
           SwitchListTile(
               title: const Text("Floating Searchbar"),
-              subtitle:
-                  const Text("Make search bar reappears when you scroll up"),
+              subtitle: const Text("Make search bar reappears when you scroll up"),
               secondary: const Icon(Icons.search),
               value: appService.isSearchFloating,
               onChanged: (bool value) {
