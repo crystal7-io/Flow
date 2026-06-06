@@ -38,6 +38,14 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
     );
   }
 
+  void _closeMenu() {
+    if (!_isMenuOpen) return;
+    setState(() => _isMenuOpen = false);
+    final simulation =
+        SpringSimulation(ExpressiveMotionSpring.fastSpatial, _fabController.value, 0.0, 0.0);
+    _fabController.animateWith(simulation);
+  }
+
   void _toggleMenu() {
     setState(() {
       _isMenuOpen = !_isMenuOpen;
@@ -74,12 +82,7 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
                       .surfaceContainerLowest
                       .withAlpha((clampedProgress * 160).toInt()),
                   dismissible: true,
-                  onDismiss: () {
-                    setState(() => _isMenuOpen = false);
-                    final simulation = SpringSimulation(
-                        ExpressiveMotionSpring.fastSpatial, _fabController.value, 0.0, 0.0);
-                    _fabController.animateWith(simulation);
-                  },
+                  onDismiss: _closeMenu,
                 ),
               );
             },
@@ -88,7 +91,7 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
           delegate: _ScaffoldResponsiveFlowDelegate(
             geometryListenable: geometryListenable,
             scaffoldSize: scaffoldSize,
-            fallbackSize: const Size(_initialFabWidth, _initialFabHeight), // Fixed frame 1 snap
+            fallbackSize: const Size(_initialFabWidth, _initialFabHeight),
           ),
           children: [
             Column(
@@ -97,7 +100,9 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
               children: [
                 if (_isMenuOpen) ...[
                   for (int i = 0; i < widget.children.length; i++) ...[
-                    widget.children[i],
+                    widget.children[i].copyWith(
+                      onMenuCloseRequested: _closeMenu,
+                    ),
                     if (i < widget.children.length - 1) const SizedBox(height: 4),
                   ],
                   const SizedBox(height: 16),
@@ -171,7 +176,7 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
 class _ScaffoldResponsiveFlowDelegate extends FlowDelegate {
   final ValueListenable<ScaffoldGeometry> geometryListenable;
   final Size scaffoldSize;
-  final Size fallbackSize; // Added target fallback size tracking
+  final Size fallbackSize;
 
   _ScaffoldResponsiveFlowDelegate({
     required this.geometryListenable,
@@ -193,7 +198,6 @@ class _ScaffoldResponsiveFlowDelegate extends FlowDelegate {
 
     var childSize = context.getChildSize(0) ?? Size.zero;
 
-    // Fallback to the known standard FAB dimensions if layouts aren't ready yet
     if (childSize == Size.zero) {
       childSize = fallbackSize;
     }
@@ -216,13 +220,36 @@ class FloatingAcitonMenuButton extends StatefulWidget {
   final IconData icon;
   final String label;
   final Duration delay;
+  final VoidCallback? onPressed;
+  final VoidCallback? _onMenuCloseRequested;
 
   const FloatingAcitonMenuButton({
     super.key,
     required this.icon,
     required this.label,
     this.delay = Duration.zero,
-  });
+    this.onPressed,
+  }) : _onMenuCloseRequested = null;
+
+  const FloatingAcitonMenuButton._internal({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.delay,
+    required this.onPressed,
+    required VoidCallback? onMenuCloseRequested,
+  }) : _onMenuCloseRequested = onMenuCloseRequested;
+
+  FloatingAcitonMenuButton copyWith({VoidCallback? onMenuCloseRequested}) {
+    return FloatingAcitonMenuButton._internal(
+      key: key,
+      icon: icon,
+      label: label,
+      delay: delay,
+      onPressed: onPressed,
+      onMenuCloseRequested: onMenuCloseRequested ?? _onMenuCloseRequested,
+    );
+  }
 
   @override
   State<FloatingAcitonMenuButton> createState() => _FloatingAcitonMenuButtonState();
@@ -275,6 +302,11 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
     super.dispose();
   }
 
+  void _handleTap() {
+    widget._onMenuCloseRequested?.call();
+    widget.onPressed?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!_isMeasured) {
@@ -288,52 +320,46 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
 
     final double overshootBufferWidth = _naturalWidth * 1.3;
 
-    return SizedBox(
-      width: _naturalWidth,
-      height: 64,
-      child: OverflowBox(
-        alignment: Alignment.centerRight,
-        minWidth: 0.0,
-        maxWidth: overshootBufferWidth,
-        minHeight: 64,
-        maxHeight: 64,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            final double rawValue = _controller.value;
-            final double animatedWidth = _naturalWidth * rawValue.clamp(0.0, double.infinity);
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        final double rawValue = _controller.value;
+        final double animatedWidth = _naturalWidth * rawValue.clamp(0.0, double.infinity);
 
-            double opacityProgress = 0.0;
-            if (rawValue > 0.0) {
-              opacityProgress = (rawValue / 0.5).clamp(0.0, 1.0);
-            }
-            final double animatedOpacity = Easing.standard.transform(opacityProgress);
+        double opacityProgress = 0.0;
+        if (rawValue > 0.0) {
+          opacityProgress = (rawValue / 0.5).clamp(0.0, 1.0);
+        }
+        final double animatedOpacity = Easing.standard.transform(opacityProgress);
 
-            return Opacity(
-              opacity: animatedOpacity,
-              child: Container(
-                width: animatedWidth,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? Theme.of(context).colorScheme.inversePrimary
-                      : Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(32),
-                ),
-                clipBehavior: Clip.antiAlias,
-                alignment: Alignment.centerRight,
+        return Opacity(
+          opacity: animatedOpacity,
+          child: SizedBox(
+            width: animatedWidth,
+            height: 64,
+            child: Material(
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(32),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Theme.of(context).colorScheme.inversePrimary
+                  : Theme.of(context).colorScheme.primaryContainer,
+              child: InkWell(
+                onTap: _handleTap,
                 child: child,
               ),
-            );
-          },
-          child: OverflowBox(
-            minWidth: 0.0,
-            maxWidth: overshootBufferWidth,
-            minHeight: 0.0,
-            maxHeight: 64,
-            alignment: Alignment.centerRight,
-            child: SizedBox(width: overshootBufferWidth, child: _buildButtonContent()),
+            ),
           ),
+        );
+      },
+      child: OverflowBox(
+        minWidth: 0.0,
+        maxWidth: overshootBufferWidth,
+        minHeight: 0.0,
+        maxHeight: 64,
+        alignment: Alignment.centerRight,
+        child: SizedBox(
+          width: overshootBufferWidth,
+          child: _buildButtonContent(),
         ),
       ),
     );

@@ -150,6 +150,9 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
                       delay: Duration(milliseconds: 40),
                     ),
                     FloatingAcitonMenuButton(
+                      onPressed: () {
+                        context.push('/create-post');
+                      },
                       icon: Icons.image_outlined,
                       label: "Post",
                       delay: Duration(milliseconds: 0),
