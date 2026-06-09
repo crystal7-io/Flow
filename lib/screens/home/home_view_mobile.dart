@@ -36,63 +36,67 @@ class MobileHomeView extends StatelessWidget {
                   child: OpenContainer(
                     closedElevation: 0,
                     closedColor: Theme.of(context).colorScheme.surfaceContainer,
-                    openColor:
-                        Theme.of(context).colorScheme.surfaceContainerLow,
+                    openColor: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerLow,
                     closedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(55)),
+                      borderRadius: BorderRadius.circular(55),
+                    ),
                     useRootNavigator: true,
                     closedBuilder: (context, action) => Material(
-                      color:
-                          Theme.of(context).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                       child: InkWell(
-                          onTap: () {
-                            viewModel.onSearchTap();
-                            action();
-                          },
-                          child: Padding(
-                            padding:
-                                EdgeInsetsGeometry.only(left: 18, right: 12),
-                            child: Row(
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Symbols.search,
-                                      opticalSize: 24,
-                                      weight: 400,
-                                    ),
-                                    SizedBox(
-                                      width: 14,
-                                    ),
-                                    Text("Search Flow")
-                                  ],
-                                ),
-                                Spacer(),
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                  child: CachedNetworkImage(
-                                    height: 36,
-                                    width: 36,
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                    placeholderFadeInDuration:
-                                        const Duration(seconds: 0),
-                                    placeholder: (context, url) => Icon(
-                                      Icons.account_circle_rounded,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
-                                    fit: BoxFit.cover,
-                                    imageUrl: viewModel.profilePictureLink,
+                        onTap: () {
+                          viewModel.onSearchTap();
+                          action();
+                        },
+                        child: Padding(
+                          padding: EdgeInsetsGeometry.only(left: 18, right: 12),
+                          child: Row(
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Symbols.search,
+                                    opticalSize: 24,
+                                    weight: 400,
                                   ),
-                                )
-                              ],
-                            ),
-                          )),
+                                  SizedBox(width: 14),
+                                  Text("Search Flow"),
+                                ],
+                              ),
+                              Spacer(),
+                              ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                                child: CachedNetworkImage(
+                                  height: 36,
+                                  width: 36,
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  placeholderFadeInDuration: const Duration(
+                                    seconds: 0,
+                                  ),
+                                  placeholder: (context, url) => Icon(
+                                    Icons.account_circle_rounded,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
+                                  fit: BoxFit.cover,
+                                  imageUrl: viewModel.profilePictureLink,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
+
                     //  SearchBar(
                     //   elevation: const WidgetStatePropertyAll(0),
                     //   shadowColor:
@@ -151,12 +155,11 @@ class MobileHomeView extends StatelessWidget {
                     //     action();
                     //   },
                     // ),
-
                     openBuilder: (context, action) =>
                         ChangeNotifierProvider<SearchViewModel>(
-                      create: (_) => SearchViewModel(),
-                      child: const SearchView(),
-                    ),
+                          create: (_) => SearchViewModel(),
+                          child: const SearchView(),
+                        ),
                   ),
                 ),
               ),

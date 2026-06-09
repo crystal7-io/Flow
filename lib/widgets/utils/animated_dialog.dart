@@ -14,10 +14,7 @@ Future<T?> showExpressiveDialog<T>({
       reverseTransitionDuration: const Duration(milliseconds: 250),
       pageBuilder: (context, animation, secondaryAnimation) => child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return _ExpressiveDialogTransition(
-          animation: animation,
-          child: child,
-        );
+        return _ExpressiveDialogTransition(animation: animation, child: child);
       },
     ),
   );
@@ -44,12 +41,14 @@ class _ExpressiveDialogTransition extends StatelessWidget {
           curve: const Interval(0.0, 0.4, curve: Easing.emphasizedDecelerate),
         ).value;
 
-        final double translateProgress =
-            Easing.emphasizedDecelerate.transform(value);
+        final double translateProgress = Easing.emphasizedDecelerate.transform(
+          value,
+        );
         final double translateY = -150.0 * (1.0 - translateProgress);
 
-        final double blurProgress =
-            Easing.emphasizedDecelerate.transform(value);
+        final double blurProgress = Easing.emphasizedDecelerate.transform(
+          value,
+        );
         final double currentBlur = blurProgress * 4.0;
 
         return BackdropFilter(
@@ -64,7 +63,9 @@ class _ExpressiveDialogTransition extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   elevation: 0,
                   insetPadding: const EdgeInsets.symmetric(
-                      horizontal: 40.0, vertical: 24.0),
+                    horizontal: 40.0,
+                    vertical: 24.0,
+                  ),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(28.0)),
                     child: IntrinsicHeight(

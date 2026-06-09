@@ -34,10 +34,7 @@ class DisappearingNavigationRail extends StatelessWidget {
         labelType: NavigationRailLabelType.selected,
         leading: Column(
           children: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.menu),
-            ),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
             const SizedBox(height: 8),
             FloatingActionButton(
               elevation: 0,

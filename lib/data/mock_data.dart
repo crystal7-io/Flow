@@ -9,59 +9,68 @@ import 'package:redesigned/core/models/story.dart';
 
 List<FollowPerson> followersList = [
   FollowPerson(
-      id: '12',
-      name: accounts[12].person.name,
-      userName: accounts[12].person.userName,
-      profilePicturePath: accounts[12].person.profilePicturePath,
-      isFollowing: true),
+    id: '12',
+    name: accounts[12].person.name,
+    userName: accounts[12].person.userName,
+    profilePicturePath: accounts[12].person.profilePicturePath,
+    isFollowing: true,
+  ),
   FollowPerson(
-      id: '14',
-      name: accounts[14].person.name,
-      userName: accounts[14].person.userName,
-      profilePicturePath: accounts[14].person.profilePicturePath,
-      isFollowing: true),
+    id: '14',
+    name: accounts[14].person.name,
+    userName: accounts[14].person.userName,
+    profilePicturePath: accounts[14].person.profilePicturePath,
+    isFollowing: true,
+  ),
   FollowPerson(
-      id: '15',
-      name: accounts[15].person.name,
-      userName: accounts[15].person.userName,
-      profilePicturePath: accounts[15].person.profilePicturePath,
-      isFollowing: false),
+    id: '15',
+    name: accounts[15].person.name,
+    userName: accounts[15].person.userName,
+    profilePicturePath: accounts[15].person.profilePicturePath,
+    isFollowing: false,
+  ),
   FollowPerson(
-      id: '16',
-      name: accounts[16].person.name,
-      userName: accounts[16].person.userName,
-      profilePicturePath: accounts[16].person.profilePicturePath,
-      isFollowing: true),
+    id: '16',
+    name: accounts[16].person.name,
+    userName: accounts[16].person.userName,
+    profilePicturePath: accounts[16].person.profilePicturePath,
+    isFollowing: true,
+  ),
   FollowPerson(
-      id: '4',
-      name: accounts[4].person.name,
-      userName: accounts[4].person.userName,
-      profilePicturePath: accounts[4].person.profilePicturePath,
-      isFollowing: true),
+    id: '4',
+    name: accounts[4].person.name,
+    userName: accounts[4].person.userName,
+    profilePicturePath: accounts[4].person.profilePicturePath,
+    isFollowing: true,
+  ),
   FollowPerson(
-      id: '6',
-      name: accounts[6].person.name,
-      userName: accounts[6].person.userName,
-      profilePicturePath: accounts[6].person.profilePicturePath,
-      isFollowing: true),
+    id: '6',
+    name: accounts[6].person.name,
+    userName: accounts[6].person.userName,
+    profilePicturePath: accounts[6].person.profilePicturePath,
+    isFollowing: true,
+  ),
   FollowPerson(
-      id: '19',
-      name: accounts[19].person.name,
-      userName: accounts[19].person.userName,
-      profilePicturePath: accounts[19].person.profilePicturePath,
-      isFollowing: false),
+    id: '19',
+    name: accounts[19].person.name,
+    userName: accounts[19].person.userName,
+    profilePicturePath: accounts[19].person.profilePicturePath,
+    isFollowing: false,
+  ),
   FollowPerson(
-      id: '11',
-      name: accounts[11].person.name,
-      userName: accounts[11].person.userName,
-      profilePicturePath: accounts[11].person.profilePicturePath,
-      isFollowing: false),
+    id: '11',
+    name: accounts[11].person.name,
+    userName: accounts[11].person.userName,
+    profilePicturePath: accounts[11].person.profilePicturePath,
+    isFollowing: false,
+  ),
   FollowPerson(
-      id: '23',
-      name: accounts[23].person.name,
-      userName: accounts[23].person.userName,
-      profilePicturePath: accounts[23].person.profilePicturePath,
-      isFollowing: false),
+    id: '23',
+    name: accounts[23].person.name,
+    userName: accounts[23].person.userName,
+    profilePicturePath: accounts[23].person.profilePicturePath,
+    isFollowing: false,
+  ),
 ];
 
 List<Post> posts = <Post>[
@@ -176,498 +185,588 @@ Post getPostFromPostID(int id) {
 List<List<Comment>> comments = [
   [
     Comment(
-        person: accounts[25].person,
-        text: "For Inazuma’s sake, someone please stop her",
-        dateTime: "8 min",
-        replies: <CommentReply>[
-          CommentReply(
-              replyTo: accounts[25].person.userName,
-              person: accounts[21].person,
-              text: "Ysss",
-              dateTime: DateTime(2024, 3, 4, 12, 24, 4)),
-          CommentReply(
-              replyTo: accounts[25].person.userName,
-              person: accounts[12].person,
-              text: "Mayb yess",
-              dateTime: DateTime(2024, 3, 4, 12, 24, 4)),
-          CommentReply(
-              replyTo: accounts[25].person.userName,
-              person: accounts[15].person,
-              text:
-                  "This can be a serious thing if you think logically about it.",
-              dateTime: DateTime(2024, 3, 4, 12, 24, 4)),
-          CommentReply(
-              replyTo: accounts[25].person.userName,
-              person: accounts[16].person,
-              text: "Lmaooo 😭",
-              dateTime: DateTime(2024, 3, 4, 12, 24, 4)),
-          CommentReply(
-              replyTo: accounts[25].person.userName,
-              person: accounts[18].person,
-              text: "Agreed",
-              dateTime: DateTime(2024, 3, 4, 12, 24, 4)),
-        ]),
+      person: accounts[25].person,
+      text: "For Inazuma’s sake, someone please stop her",
+      dateTime: "8 min",
+      replies: <CommentReply>[
+        CommentReply(
+          replyTo: accounts[25].person.userName,
+          person: accounts[21].person,
+          text: "Ysss",
+          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
+        ),
+        CommentReply(
+          replyTo: accounts[25].person.userName,
+          person: accounts[12].person,
+          text: "Mayb yess",
+          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
+        ),
+        CommentReply(
+          replyTo: accounts[25].person.userName,
+          person: accounts[15].person,
+          text: "This can be a serious thing if you think logically about it.",
+          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
+        ),
+        CommentReply(
+          replyTo: accounts[25].person.userName,
+          person: accounts[16].person,
+          text: "Lmaooo 😭",
+          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
+        ),
+        CommentReply(
+          replyTo: accounts[25].person.userName,
+          person: accounts[18].person,
+          text: "Agreed",
+          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
+        ),
+      ],
+    ),
     Comment(
-        person: accounts[20].person,
-        text:
-            "All soldiers, alert. Gather all ships and  take people out of Inazuma.",
-        dateTime: "18 min"),
+      person: accounts[20].person,
+      text:
+          "All soldiers, alert. Gather all ships and  take people out of Inazuma.",
+      dateTime: "18 min",
+    ),
     Comment(
-        person: accounts[24].person,
-        text: "Always ready for free food 🔥",
-        dateTime: "26 min"),
+      person: accounts[24].person,
+      text: "Always ready for free food 🔥",
+      dateTime: "26 min",
+    ),
     Comment(
-        person: accounts[16].person,
-        text: "Will I get some beer there ?",
-        dateTime: "39 min"),
-  ]
+      person: accounts[16].person,
+      text: "Will I get some beer there ?",
+      dateTime: "39 min",
+    ),
+  ],
 ];
 
 List<List<Notif>> notifications = [
   [
     StoryLikeNotification(
-        notifier: accounts[0].person,
-        time: '5 min',
-        storyNum: 1,
-        contextImagePath: myStories[1].pathToMedia),
+      notifier: accounts[0].person,
+      time: '5 min',
+      storyNum: 1,
+      contextImagePath: myStories[1].pathToMedia,
+    ),
     FollowNotification(
-        notifier: accounts[23].person,
-        time: '2 hr',
-        contextImagePath: myStories[0].pathToMedia),
+      notifier: accounts[23].person,
+      time: '2 hr',
+      contextImagePath: myStories[0].pathToMedia,
+    ),
     CommentLikeNotficaiton(
-        notifier: accounts[21].person,
-        time: '24 min',
-        postID: 001,
-        commentText: comments[0][1].text,
-        contextImagePath: getPostFromPostID(001).coverImagePath),
+      notifier: accounts[21].person,
+      time: '24 min',
+      postID: 001,
+      commentText: comments[0][1].text,
+      contextImagePath: getPostFromPostID(001).coverImagePath,
+    ),
     StoryLikeNotification(
-        notifier: accounts[16].person,
-        time: '12 min',
-        storyNum: 0,
-        contextImagePath: myStories[0].pathToMedia),
+      notifier: accounts[16].person,
+      time: '12 min',
+      storyNum: 0,
+      contextImagePath: myStories[0].pathToMedia,
+    ),
   ],
   [
     CommentReplyNotficaiton(
-        notifier: accounts[18].person,
-        time: '34 min',
-        reply: "Yes, that's what I thought",
-        commentText: "Hey, this looks just like the previous post",
-        postID: 001,
-        isLiked: false,
-        contextImagePath: getPostFromPostID(001).coverImagePath),
+      notifier: accounts[18].person,
+      time: '34 min',
+      reply: "Yes, that's what I thought",
+      commentText: "Hey, this looks just like the previous post",
+      postID: 001,
+      isLiked: false,
+      contextImagePath: getPostFromPostID(001).coverImagePath,
+    ),
     StoryLikeNotification(
-        notifier: accounts[14].person,
-        time: '16 min',
-        storyNum: 1,
-        contextImagePath: myStories[1].pathToMedia),
+      notifier: accounts[14].person,
+      time: '16 min',
+      storyNum: 1,
+      contextImagePath: myStories[1].pathToMedia,
+    ),
     CommentLikeNotficaiton(
-        notifier: accounts[2].person,
-        time: '3 min',
-        postID: 002,
-        commentText: comments[0][0].text,
-        contextImagePath: getPostFromPostID(002).coverImagePath),
+      notifier: accounts[2].person,
+      time: '3 min',
+      postID: 002,
+      commentText: comments[0][0].text,
+      contextImagePath: getPostFromPostID(002).coverImagePath,
+    ),
     StoryLikeNotification(
-        notifier: accounts[10].person,
-        time: '46 min',
-        storyNum: 0,
-        contextImagePath: myStories[0].pathToMedia),
+      notifier: accounts[10].person,
+      time: '46 min',
+      storyNum: 0,
+      contextImagePath: myStories[0].pathToMedia,
+    ),
     CommentLikeNotficaiton(
-        notifier: accounts[8].person,
-        time: '5 hr',
-        postID: 001,
-        commentText: comments[0][1].text,
-        contextImagePath: getPostFromPostID(001).coverImagePath),
+      notifier: accounts[8].person,
+      time: '5 hr',
+      postID: 001,
+      commentText: comments[0][1].text,
+      contextImagePath: getPostFromPostID(001).coverImagePath,
+    ),
     PostLikeNotification(
-        notifier: accounts[4].person,
-        time: '9 hr',
-        postID: 002,
-        contextImagePath: getPostFromPostID(002).coverImagePath)
+      notifier: accounts[4].person,
+      time: '9 hr',
+      postID: 002,
+      contextImagePath: getPostFromPostID(002).coverImagePath,
+    ),
   ],
   [
     StoryLikeNotification(
-        notifier: accounts[9].person,
-        time: '1 day',
-        storyNum: 1,
-        contextImagePath: myStories[1].pathToMedia),
+      notifier: accounts[9].person,
+      time: '1 day',
+      storyNum: 1,
+      contextImagePath: myStories[1].pathToMedia,
+    ),
     CommentLikeNotficaiton(
-        notifier: accounts[0].person,
-        time: '1 day',
-        postID: 004,
-        commentText: comments[0][1].text,
-        contextImagePath: getPostFromPostID(004).coverImagePath),
+      notifier: accounts[0].person,
+      time: '1 day',
+      postID: 004,
+      commentText: comments[0][1].text,
+      contextImagePath: getPostFromPostID(004).coverImagePath,
+    ),
     PostLikeNotification(
-        notifier: accounts[6].person,
-        time: '1 day',
-        postID: 002,
-        contextImagePath: getPostFromPostID(002).coverImagePath),
+      notifier: accounts[6].person,
+      time: '1 day',
+      postID: 002,
+      contextImagePath: getPostFromPostID(002).coverImagePath,
+    ),
     StoryLikeNotification(
-        notifier: accounts[12].person,
-        time: '1 day',
-        storyNum: 1,
-        contextImagePath: myStories[1].pathToMedia),
+      notifier: accounts[12].person,
+      time: '1 day',
+      storyNum: 1,
+      contextImagePath: myStories[1].pathToMedia,
+    ),
     CommentLikeNotficaiton(
-        notifier: accounts[3].person,
-        time: '1 day',
-        postID: 003,
-        commentText: comments[0][0].text,
-        contextImagePath: getPostFromPostID(003).coverImagePath),
-  ]
+      notifier: accounts[3].person,
+      time: '1 day',
+      postID: 003,
+      commentText: comments[0][0].text,
+      contextImagePath: getPostFromPostID(003).coverImagePath,
+    ),
+  ],
 ];
 
 List<String> downloadImages = [
-  "https://img.freepik.com/free-photo/sunset-savannah_1048-4710.jpg?t=st=1713011145~exp=1713014745~hmac=c6681071fb5d115bd6169c2480887907acedd17e0b76976fe4bfb91a017a5070&w=1060"
+  "https://img.freepik.com/free-photo/sunset-savannah_1048-4710.jpg?t=st=1713011145~exp=1713014745~hmac=c6681071fb5d115bd6169c2480887907acedd17e0b76976fe4bfb91a017a5070&w=1060",
 ];
 
 List<Chat> chats = [
   Chat(
-      person: accounts[13].person,
-      newMessage: 2,
-      lastMessage: "Yup, saw that too !",
-      lastTime: "16:23",
-      isActive: true),
+    person: accounts[13].person,
+    newMessage: 2,
+    lastMessage: "Yup, saw that too !",
+    lastTime: "16:23",
+    isActive: true,
+  ),
   Chat(
-      person: accounts[24].person,
-      newMessage: 3,
-      lastMessage: "Wake up sleepy head",
-      lastTime: "13:35",
-      isActive: true),
+    person: accounts[24].person,
+    newMessage: 3,
+    lastMessage: "Wake up sleepy head",
+    lastTime: "13:35",
+    isActive: true,
+  ),
   Chat(
-      person: accounts[12].person,
-      newMessage: 0,
-      lastMessage: "Byee!!!",
-      lastTime: "10:23"),
+    person: accounts[12].person,
+    newMessage: 0,
+    lastMessage: "Byee!!!",
+    lastTime: "10:23",
+  ),
   Chat(
-      person: accounts[21].person,
-      newMessage: 1,
-      lastMessage:
-          "A human gave me a flower today, do you know what to do with this ?",
-      lastTime: "10:04",
-      isActive: true),
+    person: accounts[21].person,
+    newMessage: 1,
+    lastMessage:
+        "A human gave me a flower today, do you know what to do with this ?",
+    lastTime: "10:04",
+    isActive: true,
+  ),
   Chat(
-      person: accounts[17].person,
-      newMessage: 3,
-      lastMessage: "How do you cook this ?",
-      lastTime: "6:24"),
+    person: accounts[17].person,
+    newMessage: 3,
+    lastMessage: "How do you cook this ?",
+    lastTime: "6:24",
+  ),
   Chat(
-      person: accounts[10].person,
-      newMessage: 0,
-      lastMessage: "Good Night~",
-      lastMessageState: LastMessageState.sentByUserAndSeen,
-      lastTime: "1 day"),
+    person: accounts[10].person,
+    newMessage: 0,
+    lastMessage: "Good Night~",
+    lastMessageState: LastMessageState.sentByUserAndSeen,
+    lastTime: "1 day",
+  ),
   Chat(
-      person: accounts[28].person,
-      newMessage: 0,
-      lastMessage: "I will be leaving now",
-      lastTime: "1 day",
-      isActive: true),
+    person: accounts[28].person,
+    newMessage: 0,
+    lastMessage: "I will be leaving now",
+    lastTime: "1 day",
+    isActive: true,
+  ),
   Chat(
-      person: accounts[9].person,
-      newMessage: 0,
-      lastMessage: "Alrighty!",
-      lastMessageState: LastMessageState.sentByUserAndUnseen,
-      lastTime: "2 day"),
+    person: accounts[9].person,
+    newMessage: 0,
+    lastMessage: "Alrighty!",
+    lastMessageState: LastMessageState.sentByUserAndUnseen,
+    lastTime: "2 day",
+  ),
   Chat(
-      person: accounts[27].person,
-      newMessage: 2,
-      lastMessageState: LastMessageState.sentByUserAndSeen,
-      lastMessage: "Cya Later!",
-      lastTime: "2 day"),
+    person: accounts[27].person,
+    newMessage: 2,
+    lastMessageState: LastMessageState.sentByUserAndSeen,
+    lastMessage: "Cya Later!",
+    lastTime: "2 day",
+  ),
 ];
 
 List<Account> accounts = [
   Account(
-      person: Person(
-          id: '0',
-          name: "Ethan Brown",
-          userName: "EthanB_7",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1t8ON-QsNgAC1ry7OHNzBbG1uLiLIjES2'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '0',
+      name: "Ethan Brown",
+      userName: "EthanB_7",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1t8ON-QsNgAC1ry7OHNzBbG1uLiLIjES2',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '1',
-          name: "Lucas Anderson",
-          userName: "lucas_ands1",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1Y0QB4V0MeyoRUO0QQZu5qFMhT7ajlxzb'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '1',
+      name: "Lucas Anderson",
+      userName: "lucas_ands1",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1Y0QB4V0MeyoRUO0QQZu5qFMhT7ajlxzb',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '2',
-          name: "Ayaka",
-          userName: "am_i_ayaya",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1dlzU80M9PEuPhX2qKo1QpvsWyaXIcv-F'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '2',
+      name: "Ayaka",
+      userName: "am_i_ayaya",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1dlzU80M9PEuPhX2qKo1QpvsWyaXIcv-F',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '3',
-          name: "Jacob Miller",
-          userName: "jack_mil_25",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1dlzU80M9PEuPhX2qKo1QpvsWyaXIcv-F'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '3',
+      name: "Jacob Miller",
+      userName: "jack_mil_25",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1dlzU80M9PEuPhX2qKo1QpvsWyaXIcv-F',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '4',
-          name: "Liam Jones",
-          userName: "this.is.liam123",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1SiEfxr1q--HXdBy8q1ckx7IirlLt3R52'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '4',
+      name: "Liam Jones",
+      userName: "this.is.liam123",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1SiEfxr1q--HXdBy8q1ckx7IirlLt3R52',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '5',
-          name: "Christian Thompson",
-          userName: "chris_t71",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1sp3oMTRkRXPRMXZfaRq6cRt3oNrNvwCt'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '5',
+      name: "Christian Thompson",
+      userName: "chris_t71",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1sp3oMTRkRXPRMXZfaRq6cRt3oNrNvwCt',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '6',
-          name: "Matthew Evans",
-          userName: "evans_mat",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1QD_kj1U4vstuKn1wBCWtzbrtlMYsG-7y'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '6',
+      name: "Matthew Evans",
+      userName: "evans_mat",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1QD_kj1U4vstuKn1wBCWtzbrtlMYsG-7y',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '7',
-          name: "Chloe Johnson",
-          userName: "j_chloe",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1C5XUQeqY8bvi2DE0KRi7zc_XIW3721C1'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '7',
+      name: "Chloe Johnson",
+      userName: "j_chloe",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1C5XUQeqY8bvi2DE0KRi7zc_XIW3721C1',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '8',
-          name: "Archie White",
-          userName: "archie_white7",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1KSuYNIP2S9luQxptHYzOoKa8URJozIe1'),
-      bio: "Shaping spaces, one sketch at a time.",
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '8',
+      name: "Archie White",
+      userName: "archie_white7",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1KSuYNIP2S9luQxptHYzOoKa8URJozIe1',
+    ),
+    bio: "Shaping spaces, one sketch at a time.",
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '9',
-          name: "Sylvia Sunshine",
-          userName: "sylvieshine9",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1HNDR8qiIArymcwzzThjXPblRf04nnSMn'),
-      bio: "Your Friendly Celebrity Archon of Teyvat",
-      pronouns: "she/her",
-      followers: ['cook.with.shogun', 'director_hu54', 'princess_purple'],
-      following: ['cook.with.shogun'],
-      posts: []),
+    person: Person(
+      id: '9',
+      name: "Sylvia Sunshine",
+      userName: "sylvieshine9",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1HNDR8qiIArymcwzzThjXPblRf04nnSMn',
+    ),
+    bio: "Your Friendly Celebrity Archon of Teyvat",
+    pronouns: "she/her",
+    followers: ['cook.with.shogun', 'director_hu54', 'princess_purple'],
+    following: ['cook.with.shogun'],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '10',
-          name: "Director  Hu",
-          userName: "director_hu54",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1CQm-RSOfQxlKrXTOHlj_5JqhsqLsu8rq'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '10',
+      name: "Director  Hu",
+      userName: "director_hu54",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1CQm-RSOfQxlKrXTOHlj_5JqhsqLsu8rq',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '11',
-          name: "David Young",
-          userName: "its_davy_young",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1fuW9MzvqzgKl7Pt90v4eNUpMCRde1aGW'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '11',
+      name: "David Young",
+      userName: "its_davy_young",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1fuW9MzvqzgKl7Pt90v4eNUpMCRde1aGW',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '12',
-          name: "Joseph Martinez",
-          userName: "m_jose_4",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1_ItVD4thjd2pjrthRRwL3zOcRYncTKJV'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '12',
+      name: "Joseph Martinez",
+      userName: "m_jose_4",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1_ItVD4thjd2pjrthRRwL3zOcRYncTKJV',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '13',
-          name: "Emily Davis",
-          userName: "emyy_3_davy",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=11X_C6Kuddo4oN3NEBl9uyJ_rjEp0UDdN'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '13',
+      name: "Emily Davis",
+      userName: "emyy_3_davy",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=11X_C6Kuddo4oN3NEBl9uyJ_rjEp0UDdN',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '14',
-          name: "Sarah Jones",
-          userName: "sarah.is.here3",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1ImyUUqXDNoOMAG-CQd6wAmCJpUS4F1nQ'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '14',
+      name: "Sarah Jones",
+      userName: "sarah.is.here3",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1ImyUUqXDNoOMAG-CQd6wAmCJpUS4F1nQ',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '15',
-          name: "Olivia Brown",
-          userName: "olivia_brow23",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1WkCovKGcGiTR1IbeJVIb8q4I7jZSdAxl'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '15',
+      name: "Olivia Brown",
+      userName: "olivia_brow23",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1WkCovKGcGiTR1IbeJVIb8q4I7jZSdAxl',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '16',
-          name: "Sophia Rodriguez",
-          userName: "your_sophie_here",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1BLZvqwu3Sah4NkisgGo1oMq-HSIpy2qV'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '16',
+      name: "Sophia Rodriguez",
+      userName: "your_sophie_here",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1BLZvqwu3Sah4NkisgGo1oMq-HSIpy2qV',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '17',
-          name: "Eleanor Vance",
-          userName: "iam_ellie_vance",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1FjyMwEPYPNPXkOBKMGRApIS9LHwHpGGe'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '17',
+      name: "Eleanor Vance",
+      userName: "iam_ellie_vance",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1FjyMwEPYPNPXkOBKMGRApIS9LHwHpGGe',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '18',
-          name: "Emma Wilson",
-          userName: "emma_wil71",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1FTdyeb7AQRE1GPxPCQNQPIw4lCN5p5r6'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '18',
+      name: "Emma Wilson",
+      userName: "emma_wil71",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1FTdyeb7AQRE1GPxPCQNQPIw4lCN5p5r6',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '19',
-          name: "My cook book",
-          userName: "cook.with.jane",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1nnB-bR3zVtWpgrDfSDEyFM0vi0iVss1S'),
-      followers: ['director_hu54', 'princess_purple', 'furina_sunshine'],
-      following: ['furina_sunshine'],
-      posts: []),
+    person: Person(
+      id: '19',
+      name: "My cook book",
+      userName: "cook.with.jane",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1nnB-bR3zVtWpgrDfSDEyFM0vi0iVss1S',
+    ),
+    followers: ['director_hu54', 'princess_purple', 'furina_sunshine'],
+    following: ['furina_sunshine'],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '20',
-          name: "Madison White",
-          userName: "maddie_white_79",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1-Kbjq30deI8v3Hb5SZo-7mUGkx-4Te1z'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '20',
+      name: "Madison White",
+      userName: "maddie_white_79",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1-Kbjq30deI8v3Hb5SZo-7mUGkx-4Te1z',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '21',
-          name: "Jenna Liebert",
-          userName: "i.am.jenny.ig",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1SrM-csyz5iCWM3rzDGK_OVCJ83I1swN4'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '21',
+      name: "Jenna Liebert",
+      userName: "i.am.jenny.ig",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1SrM-csyz5iCWM3rzDGK_OVCJ83I1swN4',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '22',
-          name: "Sofia Garcia",
-          userName: "sofia_garxcia",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1ECGhGr_tUXRlbPSOM0w8qa_OZ0krp9h7'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '22',
+      name: "Sofia Garcia",
+      userName: "sofia_garxcia",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1ECGhGr_tUXRlbPSOM0w8qa_OZ0krp9h7',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '23',
-          name: "Venti",
-          userName: "alkahol.iz.nat.fo.kidz",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1foQW29-ihziU6MMFYY7mc0VxLCYGkT81'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '23',
+      name: "Venti",
+      userName: "alkahol.iz.nat.fo.kidz",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1foQW29-ihziU6MMFYY7mc0VxLCYGkT81',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '24',
-          name: "Walt Z",
-          userName: "eons_adrift",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1ip4pOCckeEwKwDPxDl-cfA09rWifMwyD'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '24',
+      name: "Walt Z",
+      userName: "eons_adrift",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1ip4pOCckeEwKwDPxDl-cfA09rWifMwyD',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '25',
-          name: "Xiao",
-          userName: "conqurer_of_demons",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1u0z89yW1WxTUutqhQ-8DrcBlC1IAC5tI'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '25',
+      name: "Xiao",
+      userName: "conqurer_of_demons",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1u0z89yW1WxTUutqhQ-8DrcBlC1IAC5tI',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '26',
-          name: "Hannah Smith",
-          userName: "hannah_smi_34",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=15hTDclZREA7NSTgiTEclmSEW3xZNz_YH'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '26',
+      name: "Hannah Smith",
+      userName: "hannah_smi_34",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=15hTDclZREA7NSTgiTEclmSEW3xZNz_YH',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '27',
-          name: "Helen Lightheart",
-          userName: "is.this.helen.32",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1fTisKjCd5c_VEbSBgyIE0pissAajfVyk'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '27',
+      name: "Helen Lightheart",
+      userName: "is.this.helen.32",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1fTisKjCd5c_VEbSBgyIE0pissAajfVyk',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
   Account(
-      person: Person(
-          id: '28',
-          name: "Zhang Cheng",
-          userName: "mr.zhang",
-          profilePicturePath:
-              'https://drive.google.com/uc?export=view&id=1JVAFXYHJXOTyRwoU9wtTlVOFm1w-I7_P'),
-      followers: [],
-      following: [],
-      posts: []),
+    person: Person(
+      id: '28',
+      name: "Zhang Cheng",
+      userName: "mr.zhang",
+      profilePicturePath:
+          'https://drive.google.com/uc?export=view&id=1JVAFXYHJXOTyRwoU9wtTlVOFm1w-I7_P',
+    ),
+    followers: [],
+    following: [],
+    posts: [],
+  ),
 ];
 
 Person getPersonFromUserName(String userName) {
@@ -690,25 +789,29 @@ Account getAccountFromUserName(String userName) {
 
 List<Story> myStories = [
   Story(
-      duration: const Duration(seconds: 7),
-      pathToMedia: '1w35ptuh4ixOJK6tJLbpwArG5xEQ6dS47',
-      type: StoryType.image,
-      uploadTime: '23 min'),
+    duration: const Duration(seconds: 7),
+    pathToMedia: '1w35ptuh4ixOJK6tJLbpwArG5xEQ6dS47',
+    type: StoryType.image,
+    uploadTime: '23 min',
+  ),
   Story(
-      duration: const Duration(seconds: 7),
-      pathToMedia: '10wPKtmDBC8ylKcqWplQ3LOtreucDkxAN',
-      type: StoryType.image,
-      uploadTime: '23 min'),
+    duration: const Duration(seconds: 7),
+    pathToMedia: '10wPKtmDBC8ylKcqWplQ3LOtreucDkxAN',
+    type: StoryType.image,
+    uploadTime: '23 min',
+  ),
   Story(
-      duration: const Duration(seconds: 7),
-      pathToMedia: '1swN0I0kJVE-YogucSzCcObVkdQ-ORnh2',
-      type: StoryType.image,
-      uploadTime: '23 min'),
+    duration: const Duration(seconds: 7),
+    pathToMedia: '1swN0I0kJVE-YogucSzCcObVkdQ-ORnh2',
+    type: StoryType.image,
+    uploadTime: '23 min',
+  ),
   Story(
-      duration: const Duration(seconds: 7),
-      pathToMedia: '1JpcQdKOF3N2MJe00fSvvjSxAvhdbLAo4',
-      type: StoryType.image,
-      uploadTime: '23 min')
+    duration: const Duration(seconds: 7),
+    pathToMedia: '1JpcQdKOF3N2MJe00fSvvjSxAvhdbLAo4',
+    type: StoryType.image,
+    uploadTime: '23 min',
+  ),
 ];
 
 List<Note> notes = [
@@ -717,70 +820,84 @@ List<Note> notes = [
   Note(person: accounts[24].person, note: "blahhh!"),
   Note(person: accounts[16].person, note: "I'll be sleeping whole day today"),
   Note(
-      person: accounts[19].person,
-      note: "I am never cooking fried tofu again 😭"),
+    person: accounts[19].person,
+    note: "I am never cooking fried tofu again 😭",
+  ),
 ];
 
 List<ChatText> chatTexts = [
   ChatText(
-      text: "cyaa, byee",
-      time: "8:26",
-      textid: 13,
-      repliedTo: 12,
-      sentByUser: true),
+    text: "cyaa, byee",
+    time: "8:26",
+    textid: 13,
+    repliedTo: 12,
+    sentByUser: true,
+  ),
   ChatText(text: "byee", time: "8:26", textid: 12),
   ChatText(text: "Okayy than, see ya tomorrow", time: "8:25", textid: 11),
   ChatText(
-      text: "Alr, I will call them all",
-      time: "8:25",
-      textid: 10,
-      repliedTo: 9,
-      sentByUser: true),
+    text: "Alr, I will call them all",
+    time: "8:25",
+    textid: 10,
+    repliedTo: 9,
+    sentByUser: true,
+  ),
   ChatText(
-      text: "Ya, it's been a long time since we all went out together",
-      time: "8:25",
-      textid: 9,
-      repliedTo: 8),
+    text: "Ya, it's been a long time since we all went out together",
+    time: "8:25",
+    textid: 9,
+    repliedTo: 8,
+  ),
   ChatText(
-      text: "Okay, should I call others too ??",
-      time: "8:25",
-      textid: 8,
-      sentByUser: true),
+    text: "Okay, should I call others too ??",
+    time: "8:25",
+    textid: 8,
+    sentByUser: true,
+  ),
   ChatText(textid: 7, text: "I am in 👍", time: "8:24", repliedTo: 5),
   ChatText(
-      textid: 6,
-      text: "A new park just opened last week",
-      time: "8:24",
-      sentByUser: true),
+    textid: 6,
+    text: "A new park just opened last week",
+    time: "8:24",
+    sentByUser: true,
+  ),
   ChatText(
-      textid: 5,
-      text: "So wanna go hangout morrow ?",
-      time: "8:24",
-      sentByUser: true),
+    textid: 5,
+    text: "So wanna go hangout morrow ?",
+    time: "8:24",
+    sentByUser: true,
+  ),
   ChatText(
-      textid: 4,
-      text: "Had hard time getting into my room, its on second floor",
-      time: "8:24"),
+    textid: 4,
+    text: "Had hard time getting into my room, its on second floor",
+    time: "8:24",
+  ),
   ChatText(
-      textid: 3, text: "Heyy, don't remind me it", time: "8:23", repliedTo: 2),
+    textid: 3,
+    text: "Heyy, don't remind me it",
+    time: "8:23",
+    repliedTo: 2,
+  ),
   ChatText(
-      textid: 2,
-      text: "Hope you don't get scared while sleepin at night",
-      time: "8:23",
-      sentByUser: true),
+    textid: 2,
+    text: "Hope you don't get scared while sleepin at night",
+    time: "8:23",
+    sentByUser: true,
+  ),
   ChatText(textid: 1, text: "Just got shifted to the new house", time: "8:23"),
   ChatText(textid: 0, text: "hii", time: "8:23"),
 ];
 
 List<Reel> reels = [
   Reel(
-      person: accounts[13].person,
-      title: "Drawing still life",
-      description: "",
-      pathToMedia: "reels/v1.mp4",
-      postId: 006,
-      likes: 132,
-      playCount: 4231),
+    person: accounts[13].person,
+    title: "Drawing still life",
+    description: "",
+    pathToMedia: "reels/v1.mp4",
+    postId: 006,
+    likes: 132,
+    playCount: 4231,
+  ),
 ];
 
 const String linkToPfp =

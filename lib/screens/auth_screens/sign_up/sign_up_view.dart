@@ -25,7 +25,8 @@ class SignUpView extends StatefulWidget {
   State<SignUpView> createState() => _SignUpViewState();
 }
 
-class _SignUpViewState extends State<SignUpView> with SingleTickerProviderStateMixin {
+class _SignUpViewState extends State<SignUpView>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   List<_ShapeState> _shapes = [];
   bool _initialized = false;
@@ -46,32 +47,68 @@ class _SignUpViewState extends State<SignUpView> with SingleTickerProviderStateM
 
     _shapes = [
       _ShapeState(
-        position: Offset(random.nextDouble() * (size.width - 150), random.nextDouble() * (size.height - 150)),
-        velocity: Offset(random.nextDouble() * 4 - 2, random.nextDouble() * 4 - 2),
+        position: Offset(
+          random.nextDouble() * (size.width - 150),
+          random.nextDouble() * (size.height - 150),
+        ),
+        velocity: Offset(
+          random.nextDouble() * 4 - 2,
+          random.nextDouble() * 4 - 2,
+        ),
         rotation: random.nextDouble() * 2 * pi,
         rotationSpeed: 0.02,
-        child: MaterialShapes.burst(size: 150, color: colorScheme.primaryContainer.withValues(alpha: 0.5)),
+        child: MaterialShapes.burst(
+          size: 150,
+          color: colorScheme.primaryContainer.withValues(alpha: 0.5),
+        ),
       ),
       _ShapeState(
-        position: Offset(random.nextDouble() * (size.width - 200), random.nextDouble() * (size.height - 200)),
-        velocity: Offset(random.nextDouble() * 4 - 2, random.nextDouble() * 4 - 2),
+        position: Offset(
+          random.nextDouble() * (size.width - 200),
+          random.nextDouble() * (size.height - 200),
+        ),
+        velocity: Offset(
+          random.nextDouble() * 4 - 2,
+          random.nextDouble() * 4 - 2,
+        ),
         rotation: random.nextDouble() * 2 * pi,
         rotationSpeed: -0.02,
-        child: MaterialShapes.flower(size: 200, color: colorScheme.secondaryContainer.withValues(alpha: 0.5)),
+        child: MaterialShapes.flower(
+          size: 200,
+          color: colorScheme.secondaryContainer.withValues(alpha: 0.5),
+        ),
       ),
       _ShapeState(
-        position: Offset(random.nextDouble() * (size.width - 100), random.nextDouble() * (size.height - 100)),
-        velocity: Offset(random.nextDouble() * 4 - 2, random.nextDouble() * 4 - 2),
+        position: Offset(
+          random.nextDouble() * (size.width - 100),
+          random.nextDouble() * (size.height - 100),
+        ),
+        velocity: Offset(
+          random.nextDouble() * 4 - 2,
+          random.nextDouble() * 4 - 2,
+        ),
         rotation: random.nextDouble() * 2 * pi,
         rotationSpeed: 0.01,
-        child: MaterialShapes.heart(size: 100, color: colorScheme.tertiaryContainer.withValues(alpha: 0.5)),
+        child: MaterialShapes.heart(
+          size: 100,
+          color: colorScheme.tertiaryContainer.withValues(alpha: 0.5),
+        ),
       ),
       _ShapeState(
-        position: Offset(random.nextDouble() * (size.width - 120), random.nextDouble() * (size.height - 120)),
-        velocity: Offset(random.nextDouble() * 4 - 2, random.nextDouble() * 4 - 2),
+        position: Offset(
+          random.nextDouble() * (size.width - 120),
+          random.nextDouble() * (size.height - 120),
+        ),
+        velocity: Offset(
+          random.nextDouble() * 4 - 2,
+          random.nextDouble() * 4 - 2,
+        ),
         rotation: random.nextDouble() * 2 * pi,
         rotationSpeed: -0.01,
-        child: MaterialShapes.circle(size: 120, color: colorScheme.errorContainer.withValues(alpha: 0.5)),
+        child: MaterialShapes.circle(
+          size: 120,
+          color: colorScheme.errorContainer.withValues(alpha: 0.5),
+        ),
       ),
     ];
     _initialized = true;
@@ -108,11 +145,13 @@ class _SignUpViewState extends State<SignUpView> with SingleTickerProviderStateM
     return Scaffold(
       body: Stack(
         children: [
-          ..._shapes.map((s) => Positioned(
-            left: s.position.dx,
-            top: s.position.dy,
-            child: Transform.rotate(angle: s.rotation, child: s.child),
-          )),
+          ..._shapes.map(
+            (s) => Positioned(
+              left: s.position.dx,
+              top: s.position.dy,
+              child: Transform.rotate(angle: s.rotation, child: s.child),
+            ),
+          ),
           const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -17,13 +17,17 @@ class StoriesSheetView extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(13), bottomLeft: Radius.circular(13)),
+            topLeft: Radius.circular(13),
+            bottomLeft: Radius.circular(13),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Stories",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
+            const Text(
+              "Stories",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 18),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -49,12 +53,20 @@ class StoriesSheetView extends StatelessWidget {
                   const Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("Crystal",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600)),
-                      Text("crystal_arucs",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500)),
+                      Text(
+                        "Crystal",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "crystal_arucs",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ],
                   ),
                   const Spacer(),
@@ -75,10 +87,17 @@ class StoriesSheetView extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: viewModel.storiesData
-                    .map((e) => StoryTile(
-                        person:
-                            Person(id: '', name: e[1], userName: e[0], profilePicturePath: e[2]),
-                        notifNum: e[3]))
+                    .map(
+                      (e) => StoryTile(
+                        person: Person(
+                          id: '',
+                          name: e[1],
+                          userName: e[0],
+                          profilePicturePath: e[2],
+                        ),
+                        notifNum: e[3],
+                      ),
+                    )
                     .toList(),
               ),
             ),

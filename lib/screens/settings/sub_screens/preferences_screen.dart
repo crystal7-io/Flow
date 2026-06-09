@@ -19,9 +19,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     final themeMode = appService.themeMode;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Preferences"),
-      ),
+      appBar: AppBar(title: const Text("Preferences")),
       body: ListView(
         children: [
           // ListTile(
@@ -91,54 +89,63 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           //         });
           //   },
           // ),
-
           Center(
             child: Padding(
-                padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
-                child: M3EToggleButtonGroup(
-                    spacing: 4,
-                    size: M3EButtonSize.md,
-                    type: M3EButtonGroupType.connected,
-                    onSelectedIndexChanged: (value) => appService.changeTheme(value == 0
-                        ? ThemeMode.system
-                        : value == 1
-                            ? ThemeMode.light
-                            : ThemeMode.dark),
-                    selectedIndex: themeMode == ThemeMode.system
-                        ? 0
-                        : themeMode == ThemeMode.light
-                            ? 1
-                            : 2,
-                    actions: [
-                      M3EToggleButtonGroupAction(
-                        width: (MediaQuery.widthOf(context) - 36) / 3,
-                        label: const Text('System'),
-                      ),
-                      M3EToggleButtonGroupAction(
-                        width: (MediaQuery.widthOf(context) - 36) / 3,
-                        label: const Text('Light'),
-                      ),
-                      M3EToggleButtonGroupAction(
-                        width: (MediaQuery.widthOf(context) - 36) / 3,
-                        label: const Text('Dark'),
-                      )
-                    ])),
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
+              child: M3EToggleButtonGroup(
+                spacing: 4,
+                size: M3EButtonSize.md,
+                type: M3EButtonGroupType.connected,
+                onSelectedIndexChanged: (value) => appService.changeTheme(
+                  value == 0
+                      ? ThemeMode.system
+                      : value == 1
+                      ? ThemeMode.light
+                      : ThemeMode.dark,
+                ),
+                selectedIndex: themeMode == ThemeMode.system
+                    ? 0
+                    : themeMode == ThemeMode.light
+                    ? 1
+                    : 2,
+                actions: [
+                  M3EToggleButtonGroupAction(
+                    width: (MediaQuery.widthOf(context) - 36) / 3,
+                    label: const Text('System'),
+                  ),
+                  M3EToggleButtonGroupAction(
+                    width: (MediaQuery.widthOf(context) - 36) / 3,
+                    label: const Text('Light'),
+                  ),
+                  M3EToggleButtonGroupAction(
+                    width: (MediaQuery.widthOf(context) - 36) / 3,
+                    label: const Text('Dark'),
+                  ),
+                ],
+              ),
+            ),
           ),
           ListTile(
             onTap: () {},
-            contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 16,
+            ),
             leading: const Icon(Icons.translate_outlined),
             title: const Text("Language"),
             subtitle: const Text("English"),
           ),
           SwitchListTile(
-              title: const Text("Floating Searchbar"),
-              subtitle: const Text("Make search bar reappears when you scroll up"),
-              secondary: const Icon(Icons.search),
-              value: appService.isSearchFloating,
-              onChanged: (bool value) {
-                appService.toggleSearchFloating();
-              })
+            title: const Text("Floating Searchbar"),
+            subtitle: const Text(
+              "Make search bar reappears when you scroll up",
+            ),
+            secondary: const Icon(Icons.search),
+            value: appService.isSearchFloating,
+            onChanged: (bool value) {
+              appService.toggleSearchFloating();
+            },
+          ),
         ],
       ),
     );

@@ -19,24 +19,19 @@ class AppProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppService>(
-          create: (_) => AppService(),
-        ),
-        ChangeNotifierProvider<AuthService>(
-          create: (_) => AuthService(),
-        ),
+        ChangeNotifierProvider<AppService>(create: (_) => AppService()),
+        ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
         ChangeNotifierProvider<CreatePostTransitionProvider>(
           create: (_) => CreatePostTransitionProvider(),
         ),
         ChangeNotifierProvider<UserDataService>(
           create: (_) => UserDataService(
-              UserRepository(LocalUserDataSource(), RemoteUserDataSource())),
+            UserRepository(LocalUserDataSource(), RemoteUserDataSource()),
+          ),
         ),
         Provider<NavigationService>(
-          create: (_) => NavigationService(
-            context.read<GoRouter>(),
-          ),
-        )
+          create: (_) => NavigationService(context.read<GoRouter>()),
+        ),
       ],
       child: child,
     );

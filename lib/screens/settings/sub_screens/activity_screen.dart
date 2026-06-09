@@ -12,9 +12,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Activity"),
-      ),
+      appBar: AppBar(title: const Text("Activity")),
       body: ListView(
         children: [
           ListItem(
@@ -22,11 +20,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             iconData: Icons.bookmark_outline,
             onTap: () {},
           ),
-          ListItem(
-            title: "Archive",
-            iconData: Icons.history,
-            onTap: () {},
-          ),
+          ListItem(title: "Archive", iconData: Icons.history, onTap: () {}),
           ListItem(
             title: "Time spent",
             iconData: Icons.schedule_outlined,
@@ -74,11 +68,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             iconData: Icons.manage_search,
             onTap: () {},
           ),
-          ListItem(
-            title: "Link history",
-            iconData: Icons.link,
-            onTap: () {},
-          ),
+          ListItem(title: "Link history", iconData: Icons.link, onTap: () {}),
           const Divider(),
           ListItem(
             title: "Transfer information",
@@ -110,9 +100,10 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       titleTextStyle: TextStyle(
-          fontSize: 18,
-          color: Theme.of(context).colorScheme.onSurface,
-          fontWeight: FontWeight.w400),
+        fontSize: 18,
+        color: Theme.of(context).colorScheme.onSurface,
+        fontWeight: FontWeight.w400,
+      ),
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       onTap: onTap,
       title: Text(title),

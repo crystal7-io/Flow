@@ -12,11 +12,7 @@ class BlobShape extends ShapeBorder {
   final double roundness;
   final double rotation;
 
-  const BlobShape({
-    this.points = 5,
-    this.roundness = 0.6,
-    this.rotation = 0.0,
-  });
+  const BlobShape({this.points = 5, this.roundness = 0.6, this.rotation = 0.0});
 
   @override
   EdgeInsetsGeometry get dimensions => EdgeInsets.zero;
@@ -40,10 +36,12 @@ class BlobShape extends ShapeBorder {
 
     for (int i = 0; i < points; i++) {
       final double theta = -math.pi / 2 + i * step + rotation;
-      vertices.add(Offset(
-        center.dx + radius * math.cos(theta),
-        center.dy + radius * math.sin(theta),
-      ));
+      vertices.add(
+        Offset(
+          center.dx + radius * math.cos(theta),
+          center.dy + radius * math.sin(theta),
+        ),
+      );
     }
 
     // Calculate a corner radius that scales with the size
@@ -57,8 +55,11 @@ class BlobShape extends ShapeBorder {
 
       final double dist12 = (p2 - p1).distance;
       final double dist23 = (p3 - p2).distance;
-      
-      final double actualK = math.min(cornerRadius, math.min(dist12, dist23) / 2);
+
+      final double actualK = math.min(
+        cornerRadius,
+        math.min(dist12, dist23) / 2,
+      );
 
       final Offset start = p2 + (p1 - p2) * (actualK / dist12);
       final Offset end = p2 + (p3 - p2) * (actualK / dist23);
@@ -66,20 +67,30 @@ class BlobShape extends ShapeBorder {
       if (i == 0) {
         path.moveTo(start.dx, start.dy);
       } else {
-        // Instead of lineTo, we can use a slight curve for the "sides" 
+        // Instead of lineTo, we can use a slight curve for the "sides"
         // to make it more blobby/organic
-        final Offset prevEnd = _getEndForIndex((i - 1 + points) % points, vertices, cornerRadius);
+        final Offset prevEnd = _getEndForIndex(
+          (i - 1 + points) % points,
+          vertices,
+          cornerRadius,
+        );
         final double sideDist = (start - prevEnd).distance;
         if (sideDist > 0) {
           final Offset cp = Offset.lerp(prevEnd, start, 0.5)!;
           // Pull the side slightly outwards
-          final Offset normal = _getNormal(prevEnd, start) * (sideDist * 0.1 * roundness);
-          path.quadraticBezierTo(cp.dx + normal.dx, cp.dy + normal.dy, start.dx, start.dy);
+          final Offset normal =
+              _getNormal(prevEnd, start) * (sideDist * 0.1 * roundness);
+          path.quadraticBezierTo(
+            cp.dx + normal.dx,
+            cp.dy + normal.dy,
+            start.dx,
+            start.dy,
+          );
         } else {
           path.lineTo(start.dx, start.dy);
         }
       }
-      
+
       // Use cubic beziers for smoother "blobby" corners
       final double controlDist = actualK * 0.552284749831;
       final Offset cp1 = p2 + (p1 - p2) * ((actualK - controlDist) / dist12);
@@ -110,11 +121,8 @@ class BlobShape extends ShapeBorder {
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {}
 
   @override
-  ShapeBorder scale(double t) => BlobShape(
-        points: points,
-        roundness: roundness * t,
-        rotation: rotation,
-      );
+  ShapeBorder scale(double t) =>
+      BlobShape(points: points, roundness: roundness * t, rotation: rotation);
 
   @override
   bool operator ==(Object other) {
@@ -135,16 +143,15 @@ class BlobClipper extends CustomClipper<Path> {
   final double roundness;
   final double rotation;
 
-  BlobClipper({
-    this.points = 5,
-    this.roundness = 0.6,
-    this.rotation = 0.0,
-  });
+  BlobClipper({this.points = 5, this.roundness = 0.6, this.rotation = 0.0});
 
   @override
   Path getClip(Size size) {
-    return BlobShape(points: points, roundness: roundness, rotation: rotation)
-        .getOuterPath(Offset.zero & size);
+    return BlobShape(
+      points: points,
+      roundness: roundness,
+      rotation: rotation,
+    ).getOuterPath(Offset.zero & size);
   }
 
   @override
@@ -203,11 +210,7 @@ class BlobAvatar extends StatelessWidget {
     }
 
     if (size != null) {
-      return SizedBox(
-        width: size,
-        height: size,
-        child: content,
-      );
+      return SizedBox(width: size, height: size, child: content);
     }
 
     return content;

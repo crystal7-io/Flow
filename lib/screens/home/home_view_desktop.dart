@@ -31,14 +31,12 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
               children: [
                 Expanded(
                   child: SearchBar(
-                    shadowColor:
-                        const WidgetStatePropertyAll(Colors.transparent),
+                    shadowColor: const WidgetStatePropertyAll(
+                      Colors.transparent,
+                    ),
                     leading: IconButton(
                       onPressed: null,
-                      icon: const Icon(
-                        Symbols.search,
-                        weight: 600,
-                      ),
+                      icon: const Icon(Symbols.search, weight: 600),
                       disabledColor: Theme.of(context).colorScheme.onSurface,
                     ),
                     trailing: [
@@ -73,8 +71,9 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
                           placeholderFadeInDuration: const Duration(seconds: 0),
                           placeholder: (context, url) => Icon(
                             Icons.account_circle_rounded,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                           fit: BoxFit.contain,
                           imageUrl: viewModel.profilePictureLink,
@@ -110,24 +109,29 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text("Explore",
-                                            style: TextStyle(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.w600)),
+                                        const Text(
+                                          "Explore",
+                                          style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
                                         constraints.maxWidth < 1000
                                             ? SizedBox(
                                                 height: 40,
                                                 child: TextButton.icon(
                                                   onPressed: () =>
                                                       SideSheet.right(
-                                                    width: 400,
-                                                    sheetBorderRadius: 14,
-                                                    context: context,
-                                                    body: StoriesSheetView(
-                                                        viewModel: viewModel),
-                                                  ),
+                                                        width: 400,
+                                                        sheetBorderRadius: 14,
+                                                        context: context,
+                                                        body: StoriesSheetView(
+                                                          viewModel: viewModel,
+                                                        ),
+                                                      ),
                                                   icon: const Icon(
-                                                      Icons.chevron_left),
+                                                    Icons.chevron_left,
+                                                  ),
                                                   label: const Text("Stories"),
                                                 ),
                                               )
@@ -138,27 +142,33 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
                                     Wrap(
                                       spacing: 8,
                                       children: Filters.values
-                                          .map((e) => FilterChip(
-                                                color:
-                                                    const WidgetStatePropertyAll(
-                                                        Colors.transparent),
-                                                shape: RoundedRectangleBorder(
-                                                    side: BorderSide(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .outlineVariant),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20)),
-                                                label: Text(e.name),
-                                                selected: viewModel
-                                                    .selectedFilters
-                                                    .contains(e),
-                                                onSelected: (selected) {
-                                                  viewModel.toggleFilter(
-                                                      e, selected);
-                                                },
-                                              ))
+                                          .map(
+                                            (e) => FilterChip(
+                                              color:
+                                                  const WidgetStatePropertyAll(
+                                                    Colors.transparent,
+                                                  ),
+                                              shape: RoundedRectangleBorder(
+                                                side: BorderSide(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.outlineVariant,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              label: Text(e.name),
+                                              selected: viewModel
+                                                  .selectedFilters
+                                                  .contains(e),
+                                              onSelected: (selected) {
+                                                viewModel.toggleFilter(
+                                                  e,
+                                                  selected,
+                                                );
+                                              },
+                                            ),
+                                          )
                                           .toList(),
                                     ),
                                     const SizedBox(height: 22),

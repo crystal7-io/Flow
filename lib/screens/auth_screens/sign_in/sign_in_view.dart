@@ -23,31 +23,33 @@ class SignInView extends StatelessWidget {
                 top: 50,
                 left: 50,
                 child: MaterialShapes.burst(
-                    size: 150,
-                    color: colorScheme.primaryContainer.withValues(alpha: 0.3)),
+                  size: 150,
+                  color: colorScheme.primaryContainer.withValues(alpha: 0.3),
+                ),
               ),
               Positioned(
                 bottom: -10,
                 right: 20,
                 child: MaterialShapes.flower(
-                    size: 200,
-                    color:
-                        colorScheme.secondaryContainer.withValues(alpha: 0.3)),
+                  size: 200,
+                  color: colorScheme.secondaryContainer.withValues(alpha: 0.3),
+                ),
               ),
               Positioned(
                 top: size.height / 2,
                 right: 20,
                 child: MaterialShapes.heart(
-                    size: 100,
-                    color:
-                        colorScheme.tertiaryContainer.withValues(alpha: 0.3)),
+                  size: 100,
+                  color: colorScheme.tertiaryContainer.withValues(alpha: 0.3),
+                ),
               ),
               Positioned(
                 bottom: size.height / 3,
                 left: -20,
                 child: MaterialShapes.circle(
-                    size: 150,
-                    color: colorScheme.secondary.withValues(alpha: 0.2)),
+                  size: 150,
+                  color: colorScheme.secondary.withValues(alpha: 0.2),
+                ),
               ),
             ],
           ),
@@ -60,15 +62,21 @@ class SignInView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Flow",
-                      style: GoogleFonts.pacifico(
-                          fontSize: 56,
-                          fontWeight: FontWeight.bold,
-                          color: colorScheme.primary)),
+                  Text(
+                    "Flow",
+                    style: GoogleFonts.pacifico(
+                      fontSize: 56,
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.primary,
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                  Text("Reconnect with your world",
-                      style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: colorScheme.onSurfaceVariant)),
+                  Text(
+                    "Reconnect with your world",
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
                   const SizedBox(height: 32),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 24),
@@ -77,8 +85,9 @@ class SignInView extends StatelessWidget {
                         TextField(
                           onTapOutside: (event) =>
                               FocusManager.instance.primaryFocus?.unfocus(),
-                          controller:
-                              context.read<SignInViewModel>().emailController,
+                          controller: context
+                              .read<SignInViewModel>()
+                              .emailController,
                           decoration: InputDecoration(
                             fillColor: colorScheme.surfaceContainer,
                             filled: true,
@@ -114,50 +123,58 @@ class SignInView extends StatelessWidget {
                           width: double.infinity,
                           height: 52,
                           child: FilledButton(
-                            onPressed:
-                                context.read<SignInViewModel>().onLoginPress,
+                            onPressed: context
+                                .read<SignInViewModel>()
+                                .onLoginPress,
                             child: const Text(
                               "Login",
                               style: TextStyle(fontWeight: FontWeight.w800),
                             ),
                           ),
                         ),
+                        SizedBox(height: 24),
                         SizedBox(
-                          height: 24,
+                          height: 56,
+                          width: double.infinity,
+                          child: FilledButton.tonalIcon(
+                            onPressed: () {},
+                            icon: Text(
+                              "G",
+                              style: GoogleFonts.urbanist(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                            label: const Text("Continue with Google"),
+                          ),
                         ),
-                        SizedBox(
-                            height: 56,
-                            width: double.infinity,
-                            child: FilledButton.tonalIcon(
-                                onPressed: () {},
-                                icon: Text(
-                                  "G",
-                                  style: GoogleFonts.urbanist(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24),
-                                ),
-                                label: const Text("Continue with Google")))
                       ],
                     ),
                   ),
                   const SizedBox(height: 24),
                   TextButton(
-                      onPressed:
-                          context.read<SignInViewModel>().onForgetPasswordPress,
-                      child: const Text("Forget password?")),
+                    onPressed: context
+                        .read<SignInViewModel>()
+                        .onForgetPasswordPress,
+                    child: const Text("Forget password?"),
+                  ),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Don't have an account?",
-                          style: theme.textTheme.bodySmall),
+                      Text(
+                        "Don't have an account?",
+                        style: theme.textTheme.bodySmall,
+                      ),
                       TextButton(
-                          onPressed:
-                              context.read<SignInViewModel>().onSignUpPress,
-                          child: const Text(
-                            "Sign up",
-                            style: TextStyle(fontWeight: FontWeight.w800),
-                          )),
+                        onPressed: context
+                            .read<SignInViewModel>()
+                            .onSignUpPress,
+                        child: const Text(
+                          "Sign up",
+                          style: TextStyle(fontWeight: FontWeight.w800),
+                        ),
+                      ),
                     ],
                   ),
                 ],

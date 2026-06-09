@@ -52,47 +52,68 @@ class _AuthControllerViewState extends State<AuthControllerView>
 
     _shapes = [
       _ShapeState(
-        position: Offset(random.nextDouble() * (size.width - 150),
-            random.nextDouble() * (size.height - 150)),
-        velocity:
-            Offset(random.nextDouble() * 4 - 2, random.nextDouble() * 4 - 2),
+        position: Offset(
+          random.nextDouble() * (size.width - 150),
+          random.nextDouble() * (size.height - 150),
+        ),
+        velocity: Offset(
+          random.nextDouble() * 4 - 2,
+          random.nextDouble() * 4 - 2,
+        ),
         rotation: random.nextDouble() * 2 * pi,
         rotationSpeed: 0.02,
         child: MaterialShapes.burst(
-            size: 150,
-            color: colorScheme.primaryContainer.withValues(alpha: 0.3)),
+          size: 150,
+          color: colorScheme.primaryContainer.withValues(alpha: 0.3),
+        ),
       ),
       _ShapeState(
-        position: Offset(random.nextDouble() * (size.width - 200),
-            random.nextDouble() * (size.height - 200)),
-        velocity:
-            Offset(random.nextDouble() * 4 - 2, random.nextDouble() * 4 - 2),
+        position: Offset(
+          random.nextDouble() * (size.width - 200),
+          random.nextDouble() * (size.height - 200),
+        ),
+        velocity: Offset(
+          random.nextDouble() * 4 - 2,
+          random.nextDouble() * 4 - 2,
+        ),
         rotation: random.nextDouble() * 2 * pi,
         rotationSpeed: -0.02,
         child: MaterialShapes.flower(
-            size: 200,
-            color: colorScheme.secondaryContainer.withValues(alpha: 0.3)),
+          size: 200,
+          color: colorScheme.secondaryContainer.withValues(alpha: 0.3),
+        ),
       ),
       _ShapeState(
-        position: Offset(random.nextDouble() * (size.width - 100),
-            random.nextDouble() * (size.height - 100)),
-        velocity:
-            Offset(random.nextDouble() * 4 - 2, random.nextDouble() * 4 - 2),
+        position: Offset(
+          random.nextDouble() * (size.width - 100),
+          random.nextDouble() * (size.height - 100),
+        ),
+        velocity: Offset(
+          random.nextDouble() * 4 - 2,
+          random.nextDouble() * 4 - 2,
+        ),
         rotation: random.nextDouble() * 2 * pi,
         rotationSpeed: 0.01,
         child: MaterialShapes.heart(
-            size: 100,
-            color: colorScheme.tertiaryContainer.withValues(alpha: 0.3)),
+          size: 100,
+          color: colorScheme.tertiaryContainer.withValues(alpha: 0.3),
+        ),
       ),
       _ShapeState(
-        position: Offset(random.nextDouble() * (size.width - 150),
-            random.nextDouble() * (size.height - 150)),
-        velocity:
-            Offset(random.nextDouble() * 4 - 2, random.nextDouble() * 4 - 2),
+        position: Offset(
+          random.nextDouble() * (size.width - 150),
+          random.nextDouble() * (size.height - 150),
+        ),
+        velocity: Offset(
+          random.nextDouble() * 4 - 2,
+          random.nextDouble() * 4 - 2,
+        ),
         rotation: random.nextDouble() * 2 * pi,
         rotationSpeed: -0.01,
         child: MaterialShapes.circle(
-            size: 150, color: colorScheme.secondary.withValues(alpha: 0.2)),
+          size: 150,
+          color: colorScheme.secondary.withValues(alpha: 0.2),
+        ),
       ),
     ];
     _initialized = true;
@@ -136,11 +157,13 @@ class _AuthControllerViewState extends State<AuthControllerView>
         backgroundColor: colorScheme.surface,
         body: Stack(
           children: [
-            ..._shapes.map((s) => Positioned(
-                  left: s.position.dx,
-                  top: s.position.dy,
-                  child: Transform.rotate(angle: s.rotation, child: s.child),
-                )),
+            ..._shapes.map(
+              (s) => Positioned(
+                left: s.position.dx,
+                top: s.position.dy,
+                child: Transform.rotate(angle: s.rotation, child: s.child),
+              ),
+            ),
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -148,18 +171,23 @@ class _AuthControllerViewState extends State<AuthControllerView>
                   builder: (context, vm, _) => Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Flow",
-                          style: GoogleFonts.pacifico(
-                              fontSize: 56,
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.primary)),
+                      Text(
+                        "Flow",
+                        style: GoogleFonts.pacifico(
+                          fontSize: 56,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.primary,
+                        ),
+                      ),
                       const SizedBox(height: 48),
                       _buildAuthStep(context, vm),
                       if (vm.errorMessage != null)
                         Padding(
                           padding: const EdgeInsets.only(top: 16),
-                          child: Text(vm.errorMessage!,
-                              style: TextStyle(color: colorScheme.error)),
+                          child: Text(
+                            vm.errorMessage!,
+                            style: TextStyle(color: colorScheme.error),
+                          ),
                         ),
                     ],
                   ),
@@ -208,14 +236,15 @@ class _AuthControllerViewState extends State<AuthControllerView>
           width: double.infinity,
           height: 56,
           child: FilledButton(
-              onPressed: () {
-                if (!vm.proceedEmail()) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(vm.errorMessage ?? 'Invalid email')),
-                  );
-                }
-              },
-              child: const Text("Continue")),
+            onPressed: () {
+              if (!vm.proceedEmail()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(vm.errorMessage ?? 'Invalid email')),
+                );
+              }
+            },
+            child: const Text("Continue"),
+          ),
         ),
         const SizedBox(height: 16),
         TextButton(onPressed: () {}, child: const Text("Continue with Google")),

@@ -32,8 +32,9 @@ class SignInViewModel extends ChangeNotifier {
   final TextEditingController emailController = TextEditingController(text: "");
 
   /// Text editing controller for password
-  final TextEditingController passwordController =
-      TextEditingController(text: "");
+  final TextEditingController passwordController = TextEditingController(
+    text: "",
+  );
 
   /// Login using user entered credentials
   Future<void> onLoginPress() async {
@@ -46,7 +47,9 @@ class SignInViewModel extends ChangeNotifier {
       notifyListeners();
       try {
         UserCredential? creds = await _authService.signInWithEmailAndPassword(
-            emailController.text, passwordController.text);
+          emailController.text,
+          passwordController.text,
+        );
         if (creds != null) {
           await _userDataService.fetchData(creds.user!.uid);
         }

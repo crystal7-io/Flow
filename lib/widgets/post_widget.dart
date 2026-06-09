@@ -13,10 +13,7 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class MobilePost extends StatefulWidget {
-  const MobilePost({
-    super.key,
-    required this.post,
-  });
+  const MobilePost({super.key, required this.post});
   final Post post;
   // final Function openComment;
   @override
@@ -424,9 +421,7 @@ class _MobilePostState extends State<MobilePost> {
     //   ),
     // );
     return Padding(
-      padding: EdgeInsetsGeometry.only(
-        bottom: 8,
-      ),
+      padding: EdgeInsetsGeometry.only(bottom: 8),
       child: Stack(
         alignment: Alignment.bottomRight,
         children: [
@@ -438,44 +433,53 @@ class _MobilePostState extends State<MobilePost> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     GestureDetector(
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(
-                            PageRouteBuilder(
-                              opaque: false,
-                              barrierDismissible: true,
-                              transitionDuration: Durations.extralong1,
-                              reverseTransitionDuration: Durations.medium4,
-                              pageBuilder: (context, animation, secondaryAnimation) {
-                                return ProfilePictureViewer(
-                                  post: widget.post,
-                                  animation: CurvedAnimation(
-                                    parent: animation,
-                                    curve: Easing.emphasizedDecelerate,
-                                    reverseCurve: Easing.emphasizedAccelerate,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: Hero(
-                          tag: 'pfp_${widget.post.postId}',
-                          createRectTween: (begin, end) =>
-                              ExpressiveRectTween(begin: begin, end: end),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(21),
-                            child: CachedNetworkImage(
-                              height: 42,
-                              width: 42,
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
-                              placeholderFadeInDuration: const Duration(seconds: 0),
-                              placeholder: (context, url) => Icon(Icons.account_circle_rounded,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant),
-                              fit: BoxFit.contain,
-                              imageUrl: widget.post.person.pfpPath,
-                            ),
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          PageRouteBuilder(
+                            opaque: false,
+                            barrierDismissible: true,
+                            transitionDuration: Durations.extralong1,
+                            reverseTransitionDuration: Durations.medium4,
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                                  return ProfilePictureViewer(
+                                    post: widget.post,
+                                    animation: CurvedAnimation(
+                                      parent: animation,
+                                      curve: Easing.emphasizedDecelerate,
+                                      reverseCurve: Easing.emphasizedAccelerate,
+                                    ),
+                                  );
+                                },
                           ),
-                        )),
+                        );
+                      },
+                      child: Hero(
+                        tag: 'pfp_${widget.post.postId}',
+                        createRectTween: (begin, end) =>
+                            ExpressiveRectTween(begin: begin, end: end),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(21),
+                          child: CachedNetworkImage(
+                            height: 42,
+                            width: 42,
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                            placeholderFadeInDuration: const Duration(
+                              seconds: 0,
+                            ),
+                            placeholder: (context, url) => Icon(
+                              Icons.account_circle_rounded,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                            fit: BoxFit.contain,
+                            imageUrl: widget.post.person.pfpPath,
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -485,17 +489,19 @@ class _MobilePostState extends State<MobilePost> {
                           Text(
                             widget.post.person.name,
                             style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.outline,
-                                fontWeight: FontWeight.w600),
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.outline,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           Text(
                             widget.post.subTitle,
                             style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontWeight: FontWeight.w500),
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
@@ -507,8 +513,10 @@ class _MobilePostState extends State<MobilePost> {
               widget.post.type == PostType.image
                   ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
                   : widget.post.type == PostType.carosel
-                      ? CarouselPostWidget(imagePost: widget.post as CarouselPostObject)
-                      : ReelPost(post: widget.post as ReelPostObject),
+                  ? CarouselPostWidget(
+                      imagePost: widget.post as CarouselPostObject,
+                    )
+                  : ReelPost(post: widget.post as ReelPostObject),
               SizedBox(height: 4),
               Padding(
                 padding: EdgeInsetsGeometry.symmetric(horizontal: 18),
@@ -516,14 +524,18 @@ class _MobilePostState extends State<MobilePost> {
                   children: [
                     Text(
                       formatPostTimestamp(widget.post.dateTime),
-                      style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.outline),
-                    )
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
                   ],
                 ),
               ),
               SizedBox(height: 8),
             ],
           ),
+
           // Row(
           //   mainAxisSize: MainAxisSize.min,
           //   children: [
@@ -580,13 +592,28 @@ class _MobilePostState extends State<MobilePost> {
           //             Theme.of(context).colorScheme.primaryFixed),
           //   ],
           // ),
-
-          StandardButtonGroup(alignment: MainAxisAlignment.end, items: [
-            ButtonGroupItem(width: 44, height: 56, onPressed: () {}, icon: Symbols.forward),
-            ButtonGroupItem(width: 56, height: 56, onPressed: () {}, icon: Symbols.comment),
-            ButtonGroupItem(
-                backgroundColor: liked ? Theme.of(context).colorScheme.primaryFixed : null,
-                foregroundColor: liked ? Theme.of(context).colorScheme.onPrimaryFixed : null,
+          StandardButtonGroup(
+            alignment: MainAxisAlignment.end,
+            items: [
+              ButtonGroupItem(
+                width: 44,
+                height: 56,
+                onPressed: () {},
+                icon: Symbols.forward,
+              ),
+              ButtonGroupItem(
+                width: 56,
+                height: 56,
+                onPressed: () {},
+                icon: Symbols.comment,
+              ),
+              ButtonGroupItem(
+                backgroundColor: liked
+                    ? Theme.of(context).colorScheme.primaryFixed
+                    : null,
+                foregroundColor: liked
+                    ? Theme.of(context).colorScheme.onPrimaryFixed
+                    : null,
                 height: 56,
                 onPressed: () {
                   setState(() {
@@ -594,8 +621,10 @@ class _MobilePostState extends State<MobilePost> {
                   });
                 },
                 icon: liked ? Icons.favorite : Icons.favorite_border_outlined,
-                label: const Text("24K"))
-          ])
+                label: const Text("24K"),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -622,9 +651,10 @@ class ListItem extends StatelessWidget {
       iconColor: color,
       onTap: onTap,
       titleTextStyle: GoogleFonts.googleSansFlex(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: color ?? Theme.of(context).colorScheme.onSurface),
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: color ?? Theme.of(context).colorScheme.onSurface,
+      ),
     );
   }
 }
@@ -644,7 +674,9 @@ class _DesktopPostState extends State<DesktopPost> {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(
-          maxHeight: MediaQuery.sizeOf(context).width / (2.5 * widget.post.aspectRatio)),
+        maxHeight:
+            MediaQuery.sizeOf(context).width / (2.5 * widget.post.aspectRatio),
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Theme.of(context).colorScheme.surfaceContainer,
@@ -655,140 +687,169 @@ class _DesktopPostState extends State<DesktopPost> {
           SizedBox(
             width: MediaQuery.sizeOf(context).width / 2.5,
             child: widget.post.type == PostType.image
-                ? ImagePostWidget(
-                    imagePost: widget.post as ImagePostObject,
-                  )
+                ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
                 : widget.post.type == PostType.carosel
-                    ? CarouselPostWidget(imagePost: widget.post as CarouselPostObject)
-                    : ReelPost(post: widget.post as ReelPostObject),
+                ? CarouselPostWidget(
+                    imagePost: widget.post as CarouselPostObject,
+                  )
+                : ReelPost(post: widget.post as ReelPostObject),
           ),
           Expanded(
-              child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(24),
-                            child: CachedNetworkImage(
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
-                                placeholderFadeInDuration: const Duration(seconds: 0),
-                                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                    Center(
-                                      child: CircularProgressIndicator(
-                                          value: downloadProgress.progress),
-                                    ),
-                                fit: BoxFit.contain,
-                                imageUrl: widget.post.person.pfpPath),
-                          ),
-                          const SizedBox(width: 8),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.post.person.name,
-                                style: GoogleFonts.googleSansFlex(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: CachedNetworkImage(
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                          placeholderFadeInDuration: const Duration(seconds: 0),
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                ),
                               ),
-                              Text(
-                                widget.post.person.userName,
-                                style: GoogleFonts.googleSansFlex(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Expanded(
-                        child: ListView(
-                          physics: const ClampingScrollPhysics(),
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                    height: 40,
-                                    child: SelectButton(
-                                        isSelected: liked,
-                                        onPressed: () {
-                                          setState(() {
-                                            liked = !liked;
-                                          });
-                                        },
-                                        selectedColor: Colors.red,
-                                        selectedIcon: Icons.favorite,
-                                        unselectedIcon: Icons.favorite_outline,
-                                        title: "23K")),
-                                const SizedBox(width: 12),
-                                SizedBox(
-                                    height: 40,
-                                    child: FilledButton.tonalIcon(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.reply_outlined),
-                                        label: const Text("16K"))),
-                                const SizedBox(width: 12),
-                                SizedBox(
-                                    height: 40,
-                                    child: IconButton.filledTonal(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Symbols.send,
-                                          weight: 700,
-                                          size: 20,
-                                        ))),
-                                const SizedBox(width: 12),
-                                SizedBox(
-                                    height: 40,
-                                    child: IconButton.filledTonal(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.bookmark_outline,
-                                          weight: 700,
-                                          size: 20,
-                                        ))),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            const Text(
-                                style: TextStyle(fontSize: 16),
-                                softWrap: true,
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\nIncididunt ut labore et dolore magna aliqua."),
-                            const SizedBox(height: 16),
-                            widget.post.tags.isNotEmpty
-                                ? Text(
-                                    "Tags",
-                                    style: GoogleFonts.googleSansFlex(
-                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                        fontWeight: FontWeight.w600),
-                                  )
-                                : const SizedBox(),
-                            const SizedBox(height: 8),
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: 6,
-                              children: widget.post.tags
-                                  .map((e) => ActionChip(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                          side: const BorderSide(color: Colors.transparent)),
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.surfaceContainerHighest,
-                                      onPressed: () {},
-                                      label: Text(e)))
-                                  .toList(),
-                            )
-                          ],
+                          fit: BoxFit.contain,
+                          imageUrl: widget.post.person.pfpPath,
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.post.person.name,
+                            style: GoogleFonts.googleSansFlex(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            widget.post.person.userName,
+                            style: GoogleFonts.googleSansFlex(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
-                  ))),
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: ListView(
+                      physics: const ClampingScrollPhysics(),
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              height: 40,
+                              child: SelectButton(
+                                isSelected: liked,
+                                onPressed: () {
+                                  setState(() {
+                                    liked = !liked;
+                                  });
+                                },
+                                selectedColor: Colors.red,
+                                selectedIcon: Icons.favorite,
+                                unselectedIcon: Icons.favorite_outline,
+                                title: "23K",
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                              height: 40,
+                              child: FilledButton.tonalIcon(
+                                onPressed: () {},
+                                icon: Icon(Icons.reply_outlined),
+                                label: const Text("16K"),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                              height: 40,
+                              child: IconButton.filledTonal(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Symbols.send,
+                                  weight: 700,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                              height: 40,
+                              child: IconButton.filledTonal(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.bookmark_outline,
+                                  weight: 700,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          style: TextStyle(fontSize: 16),
+                          softWrap: true,
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.\nIncididunt ut labore et dolore magna aliqua.",
+                        ),
+                        const SizedBox(height: 16),
+                        widget.post.tags.isNotEmpty
+                            ? Text(
+                                "Tags",
+                                style: GoogleFonts.googleSansFlex(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            : const SizedBox(),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: widget.post.tags
+                              .map(
+                                (e) => ActionChip(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: const BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceContainerHighest,
+                                  onPressed: () {},
+                                  label: Text(e),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -809,35 +870,56 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
       tag: widget.imagePost.postId.toString(),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-            maxWidth: (widget.imagePost.aspectRatio * (MediaQuery.of(context).size.width)),
-            maxHeight: (1 / widget.imagePost.aspectRatio) * (MediaQuery.of(context).size.width)),
+          maxWidth:
+              (widget.imagePost.aspectRatio *
+              (MediaQuery.of(context).size.width)),
+          maxHeight:
+              (1 / widget.imagePost.aspectRatio) *
+              (MediaQuery.of(context).size.width),
+        ),
         child: CarouselView(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(24)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(24),
+          ),
           onTap: (int i) {
-            Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
+            Navigator.of(context, rootNavigator: true).push(
+              PageRouteBuilder(
                 transitionDuration: Durations.medium1,
-                pageBuilder: (context, animation, secondAnimtion) => FadeTransition(
+                pageBuilder: (context, animation, secondAnimtion) =>
+                    FadeTransition(
                       opacity: animation,
                       child: CarouselPostViewer(
-                          initPage: i,
-                          imageTag: widget.imagePost.postId.toString(),
-                          post: widget.imagePost),
-                    )));
+                        initPage: i,
+                        imageTag: widget.imagePost.postId.toString(),
+                        post: widget.imagePost,
+                      ),
+                    ),
+              ),
+            );
           },
           itemSnapping: true,
-          itemExtent: widget.imagePost.aspectRatio * (MediaQuery.of(context).size.width),
+          itemExtent:
+              widget.imagePost.aspectRatio *
+              (MediaQuery.of(context).size.width),
           shrinkExtent: 0,
           children: widget.imagePost.imagePaths
-              .map((e) => Builder(
-                    builder: (BuildContext context) => CachedNetworkImage(
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                        placeholderFadeInDuration: const Duration(seconds: 0),
-                        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                              child: CircularProgressIndicator(value: downloadProgress.progress),
-                            ),
-                        fit: BoxFit.cover,
-                        imageUrl: "https://drive.google.com/uc?export=view&id=$e"),
-                  ))
+              .map(
+                (e) => Builder(
+                  builder: (BuildContext context) => CachedNetworkImage(
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    placeholderFadeInDuration: const Duration(seconds: 0),
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                          ),
+                        ),
+                    fit: BoxFit.cover,
+                    imageUrl: "https://drive.google.com/uc?export=view&id=$e",
+                  ),
+                ),
+              )
               .toList(),
         ),
       ),
@@ -863,26 +945,35 @@ class _ImagePostWidgetState extends State<ImagePostWidget> {
         borderRadius: BorderRadius.circular(24),
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context, rootNavigator: true).push(PageRouteBuilder(
+            Navigator.of(context, rootNavigator: true).push(
+              PageRouteBuilder(
                 transitionDuration: Durations.medium1,
-                pageBuilder: (context, animation, secondAnimtion) => FadeTransition(
+                pageBuilder: (context, animation, secondAnimtion) =>
+                    FadeTransition(
                       opacity: animation,
                       child: ImagePostViewer(
-                          imageTag: widget.imagePost.postId.toString(),
-                          image: widget.imagePost.imagePath),
-                    )));
+                        imageTag: widget.imagePost.postId.toString(),
+                        image: widget.imagePost.imagePath,
+                      ),
+                    ),
+              ),
+            );
           },
           child: Hero(
             tag: widget.imagePost.postId.toString(),
             child: CachedNetworkImage(
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-                placeholderFadeInDuration: const Duration(seconds: 0),
-                progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                      child: CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              placeholderFadeInDuration: const Duration(seconds: 0),
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(
+                    child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
                     ),
-                fit: BoxFit.contain,
-                imageUrl:
-                    "https://drive.google.com/uc?export=view&id=${widget.imagePost.imagePath}"),
+                  ),
+              fit: BoxFit.contain,
+              imageUrl:
+                  "https://drive.google.com/uc?export=view&id=${widget.imagePost.imagePath}",
+            ),
           ),
         ),
       ),
@@ -903,15 +994,19 @@ class _ReelPostState extends State<ReelPost> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.networkUrl(
-        Uri.parse("https://drive.google.com/uc?export=view&id=${widget.post.sourcePath}"))
-      ..initialize().then((_) {
-        //  // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {
-          controller.play();
-          controller.setVolume(0);
-        });
-      });
+    controller =
+        VideoPlayerController.networkUrl(
+            Uri.parse(
+              "https://drive.google.com/uc?export=view&id=${widget.post.sourcePath}",
+            ),
+          )
+          ..initialize().then((_) {
+            //  // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+            setState(() {
+              controller.play();
+              controller.setVolume(0);
+            });
+          });
   }
 
   @override
@@ -928,39 +1023,45 @@ class _ReelPostState extends State<ReelPost> {
         clipBehavior: Clip.hardEdge,
         alignment: Alignment.center,
         width: MediaQuery.sizeOf(context).width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
         child: AspectRatio(
-            aspectRatio: widget.post.aspectRatio,
-            child: Stack(
-              children: [
-                VisibilityDetector(
-                    key: ObjectKey(widget.key),
-                    child: VideoPlayer(controller),
-                    onVisibilityChanged: (vibility) {
-                      setState(() {
-                        vibility.visibleFraction > 0.5 ? controller.play() : controller.pause();
-                      });
-                    }),
-                Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          aspectRatio: widget.post.aspectRatio,
+          child: Stack(
+            children: [
+              VisibilityDetector(
+                key: ObjectKey(widget.key),
+                child: VideoPlayer(controller),
+                onVisibilityChanged: (vibility) {
+                  setState(() {
+                    vibility.visibleFraction > 0.5
+                        ? controller.play()
+                        : controller.pause();
+                  });
+                },
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
                   Align(
                     alignment: Alignment.bottomRight,
                     child: IconButton.filledTonal(
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () {},
-                        icon: const Icon(
-                          size: 16,
-                          Icons.volume_up_outlined,
-                        )),
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () {},
+                      icon: const Icon(size: 16, Icons.volume_up_outlined),
+                    ),
                   ),
-                  VideoProgressIndicator(controller,
-                      colors:
-                          VideoProgressColors(playedColor: Theme.of(context).colorScheme.primary),
-                      allowScrubbing: true)
-                ]),
-              ],
-            )),
+                  VideoProgressIndicator(
+                    controller,
+                    colors: VideoProgressColors(
+                      playedColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    allowScrubbing: true,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -989,7 +1090,8 @@ class SelectButton extends StatefulWidget {
   State<SelectButton> createState() => _SelectButtonState();
 }
 
-class _SelectButtonState extends State<SelectButton> with TickerProviderStateMixin {
+class _SelectButtonState extends State<SelectButton>
+    with TickerProviderStateMixin {
   double scaleValue = 1;
 
   void onTap() {
@@ -1007,17 +1109,21 @@ class _SelectButtonState extends State<SelectButton> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 40,
-        child: IconButton.filledTonal(
-          onPressed: onTap,
-          // label: Text(widget.title),
-          icon: AnimatedScale(
-              duration: Durations.short3,
-              scale: scaleValue,
-              child: Icon(
-                widget.isSelected ? widget.selectedIcon : widget.unselectedIcon,
-                color: widget.isSelected ? widget.selectedColor : widget.unselectedColor,
-              )),
-        ));
+      height: 40,
+      child: IconButton.filledTonal(
+        onPressed: onTap,
+        // label: Text(widget.title),
+        icon: AnimatedScale(
+          duration: Durations.short3,
+          scale: scaleValue,
+          child: Icon(
+            widget.isSelected ? widget.selectedIcon : widget.unselectedIcon,
+            color: widget.isSelected
+                ? widget.selectedColor
+                : widget.unselectedColor,
+          ),
+        ),
+      ),
+    );
   }
 }

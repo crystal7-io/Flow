@@ -60,7 +60,7 @@ class MessageScreenMobile extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16)
+          const SizedBox(width: 16),
         ],
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -72,47 +72,55 @@ class MessageScreenMobile extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: [
                 const SizedBox(width: 8),
-                ...filters.map((e) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: FilterChip(
-                        side: BorderSide.none,
-                        backgroundColor:
-                            Theme.of(context).colorScheme.surfaceContainerHigh,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        label: Text(e),
-                        labelPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 2),
-                        selected: viewModel.currentFilters.contains(e),
-                        onSelected: (bool isSelected) {
-                          viewModel.toggleFilter(e, isSelected);
-                        },
+                ...filters.map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: FilterChip(
+                      side: BorderSide.none,
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHigh,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                    ))
+                      label: Text(e),
+                      labelPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 2,
+                      ),
+                      selected: viewModel.currentFilters.contains(e),
+                      onSelected: (bool isSelected) {
+                        viewModel.toggleFilter(e, isSelected);
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          ...viewModel.chatData.map((e) => LightOpenContainer(
-                useRootNavigator: false,
-                openColor: Theme.of(context).colorScheme.surface,
-                closedColor: Theme.of(context).colorScheme.surface,
-                closedBuilder: (context, close) => ChatWidget(
-                  chat: e,
-                  openChat: () {
-                    context.read<AppService>().setNavBarVisible(false);
-                    close();
-                  },
-                ),
-                onClosed: (_) {
-                  context.read<AppService>().setNavBarVisible(true);
+          ...viewModel.chatData.map(
+            (e) => LightOpenContainer(
+              useRootNavigator: false,
+              openColor: Theme.of(context).colorScheme.surface,
+              closedColor: Theme.of(context).colorScheme.surface,
+              closedBuilder: (context, close) => ChatWidget(
+                chat: e,
+                openChat: () {
+                  context.read<AppService>().setNavBarVisible(false);
+                  close();
                 },
-                openBuilder: (context, _) =>
-                    ChangeNotifierProvider<ChatViewModel>(
-                  create: (_) => ChatViewModel(e.person),
-                  child: const ChatView(),
-                ),
-              )),
-          const SizedBox(height: 120)
+              ),
+              onClosed: (_) {
+                context.read<AppService>().setNavBarVisible(true);
+              },
+              openBuilder: (context, _) =>
+                  ChangeNotifierProvider<ChatViewModel>(
+                    create: (_) => ChatViewModel(e.person),
+                    child: const ChatView(),
+                  ),
+            ),
+          ),
+          const SizedBox(height: 120),
         ],
       ),
     );
@@ -135,8 +143,9 @@ class MessageScreenDesktop extends StatelessWidget {
             const SizedBox(width: 8),
             Container(
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(14)),
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(14),
+              ),
               width: MediaQuery.sizeOf(context).width / 3.5,
               child: Column(
                 children: <Widget>[
@@ -144,7 +153,8 @@ class MessageScreenDesktop extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     child: SearchBar(
                       backgroundColor: WidgetStatePropertyAll(
-                          Theme.of(context).colorScheme.surfaceContainerHigh),
+                        Theme.of(context).colorScheme.surfaceContainerHigh,
+                      ),
                       leading: const SizedBox(
                         height: 40,
                         width: 40,
@@ -159,25 +169,28 @@ class MessageScreenDesktop extends StatelessWidget {
                           child: Stack(
                             children: <Widget>[
                               CachedNetworkImage(
-                                  height: 40,
-                                  width: 40,
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                  placeholderFadeInDuration:
-                                      const Duration(seconds: 0),
-                                  placeholder: (context, url) => Icon(
-                                      Icons.account_circle_rounded,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant),
-                                  fit: BoxFit.contain,
-                                  imageUrl: linkToPfp),
+                                height: 40,
+                                width: 40,
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                                placeholderFadeInDuration: const Duration(
+                                  seconds: 0,
+                                ),
+                                placeholder: (context, url) => Icon(
+                                  Icons.account_circle_rounded,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
+                                fit: BoxFit.contain,
+                                imageUrl: linkToPfp,
+                              ),
                               Positioned.fill(
-                                  child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onTap: () {},
-                                      )))
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(onTap: () {}),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -190,63 +203,72 @@ class MessageScreenDesktop extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       children: [
                         const SizedBox(width: 8),
-                        ...filters.map((e) => Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              child: FilterChip(
-                                side: BorderSide(
-                                    color: viewModel.currentFilters.contains(e)
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .primaryContainer
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .outlineVariant),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                                label: Text(e),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 2),
-                                selected: viewModel.currentFilters.contains(e),
-                                onSelected: (bool isSelected) {
-                                  viewModel.toggleFilter(e, isSelected);
-                                },
+                        ...filters.map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: FilterChip(
+                              side: BorderSide(
+                                color: viewModel.currentFilters.contains(e)
+                                    ? Theme.of(
+                                        context,
+                                      ).colorScheme.primaryContainer
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.outlineVariant,
                               ),
-                            ))
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              label: Text(e),
+                              labelPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 2,
+                              ),
+                              selected: viewModel.currentFilters.contains(e),
+                              onSelected: (bool isSelected) {
+                                viewModel.toggleFilter(e, isSelected);
+                              },
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   Expanded(
-                      child: ListView(
-                    children: chats
-                        .map((e) => ChatWidgetDesktop(
-                            chat: e,
-                            onPressed: () {
-                              viewModel.selectActiveChat(e.person);
-                            }))
-                        .toList(),
-                  ))
+                    child: ListView(
+                      children: chats
+                          .map(
+                            (e) => ChatWidgetDesktop(
+                              chat: e,
+                              onPressed: () {
+                                viewModel.selectActiveChat(e.person);
+                              },
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
-                child: ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: viewModel.currentActive != null
-                  ? ChangeNotifierProvider<ChatViewModel>(
-                      create: (_) => ChatViewModel(viewModel.currentActive!),
-                      child: const ChatView(),
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface),
-                      padding: const EdgeInsets.symmetric(),
-                      child: const Center(
-                        child: Text("Messages"),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: viewModel.currentActive != null
+                    ? ChangeNotifierProvider<ChatViewModel>(
+                        create: (_) => ChatViewModel(viewModel.currentActive!),
+                        child: const ChatView(),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        padding: const EdgeInsets.symmetric(),
+                        child: const Center(child: Text("Messages")),
                       ),
-                    ),
-            )),
+              ),
+            ),
             const SizedBox(width: 12),
           ],
         ),
@@ -256,8 +278,11 @@ class MessageScreenDesktop extends StatelessWidget {
 }
 
 class ChatWidgetDesktop extends StatelessWidget {
-  const ChatWidgetDesktop(
-      {super.key, required this.chat, required this.onPressed});
+  const ChatWidgetDesktop({
+    super.key,
+    required this.chat,
+    required this.onPressed,
+  });
   final Chat chat;
   final VoidCallback onPressed;
   @override
@@ -274,27 +299,32 @@ class ChatWidgetDesktop extends StatelessWidget {
         leading: CircleAvatar(
           radius: 28,
           child: CachedNetworkImage(
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              placeholderFadeInDuration: const Duration(seconds: 0),
-              placeholder: (context, url) => Icon(Icons.account_circle_rounded,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant),
-              fit: BoxFit.contain,
-              imageUrl: chat.person.pfpPath),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            placeholderFadeInDuration: const Duration(seconds: 0),
+            placeholder: (context, url) => Icon(
+              Icons.account_circle_rounded,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            fit: BoxFit.contain,
+            imageUrl: chat.person.pfpPath,
+          ),
         ),
         subtitle: Text(
           maxLines: 1,
           chat.lastMessageState == LastMessageState.sentByUserAndSeen
               ? "Seen"
               : chat.lastMessageState == LastMessageState.sentByUserAndUnseen
-                  ? "Sent"
-                  : chat.newMessage > 1
-                      ? "${chat.newMessage} new messages"
-                      : chat.lastMessage,
+              ? "Sent"
+              : chat.newMessage > 1
+              ? "${chat.newMessage} new messages"
+              : chat.lastMessage,
           style: TextStyle(
-              fontSize: 14,
-              fontWeight:
-                  chat.newMessage == 0 ? FontWeight.w500 : FontWeight.w700,
-              letterSpacing: 0),
+            fontSize: 14,
+            fontWeight: chat.newMessage == 0
+                ? FontWeight.w500
+                : FontWeight.w700,
+            letterSpacing: 0,
+          ),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -302,9 +332,10 @@ class ChatWidgetDesktop extends StatelessWidget {
             Text(
               chat.lastTime,
               style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontWeight: FontWeight.w600),
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),
@@ -325,29 +356,28 @@ class ChatWidget extends StatelessWidget {
     return InkWell(
       onTap: openChat,
       child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Row(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                child: CircleAvatar(
-                  radius: 24,
-                  child: CachedNetworkImage(
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      placeholderFadeInDuration: const Duration(seconds: 0),
-                      placeholder: (context, url) => Icon(
-                          Icons.account_circle_rounded,
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
-                      fit: BoxFit.contain,
-                      imageUrl: chat.person.pfpPath),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              child: CircleAvatar(
+                radius: 24,
+                child: CachedNetworkImage(
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  placeholderFadeInDuration: const Duration(seconds: 0),
+                  placeholder: (context, url) => Icon(
+                    Icons.account_circle_rounded,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  fit: BoxFit.contain,
+                  imageUrl: chat.person.pfpPath,
                 ),
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                  child: Column(
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -355,9 +385,10 @@ class ChatWidget extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     chat.person.name,
                     style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -366,35 +397,39 @@ class ChatWidget extends StatelessWidget {
                     chat.lastMessageState == LastMessageState.sentByUserAndSeen
                         ? "Seen"
                         : chat.lastMessageState ==
-                                LastMessageState.sentByUserAndUnseen
-                            ? "Sent"
-                            : chat.newMessage > 1
-                                ? "${chat.newMessage} new messages"
-                                : chat.lastMessage,
+                              LastMessageState.sentByUserAndUnseen
+                        ? "Sent"
+                        : chat.newMessage > 1
+                        ? "${chat.newMessage} new messages"
+                        : chat.lastMessage,
                     style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: chat.newMessage == 0
-                            ? FontWeight.w500
-                            : FontWeight.w700,
-                        letterSpacing: 0),
+                      fontSize: 14,
+                      fontWeight: chat.newMessage == 0
+                          ? FontWeight.w500
+                          : FontWeight.w700,
+                      letterSpacing: 0,
+                    ),
                   ),
                 ],
-              )),
-              const SizedBox(width: 18),
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                direction: Axis.horizontal,
-                children: [
-                  Text(
-                    chat.lastTime,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ),
+            ),
+            const SizedBox(width: 18),
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              direction: Axis.horizontal,
+              children: [
+                Text(
+                  chat.lastTime,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
-                ],
-              )
-            ],
-          )),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -405,22 +440,21 @@ class MessageSearchAnchor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LightOpenContainer(
-        openColor: Theme.of(context).colorScheme.surface,
-        closedColor: Theme.of(context).colorScheme.surface,
-        closedBuilder: (context, openContainer) => SizedBox(
-              height: 45,
-              width: 45,
-              child: IconButton(
-                  onPressed: openContainer,
-                  icon: const Icon(
-                    Icons.search,
-                    weight: 600,
-                  )),
-            ),
-        openBuilder: (context, controller) =>
-            ChangeNotifierProvider<SearchMessageViewModel>(
-              create: (_) => SearchMessageViewModel(),
-              child: const SearchMessageView(),
-            ));
+      openColor: Theme.of(context).colorScheme.surface,
+      closedColor: Theme.of(context).colorScheme.surface,
+      closedBuilder: (context, openContainer) => SizedBox(
+        height: 45,
+        width: 45,
+        child: IconButton(
+          onPressed: openContainer,
+          icon: const Icon(Icons.search, weight: 600),
+        ),
+      ),
+      openBuilder: (context, controller) =>
+          ChangeNotifierProvider<SearchMessageViewModel>(
+            create: (_) => SearchMessageViewModel(),
+            child: const SearchMessageView(),
+          ),
+    );
   }
 }

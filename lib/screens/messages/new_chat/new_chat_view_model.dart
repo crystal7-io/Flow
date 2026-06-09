@@ -13,13 +13,15 @@ class NewChatViewModel extends ChangeNotifier {
       return myFollowersConst;
     } else {
       return myFollowersConst
-          .where((element) =>
-              element.name
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()) ||
-              element.userName
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()))
+          .where(
+            (element) =>
+                element.name.toLowerCase().contains(
+                  searchController.text.toLowerCase(),
+                ) ||
+                element.userName.toLowerCase().contains(
+                  searchController.text.toLowerCase(),
+                ),
+          )
           .toList();
     }
   }
