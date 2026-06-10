@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:libmonet/libmonet.dart';
 import 'package:provider/provider.dart';
@@ -48,45 +49,38 @@ class MainApp extends StatelessWidget {
             specVersion: SpecVersion.spec2026,
           );
 
-          final lightScheme = createDynamicScheme(Brightness.light, false);
-          final darkScheme = createDynamicScheme(Brightness.dark, false);
-          final highContrastLightScheme = createDynamicScheme(
-            Brightness.light,
-            true,
-          );
-          final highContrastDarkScheme = createDynamicScheme(
-            Brightness.dark,
-            true,
-          );
+          ThemeData createTheme({required ColorScheme colorScheme}) {
+            return ThemeData(
+              useMaterial3: true,
+              colorScheme: colorScheme,
+              textTheme: GoogleFonts.googleSansFlexTextTheme(),
+              splashFactory: kIsWeb
+                  ? InkRipple.splashFactory
+                  : InkSparkle.splashFactory,
+              iconTheme: IconThemeData(
+                fill: 0.0,
+                weight: 400.0,
+                grade: 0.0,
+                opticalSize: 24.0,
+                size: 24.0,
+                color: colorScheme.onSurface,
+              ),
+            );
+          }
+
           return MaterialApp.router(
             routerConfig: context.read<GoRouter>(),
-            theme: ThemeData.from(
-              textTheme: GoogleFonts.googleSansFlexTextTheme(
-                ThemeData.light().textTheme,
-              ),
-              colorScheme: lightScheme.toColorScheme(),
-              useMaterial3: true,
+            theme: createTheme(
+              colorScheme: createDynamicScheme(.light, false).toColorScheme(),
             ),
-            darkTheme: ThemeData.from(
-              textTheme: GoogleFonts.googleSansFlexTextTheme(
-                ThemeData.dark().textTheme,
-              ),
-              colorScheme: darkScheme.toColorScheme(),
-              useMaterial3: true,
+            darkTheme: createTheme(
+              colorScheme: createDynamicScheme(.dark, false).toColorScheme(),
             ),
-            highContrastTheme: ThemeData.from(
-              textTheme: GoogleFonts.googleSansFlexTextTheme(
-                ThemeData.light().textTheme,
-              ),
-              colorScheme: highContrastLightScheme.toColorScheme(),
-              useMaterial3: true,
+            highContrastTheme: createTheme(
+              colorScheme: createDynamicScheme(.light, true).toColorScheme(),
             ),
-            highContrastDarkTheme: ThemeData.from(
-              textTheme: GoogleFonts.googleSansFlexTextTheme(
-                ThemeData.dark().textTheme,
-              ),
-              colorScheme: highContrastDarkScheme.toColorScheme(),
-              useMaterial3: true,
+            highContrastDarkTheme: createTheme(
+              colorScheme: createDynamicScheme(.dark, true).toColorScheme(),
             ),
             themeMode: appService.themeMode,
             debugShowCheckedModeBanner: false,
@@ -99,7 +93,7 @@ class MainApp extends StatelessWidget {
 
 extension DynamicSchemeExtension on DynamicScheme {
   ColorScheme toColorScheme() => ColorScheme(
-    brightness: isDark ? Brightness.dark : Brightness.light,
+    brightness: isDark ? .dark : .light,
     // ignore: deprecated_member_use
     background: Color(background),
     // ignore: deprecated_member_use
