@@ -14,9 +14,7 @@ class _NotificationSettingsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Notifications"),
-      ),
+      appBar: AppBar(title: const Text("Notifications")),
       body: ListView(
         children: [
           // const Banner(
@@ -24,15 +22,18 @@ class _NotificationSettingsScreenState
           //         "Control all your notifications from your device settings",
           //     location: BannerLocation.topStart),
           SwitchListTile(
-              title: const Text("Pause all"),
-              value: pauseAll,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-              onChanged: (value) {
-                setState(() {
-                  pauseAll = value;
-                });
-              }),
+            title: const Text("Pause all"),
+            value: pauseAll,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 6,
+              horizontal: 16,
+            ),
+            onChanged: (value) {
+              setState(() {
+                pauseAll = value;
+              });
+            },
+          ),
           ListItem(title: "Quite mode", onTap: () {}),
           const Divider(),
           ListItem(title: "Posts, stories and comments", onTap: () {}),
@@ -53,20 +54,17 @@ class _NotificationSettingsScreenState
 }
 
 class ListItem extends StatelessWidget {
-  const ListItem({
-    super.key,
-    required this.title,
-    required this.onTap,
-  });
+  const ListItem({super.key, required this.title, required this.onTap});
   final String title;
   final void Function() onTap;
   @override
   Widget build(BuildContext context) {
     return ListTile(
       titleTextStyle: TextStyle(
-          fontSize: 18,
-          color: Theme.of(context).colorScheme.onSurface,
-          fontWeight: FontWeight.w400),
+        fontSize: 18,
+        color: Theme.of(context).colorScheme.onSurface,
+        fontWeight: FontWeight.w400,
+      ),
       contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       onTap: onTap,
       title: Text(title),

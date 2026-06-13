@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:libmonet/libmonet.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/constants/app_config.dart';
 import 'package:redesigned/core/navigation/router.dart';
@@ -14,7 +16,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (AppConfig.useAuth) {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   } else {
     // Ensure default user is initialized for local development
     await LocalUserDataSource().initializeDefaultUser();
@@ -31,26 +35,52 @@ class MainApp extends StatelessWidget {
     return AppProvider(
       child: Consumer<AppService>(
         builder: (context, appService, child) {
+          DynamicScheme createDynamicScheme(
+            Brightness brightness,
+            bool highContrast,
+          ) => DynamicScheme.withDefaults(
+            sourceColor: TonalPaletteSourceColor.fromArgb(
+              appService.seedColor.toARGB32(),
+            ),
+            variant: Variant.tonalSpot,
+            isDark: brightness == Brightness.dark,
+            contrastLevel: highContrast ? 1.0 : 0.0,
+            platform: Platform.phone,
+            specVersion: SpecVersion.spec2026,
+          );
+
+          ThemeData createTheme({required ColorScheme colorScheme}) {
+            return ThemeData(
+              useMaterial3: true,
+              colorScheme: colorScheme,
+              textTheme: GoogleFonts.googleSansFlexTextTheme(),
+              splashFactory: kIsWeb
+                  ? InkRipple.splashFactory
+                  : InkSparkle.splashFactory,
+              iconTheme: IconThemeData(
+                fill: 0.0,
+                weight: 400.0,
+                grade: 0.0,
+                opticalSize: 24.0,
+                size: 24.0,
+                color: colorScheme.onSurface,
+              ),
+            );
+          }
+
           return MaterialApp.router(
             routerConfig: context.read<GoRouter>(),
-            theme: ThemeData.from(
-              textTheme: GoogleFonts.googleSansFlexTextTheme(
-                ThemeData.light().textTheme,
-              ),
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: appService.seedColor,
-              ),
-              useMaterial3: true,
+            theme: createTheme(
+              colorScheme: createDynamicScheme(.light, false).toColorScheme(),
             ),
-            darkTheme: ThemeData.from(
-              textTheme: GoogleFonts.googleSansFlexTextTheme(
-                ThemeData.dark().textTheme,
-              ),
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: appService.seedColor,
-                brightness: Brightness.dark,
-              ),
-              useMaterial3: true,
+            darkTheme: createTheme(
+              colorScheme: createDynamicScheme(.dark, false).toColorScheme(),
+            ),
+            highContrastTheme: createTheme(
+              colorScheme: createDynamicScheme(.light, true).toColorScheme(),
+            ),
+            highContrastDarkTheme: createTheme(
+              colorScheme: createDynamicScheme(.dark, true).toColorScheme(),
             ),
             themeMode: appService.themeMode,
             debugShowCheckedModeBanner: false,
@@ -59,4 +89,62 @@ class MainApp extends StatelessWidget {
       ),
     );
   }
+}
+
+extension DynamicSchemeExtension on DynamicScheme {
+  ColorScheme toColorScheme() => ColorScheme(
+    brightness: isDark ? .dark : .light,
+    // ignore: deprecated_member_use
+    background: Color(background),
+    // ignore: deprecated_member_use
+    onBackground: Color(onBackground),
+    surface: Color(surface),
+    surfaceDim: Color(surfaceDim),
+    surfaceBright: Color(surfaceBright),
+    surfaceContainerLowest: Color(surfaceContainerLowest),
+    surfaceContainerLow: Color(surfaceContainerLow),
+    surfaceContainer: Color(surfaceContainer),
+    surfaceContainerHigh: Color(surfaceContainerHigh),
+    surfaceContainerHighest: Color(surfaceContainerHighest),
+    onSurface: Color(onSurface),
+    // ignore: deprecated_member_use
+    surfaceVariant: Color(surfaceVariant),
+    onSurfaceVariant: Color(onSurfaceVariant),
+    outline: Color(outline),
+    outlineVariant: Color(outlineVariant),
+    inverseSurface: Color(inverseSurface),
+    onInverseSurface: Color(inverseOnSurface),
+    shadow: Color(shadow),
+    scrim: Color(scrim),
+    surfaceTint: Color(surfaceTint),
+    primary: Color(primary),
+    onPrimary: Color(onPrimary),
+    primaryContainer: Color(primaryContainer),
+    onPrimaryContainer: Color(onPrimaryContainer),
+    primaryFixed: Color(primaryFixed),
+    primaryFixedDim: Color(primaryFixedDim),
+    onPrimaryFixed: Color(onPrimaryFixed),
+    onPrimaryFixedVariant: Color(onPrimaryFixedVariant),
+    inversePrimary: Color(inversePrimary),
+    secondary: Color(secondary),
+    onSecondary: Color(onSecondary),
+    secondaryContainer: Color(secondaryContainer),
+    onSecondaryContainer: Color(onSecondaryContainer),
+    secondaryFixed: Color(secondaryFixed),
+    secondaryFixedDim: Color(secondaryFixedDim),
+    onSecondaryFixed: Color(onSecondaryFixed),
+    onSecondaryFixedVariant: Color(onSecondaryFixedVariant),
+    tertiary: Color(tertiary),
+    onTertiary: Color(onTertiary),
+    tertiaryContainer: Color(tertiaryContainer),
+    onTertiaryContainer: Color(onTertiaryContainer),
+    tertiaryFixed: Color(tertiaryFixed),
+    tertiaryFixedDim: Color(tertiaryFixedDim),
+    onTertiaryFixed: Color(onTertiaryFixed),
+    onTertiaryFixedVariant: Color(onTertiaryFixedVariant),
+    error: Color(error),
+    onError: Color(onError),
+    errorContainer: Color(errorContainer),
+    onErrorContainer: Color(onErrorContainer),
+  );
 }

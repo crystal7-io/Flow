@@ -15,26 +15,28 @@ abstract class Notif {
   final String time;
   final String textContent;
   final String contextImagePath;
-  const Notif(
-      {required this.notifType,
-      required this.notifier,
-      required this.time,
-      required this.textContent,
-      required this.contextImagePath});
+  const Notif({
+    required this.notifType,
+    required this.notifier,
+    required this.time,
+    required this.textContent,
+    required this.contextImagePath,
+  });
 }
 
 class CommentReplyNotficaiton extends Notif {
-  CommentReplyNotficaiton(
-      {required super.notifier,
-      required super.time,
-      required this.reply,
-      required this.postID,
-      required this.commentText,
-      required this.isLiked,
-      required super.contextImagePath})
-      : super(
-            notifType: NotifType.commentReply,
-            textContent: "Replied to your comment");
+  CommentReplyNotficaiton({
+    required super.notifier,
+    required super.time,
+    required this.reply,
+    required this.postID,
+    required this.commentText,
+    required this.isLiked,
+    required super.contextImagePath,
+  }) : super(
+         notifType: NotifType.commentReply,
+         textContent: "Replied to your comment",
+       );
   final String commentText;
   final String reply;
   final bool isLiked;
@@ -49,24 +51,26 @@ class CommentLikeNotficaiton extends Notif {
     required this.commentText,
     required super.contextImagePath,
   }) : super(
-            notifType: NotifType.commentLike,
-            textContent: "liked your comment");
+         notifType: NotifType.commentLike,
+         textContent: "liked your comment",
+       );
   String text = "";
   final String commentText;
   final int postID;
 }
 
 class PostCommentNotficaiton extends Notif {
-  PostCommentNotficaiton(
-      {required super.notifier,
-      required super.time,
-      required this.reply,
-      required this.postID,
-      required this.isLiked,
-      required super.contextImagePath})
-      : super(
-            notifType: NotifType.commentReply,
-            textContent: "commented on your post");
+  PostCommentNotficaiton({
+    required super.notifier,
+    required super.time,
+    required this.reply,
+    required this.postID,
+    required this.isLiked,
+    required super.contextImagePath,
+  }) : super(
+         notifType: NotifType.commentReply,
+         textContent: "commented on your post",
+       );
   String text = "";
   final String reply;
   final bool isLiked;
@@ -79,9 +83,7 @@ class PostLikeNotification extends Notif {
     required super.time,
     required this.postID,
     required super.contextImagePath,
-  }) : super(
-            notifType: NotifType.postLike,
-            textContent: "Liked your Post");
+  }) : super(notifType: NotifType.postLike, textContent: "Liked your Post");
   final int postID;
 }
 
@@ -91,8 +93,9 @@ class FollowNotification extends Notif {
     required super.time,
     required super.contextImagePath,
   }) : super(
-            notifType: NotifType.follow,
-            textContent: "Who you might know is on Instagram");
+         notifType: NotifType.follow,
+         textContent: "Who you might know is on Instagram",
+       );
 }
 
 class StoryLikeNotification extends Notif {
@@ -102,7 +105,5 @@ class StoryLikeNotification extends Notif {
     required super.time,
     required this.storyNum,
     required super.contextImagePath,
-  }) : super(
-            notifType: NotifType.postLike,
-            textContent: "Liked your story");
+  }) : super(notifType: NotifType.postLike, textContent: "Liked your story");
 }

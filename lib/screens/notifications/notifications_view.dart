@@ -31,32 +31,37 @@ class NotificationsView extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: [
                 const SizedBox(width: 12),
-                ...viewModel.notifFilters.map((filter) => Padding(
-                      padding: const EdgeInsets.only(right: 6),
-                      child: FilterChip(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        backgroundColor: Theme.of(context).colorScheme.surface,
-                        selected: viewModel.selectedFilters.contains(filter),
-                        onSelected: (value) {
-                          viewModel.toggleFilter(filter, value);
-                        },
-                        label: Text(filter),
+                ...viewModel.notifFilters.map(
+                  (filter) => Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: FilterChip(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    )),
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      selected: viewModel.selectedFilters.contains(filter),
+                      onSelected: (value) {
+                        viewModel.toggleFilter(filter, value);
+                      },
+                      label: Text(filter),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           _buildHeader(context, "New"),
-          ...viewModel.allNotifications[0]
-              .map((e) => NotifWidget(notification: e)),
+          ...viewModel.allNotifications[0].map(
+            (e) => NotifWidget(notification: e),
+          ),
           _buildHeader(context, "Today"),
-          ...viewModel.allNotifications[1]
-              .map((e) => NotifWidget(notification: e)),
+          ...viewModel.allNotifications[1].map(
+            (e) => NotifWidget(notification: e),
+          ),
           _buildHeader(context, "Yesterday"),
-          ...viewModel.allNotifications[2]
-              .map((e) => NotifWidget(notification: e)),
+          ...viewModel.allNotifications[2].map(
+            (e) => NotifWidget(notification: e),
+          ),
         ],
       ),
     );
@@ -140,9 +145,9 @@ class _NotifWidgetState extends State<NotifWidget> {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.2,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ),
@@ -155,7 +160,7 @@ class _NotifWidgetState extends State<NotifWidget> {
                                   letterSpacing: 0.2,
                                   color: Theme.of(context).colorScheme.outline,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           const SizedBox(height: 4),
@@ -174,9 +179,9 @@ class _NotifWidgetState extends State<NotifWidget> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                                 fontSize: 14,
                               ),
                             )
@@ -187,32 +192,33 @@ class _NotifWidgetState extends State<NotifWidget> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                                 fontSize: 14,
                               ),
-                            )
+                            ),
                         ],
                       ),
                     ),
                     const SizedBox(width: 16),
                     if (type == NotifType.follow)
-                      context
-                              .watch<AppService>()
-                              .isFollowing(widget.notification.notifier)
+                      context.watch<AppService>().isFollowing(
+                            widget.notification.notifier,
+                          )
                           ? TextButton(
                               onPressed: () {
                                 context.read<AppService>().removeFollower(
-                                    widget.notification.notifier);
+                                  widget.notification.notifier,
+                                );
                               },
                               child: const Text("Following"),
                             )
                           : FilledButton(
                               onPressed: () {
-                                context
-                                    .read<AppService>()
-                                    .addFollower(widget.notification.notifier);
+                                context.read<AppService>().addFollower(
+                                  widget.notification.notifier,
+                                );
                               },
                               child: const Text("Follow"),
                             )
@@ -232,15 +238,15 @@ class _NotifWidgetState extends State<NotifWidget> {
                           placeholderFadeInDuration: const Duration(seconds: 0),
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                              value: downloadProgress.progress,
-                            ),
-                          ),
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                ),
+                              ),
                           fit: BoxFit.cover,
                           imageUrl:
                               "https://drive.google.com/uc?export=view&id=${widget.notification.contextImagePath}",
                         ),
-                      )
+                      ),
                   ],
                 ),
               ),

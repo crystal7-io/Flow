@@ -20,7 +20,10 @@ class Person {
       id: json['id'] as String? ?? '',
       userName: json['userName'] as String? ?? '',
       name: json['name'] as String? ?? '',
-      profilePicturePath: json['profilePicturePath'] as String? ?? json['pfpPath'] as String? ?? '',
+      profilePicturePath:
+          json['profilePicturePath'] as String? ??
+          json['pfpPath'] as String? ??
+          '',
       isStoryVisible: json['isStoryVisible'] as bool? ?? false,
       newStory: json['newStory'] as bool? ?? false,
     );

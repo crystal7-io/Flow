@@ -1,10 +1,11 @@
 name: redesigned
 description: "Instagram Redesigned with Material You."
-publish_to: "none"
 version: 0.1.0
+publish_to: none
 
 environment:
-  sdk: ">=3.3.1 <4.0.0"
+  sdk: ^3.12.0
+  flutter: ">=3.44.0"
 
 dependencies:
   animations: ^2.2.0
@@ -28,7 +29,6 @@ dependencies:
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
   m3_carousel: ^2.0.2
-  material_color_utilities: ^0.13.0
   material_symbols_icons: ^4.2719.3
   # media_kit: ^1.1.10+1
   # media_kit_libs_video: ^1.0.4
@@ -52,6 +52,11 @@ dependencies:
   split_button_m3e: ^0.2.1
   button_group_m3e: ^0.3.1
   m3e_buttons: ^0.0.3
+
+  # Implements new color generation algorithms introduced in M3E.
+  # TODO: unpin version when 2.0.0 stable is released
+  libmonet: 2.0.0-dev.15
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

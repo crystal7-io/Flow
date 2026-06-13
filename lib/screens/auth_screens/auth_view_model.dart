@@ -19,7 +19,7 @@ class AuthViewModel extends ChangeNotifier {
 
   final List<String> _existingUsers = [
     'tejasj29067@gmail.com',
-    'crystalarcus@gmail.com'
+    'crystalarcus@gmail.com',
   ];
 
   String get password => _password;
@@ -45,7 +45,7 @@ class AuthViewModel extends ChangeNotifier {
       notifyListeners();
       return false;
     }
-    
+
     if (_existingUsers.contains(_email)) {
       _currentStep = AuthStep.password;
     } else {

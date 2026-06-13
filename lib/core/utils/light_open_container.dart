@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class LightOpenContainer<T> extends StatefulWidget {
   final Widget Function(BuildContext context, VoidCallback openContainer)
-      closedBuilder;
+  closedBuilder;
   final Widget Function(BuildContext context, VoidCallback closeContainer)
-      openBuilder;
+  openBuilder;
   final void Function(T? data)? onClosed; // Added onClosed callback
   final Duration transitionDuration;
   final Duration reverseTransitionDuration;
@@ -43,20 +43,22 @@ class _LightOpenContainerState<T> extends State<LightOpenContainer<T>> {
         renderBox.localToGlobal(Offset.zero) & renderBox.size;
 
     final T? result =
-        await Navigator.of(context, rootNavigator: widget.useRootNavigator)
-            .push<T>(
-      _LightContainerRoute<T>(
-        initialRect: initialRect,
-        openBuilder: widget.openBuilder,
-        transitionDuration: widget.transitionDuration,
-        reverseTransitionDuration: widget.reverseTransitionDuration,
-        curve: widget.curve,
-        reverseCurve: widget.reverseCurve,
-        closedColor: widget.closedColor,
-        openColor: widget.openColor,
-        useRootNavigator: widget.useRootNavigator,
-      ),
-    );
+        await Navigator.of(
+          context,
+          rootNavigator: widget.useRootNavigator,
+        ).push<T>(
+          _LightContainerRoute<T>(
+            initialRect: initialRect,
+            openBuilder: widget.openBuilder,
+            transitionDuration: widget.transitionDuration,
+            reverseTransitionDuration: widget.reverseTransitionDuration,
+            curve: widget.curve,
+            reverseCurve: widget.reverseCurve,
+            closedColor: widget.closedColor,
+            openColor: widget.openColor,
+            useRootNavigator: widget.useRootNavigator,
+          ),
+        );
 
     // Trigger onClosed when the navigator pops
     if (widget.onClosed != null) {
@@ -66,10 +68,7 @@ class _LightOpenContainerState<T> extends State<LightOpenContainer<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return KeyedSubtree(
-      key: _key,
-      child: widget.closedBuilder(context, _open),
-    );
+    return KeyedSubtree(key: _key, child: widget.closedBuilder(context, _open));
   }
 }
 
@@ -92,13 +91,14 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
     required this.closedColor,
     required this.openColor,
     required this.useRootNavigator,
-  }) : super(
-          pageBuilder: (context, _, __) => const SizedBox.shrink(),
-        );
+  }) : super(pageBuilder: (context, _, __) => const SizedBox.shrink());
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     // Allows passing a result back via Navigator.of(context).pop(someData)
     return openBuilder(
       context,
@@ -107,8 +107,12 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
   }
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     final CurvedAnimation curvedAnimation = CurvedAnimation(
       parent: animation,
       curve: curve,
@@ -118,21 +122,31 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final Rect targetRect = Offset.zero & constraints.biggest;
-        final Rect currentRect =
-            Rect.lerp(initialRect, targetRect, curvedAnimation.value)!;
+        final Rect currentRect = Rect.lerp(
+          initialRect,
+          targetRect,
+          curvedAnimation.value,
+        )!;
 
-        final double fadeOutValue =
-            (1.0 - (curvedAnimation.value * 5.0)).clamp(0.0, 1.0);
-        final double fadeInValue =
-            ((curvedAnimation.value - 0.2) * 1.25).clamp(0.0, 1.0);
+        final double fadeOutValue = (1.0 - (curvedAnimation.value * 5.0)).clamp(
+          0.0,
+          1.0,
+        );
+        final double fadeInValue = ((curvedAnimation.value - 0.2) * 1.25).clamp(
+          0.0,
+          1.0,
+        );
 
         return Stack(
           children: [
             Positioned.fromRect(
               rect: currentRect,
               child: Container(
-                color:
-                    Color.lerp(closedColor, openColor, curvedAnimation.value),
+                color: Color.lerp(
+                  closedColor,
+                  openColor,
+                  curvedAnimation.value,
+                ),
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -142,10 +156,7 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
                         child: const SizedBox.shrink(),
                       ),
                     if (fadeInValue > 0)
-                      Opacity(
-                        opacity: fadeInValue,
-                        child: child,
-                      ),
+                      Opacity(opacity: fadeInValue, child: child),
                   ],
                 ),
               ),

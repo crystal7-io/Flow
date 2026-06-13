@@ -13,14 +13,10 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Privacy and Secrecy"),
-      ),
+      appBar: AppBar(title: const Text("Privacy and Secrecy")),
       body: ListView(
         children: [
-          const ListTile(
-            title: Text("Account privacy"),
-          ),
+          const ListTile(title: Text("Account privacy")),
           RadioListTile<AccountPrivacy>(
             value: AccountPrivacy.private,
             groupValue: accountPrivacy,
@@ -45,7 +41,8 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-                "When your account is public, your profile and posts can be seen by anyone, on or off Instagram, even if they don't have Instagram account.\n\nWhen your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists.\n\nCertain info on your profile, like your profile picture and username, is visible to everyone on and off Instagram."),
+              "When your account is public, your profile and posts can be seen by anyone, on or off Instagram, even if they don't have Instagram account.\n\nWhen your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists.\n\nCertain info on your profile, like your profile picture and username, is visible to everyone on and off Instagram.",
+            ),
           ),
           // Row(
           //   children: [

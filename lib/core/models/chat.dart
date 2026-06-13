@@ -4,7 +4,7 @@ enum LastMessageState {
   sentByUserAndSeen,
   sentByUserAndUnseen,
   sentByOtherandSeen,
-  sentByOtherAndUnseen
+  sentByOtherAndUnseen,
 }
 
 class Chat {

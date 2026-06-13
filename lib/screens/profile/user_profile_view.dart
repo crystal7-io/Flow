@@ -27,11 +27,15 @@ class _UserProfileContent extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Profile", style: GoogleFonts.googleSansFlex(fontWeight: FontWeight.w600)),
+        title: Text(
+          "Edit Profile",
+          style: GoogleFonts.googleSansFlex(fontWeight: FontWeight.w600),
+        ),
         actions: [
           IconButton(
-              onPressed: viewModel.isDirty ? viewModel.saveProfile : null,
-              icon: const Icon(Icons.check))
+            onPressed: viewModel.isDirty ? viewModel.saveProfile : null,
+            icon: const Icon(Icons.check),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -45,7 +49,11 @@ class _UserProfileContent extends StatelessWidget {
                   CircleAvatar(
                     radius: 64,
                     backgroundColor: colorScheme.surfaceContainerHighest,
-                    child: Icon(Icons.person, size: 64, color: colorScheme.primary),
+                    child: Icon(
+                      Icons.person,
+                      size: 64,
+                      color: colorScheme.primary,
+                    ),
                   ),
                   Positioned(
                     bottom: 0,
@@ -60,20 +68,23 @@ class _UserProfileContent extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             _buildTextField(
-                label: "Display Name",
-                controller: viewModel.displayNameController,
-                colorScheme: colorScheme),
+              label: "Display Name",
+              controller: viewModel.displayNameController,
+              colorScheme: colorScheme,
+            ),
             const SizedBox(height: 16),
             _buildTextField(
-                label: "User Name",
-                controller: viewModel.userNameController,
-                colorScheme: colorScheme),
+              label: "User Name",
+              controller: viewModel.userNameController,
+              colorScheme: colorScheme,
+            ),
             const SizedBox(height: 16),
             _buildTextField(
-                label: "Bio",
-                controller: viewModel.bioController,
-                colorScheme: colorScheme,
-                maxLines: 3),
+              label: "Bio",
+              controller: viewModel.bioController,
+              colorScheme: colorScheme,
+              maxLines: 3,
+            ),
           ],
         ),
       ),
@@ -89,9 +100,13 @@ class _UserProfileContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: GoogleFonts.googleSansFlex(
-                fontWeight: FontWeight.w500, color: colorScheme.onSurfaceVariant)),
+        Text(
+          label,
+          style: GoogleFonts.googleSansFlex(
+            fontWeight: FontWeight.w500,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
         const SizedBox(height: 8),
         TextField(
           controller: controller,

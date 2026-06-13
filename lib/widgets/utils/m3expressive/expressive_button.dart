@@ -37,9 +37,9 @@ class ExpressiveSpringButton extends StatefulWidget {
     this.unselectedBg,
     this.selectedContent,
     this.unselectedContent,
-  })  : thickness = height ?? 56.0,
-        unselectedLength = unselectedLength ?? 42.0,
-        selectedLength = selectedLength ?? (unselectedLength ?? 42) + 12.0;
+  }) : thickness = height ?? 56.0,
+       unselectedLength = unselectedLength ?? 42.0,
+       selectedLength = selectedLength ?? (unselectedLength ?? 42) + 12.0;
 
   @override
   State<ExpressiveSpringButton> createState() => _ExpressiveSpringButtonState();
@@ -108,7 +108,8 @@ class _ExpressiveSpringButtonState extends State<ExpressiveSpringButton>
           // Clamp t for color/radius lerping so they don't "break" during overshoot
           final clampedT = t.clamp(0.0, 1.0);
 
-          final currentLength = widget.unselectedLength +
+          final currentLength =
+              widget.unselectedLength +
               (t * (widget.selectedLength - widget.unselectedLength));
 
           return Container(
@@ -122,7 +123,8 @@ class _ExpressiveSpringButtonState extends State<ExpressiveSpringButton>
               left: widget.direction == SpringDirection.horizontal
                   ? currentLength / 2
                   : 12.0,
-              right: (widget.direction == SpringDirection.horizontal
+              right:
+                  (widget.direction == SpringDirection.horizontal
                       ? currentLength / 2
                       : 12.0) +
                   6,
@@ -146,8 +148,9 @@ class _ExpressiveSpringButtonState extends State<ExpressiveSpringButton>
                   Icon(
                     weight: 600,
                     widget.icon,
-                    color:
-                        widget.isSelected ? contentSelected : contentUnselected,
+                    color: widget.isSelected
+                        ? contentSelected
+                        : contentUnselected,
                     size: 24,
                   ),
                 // Text expansion logic
@@ -158,8 +161,9 @@ class _ExpressiveSpringButtonState extends State<ExpressiveSpringButton>
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.only(
-                          left:
-                              (widget.persistText || clampedT > 0.1) ? 8.0 : 0,
+                          left: (widget.persistText || clampedT > 0.1)
+                              ? 8.0
+                              : 0,
                         ),
                         child: Text(
                           widget.text!,
@@ -168,11 +172,11 @@ class _ExpressiveSpringButtonState extends State<ExpressiveSpringButton>
                           style:
                               (widget.textStyle ?? theme.textTheme.labelLarge)!
                                   .copyWith(
-                            color: widget.isSelected
-                                ? contentSelected
-                                : contentUnselected,
-                            fontWeight: FontWeight.bold,
-                          ),
+                                    color: widget.isSelected
+                                        ? contentSelected
+                                        : contentUnselected,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                       ),
                     ),
@@ -240,11 +244,7 @@ class _ExpressiveSpringIconButtonState extends State<ExpressiveSpringIconButton>
 
   void _runSpring(double target) {
     final simulation = SpringSimulation(
-      const SpringDescription(
-        mass: 1.2,
-        stiffness: 1000,
-        damping: 25,
-      ),
+      const SpringDescription(mass: 1.2, stiffness: 1000, damping: 25),
       _controller.value,
       target,
       0,
@@ -278,7 +278,8 @@ class _ExpressiveSpringIconButtonState extends State<ExpressiveSpringIconButton>
           final t = _controller.value;
           final clampedT = t.clamp(0.0, 1.0);
 
-          final currentLength = widget.unselectedLength +
+          final currentLength =
+              widget.unselectedLength +
               (t * (widget.selectedLength - widget.unselectedLength));
 
           final width = widget.direction == SpringDirection.horizontal
@@ -352,13 +353,15 @@ class _ExpressiveButtonState extends State<ExpressiveButton>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        vsync: this,
-        duration: widget.duration,
-        reverseDuration: Durations.short3);
+      vsync: this,
+      duration: widget.duration,
+      reverseDuration: Durations.short3,
+    );
     _animation = CurvedAnimation(
-        parent: _controller,
-        curve: Easing.standard,
-        reverseCurve: Easing.standard);
+      parent: _controller,
+      curve: Easing.standard,
+      reverseCurve: Easing.standard,
+    );
     if (widget.isSelected) _controller.value = 1.0;
   }
 
@@ -386,7 +389,8 @@ class _ExpressiveButtonState extends State<ExpressiveButton>
 
     final bgSelected =
         widget.selectedBackgroundColor ?? theme.colorScheme.primary;
-    final bgUnselected = widget.unselectedBackgroundColor ??
+    final bgUnselected =
+        widget.unselectedBackgroundColor ??
         theme.colorScheme.surfaceContainerHigh;
     final contentSelected =
         widget.selectedContentColor ?? theme.colorScheme.onPrimary;

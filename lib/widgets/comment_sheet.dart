@@ -38,95 +38,102 @@ class _CommentSheetState extends State<CommentSheet> {
           ),
         ),
         Expanded(
-            child: ListView(controller: widget.controller, children: [
-          const Row(
+          child: ListView(
+            controller: widget.controller,
             children: [
-              SizedBox(width: 16),
-              Text(
-                'Comments',
-                style: TextStyle(fontSize: 22),
+              const Row(
+                children: [
+                  SizedBox(width: 16),
+                  Text('Comments', style: TextStyle(fontSize: 22)),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          ExpansionViewList(
-              elevation: 0,
-              expandedHeaderPadding: EdgeInsets.zero,
-              materialGapSize: 0,
-              children: comments[0]
-                  .mapIndexed((index, comment) => ExpansionView(
-                      backgroundColor: Colors.transparent,
-                      isExpanded: isReplyOpen[index],
-                      headerBuilder: (context, isExpanded) =>
-                          CommentWidget(expand: expandComment, comment: comment),
-                      body: ListView.separated(
+              const SizedBox(height: 8),
+              ExpansionViewList(
+                elevation: 0,
+                expandedHeaderPadding: EdgeInsets.zero,
+                materialGapSize: 0,
+                children: comments[0]
+                    .mapIndexed(
+                      (index, comment) => ExpansionView(
+                        backgroundColor: Colors.transparent,
+                        isExpanded: isReplyOpen[index],
+                        headerBuilder: (context, isExpanded) => CommentWidget(
+                          expand: expandComment,
+                          comment: comment,
+                        ),
+                        body: ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: comment.replies.length,
                           separatorBuilder: (context, index) => Divider(
-                                indent: 36,
-                                endIndent: 12,
-                                color: Theme.of(context).colorScheme.outlineVariant,
-                              ),
+                            indent: 36,
+                            endIndent: 12,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                          ),
                           itemBuilder: (context, index) =>
-                              CommentReplyWidget(reply: comment.replies[index]))))
-                  .toList()),
-        ])),
+                              CommentReplyWidget(reply: comment.replies[index]),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
         Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              color: Theme.of(context).colorScheme.surfaceContainerHigh,
-              child: Row(
-                children: <Widget>[
-                  const SizedBox(width: 12),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: CachedNetworkImage(
-                        height: 40,
-                        width: 40,
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                        placeholderFadeInDuration: const Duration(seconds: 0),
-                        placeholder: (context, url) => Icon(Icons.account_circle_rounded,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant),
-                        fit: BoxFit.contain,
-                        imageUrl: linkToPfp),
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            color: Theme.of(context).colorScheme.surfaceContainerHigh,
+            child: Row(
+              children: <Widget>[
+                const SizedBox(width: 12),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: CachedNetworkImage(
+                    height: 40,
+                    width: 40,
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    placeholderFadeInDuration: const Duration(seconds: 0),
+                    placeholder: (context, url) => Icon(
+                      Icons.account_circle_rounded,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    fit: BoxFit.contain,
+                    imageUrl: linkToPfp,
                   ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                      child: TextField(
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: TextField(
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       isDense: true,
                       contentPadding: EdgeInsets.symmetric(vertical: 18),
                       hintText: "Add a comment...",
                     ),
-                  )),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Symbols.send,
-                        size: 24,
-                        weight: 600,
-                      ))
-                ],
-              ),
-            )),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Symbols.send, size: 24, weight: 600),
+                ),
+              ],
+            ),
+          ),
+        ),
         Container(
           color: Theme.of(context).colorScheme.surfaceContainerHigh,
           width: double.maxFinite,
           height: MediaQuery.of(context).padding.bottom,
-        )
+        ),
       ],
     );
   }
 }
 
 class CommentWidget extends StatefulWidget {
-  const CommentWidget({
-    super.key,
-    required this.comment,
-    required this.expand,
-  });
+  const CommentWidget({super.key, required this.comment, required this.expand});
   final Comment comment;
   final void Function(dynamic) expand;
   @override
@@ -138,34 +145,37 @@ class _CommentWidgetState extends State<CommentWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: CachedNetworkImage(
-                    height: 45,
-                    width: 45,
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                    placeholderFadeInDuration: const Duration(seconds: 0),
-                    placeholder: (context, url) => Icon(Icons.account_circle_rounded,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant),
-                    fit: BoxFit.contain,
-                    imageUrl: widget.comment.person.pfpPath,
-                  ),
-                )),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          child: Column(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: CachedNetworkImage(
+                height: 45,
+                width: 45,
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                placeholderFadeInDuration: const Duration(seconds: 0),
+                placeholder: (context, url) => Icon(
+                  Icons.account_circle_rounded,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                fit: BoxFit.contain,
+                imageUrl: widget.comment.person.pfpPath,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
@@ -178,80 +188,81 @@ class _CommentWidgetState extends State<CommentWidget> {
                               Text(widget.comment.dateTime),
                             ],
                           ),
-                          const SizedBox(
-                            height: 4,
-                          ),
+                          const SizedBox(height: 4),
                           Text(
                             maxLines: 50,
                             overflow: TextOverflow.clip,
                             widget.comment.text,
                             style: const TextStyle(fontSize: 14),
-                          )
+                          ),
                         ],
-                      )),
+                      ),
+                    ),
 
-                      // const Spacer(),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      TextButton.icon(
-                          style: ButtonStyle(
-                              iconColor: WidgetStatePropertyAll(
-                            widget.comment.isLiked
-                                ? Colors.red
-                                : Theme.of(context).colorScheme.primary,
-                          )),
-                          label: Text(
-                            widget.comment.likes.toString(),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              if (widget.comment.isLiked) {
-                                widget.comment.isLiked = false;
-                                widget.comment.likes -= 1;
-                                return;
-                              }
-                              widget.comment.isLiked = true;
-                              widget.comment.likes += 1;
-                            });
-                          },
-                          icon: Icon(
-                            widget.comment.isLiked ? Icons.favorite : Icons.favorite_outline,
-                            size: 22,
-                          )),
-                      const SizedBox(width: 8),
-                      TextButton.icon(
-                          label: const Text(
-                            "Reply",
-                          ),
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.reply_outlined,
-                            size: 24,
-                          )),
-                    ],
-                  ),
-                  if (widget.comment.replies.isNotEmpty)
+                    // const Spacer(),
+                  ],
+                ),
+                Row(
+                  children: [
                     TextButton.icon(
-                        onPressed: () {
-                          widget.expand(0);
-                          setState(() {
-                            isExpanded = !isExpanded;
-                          });
-                        },
-                        iconAlignment: IconAlignment.end,
-                        label: Text(isExpanded
-                            ? "Hide replies"
-                            : "See ${widget.comment.replies.length.toString()} replies"),
-                        icon: Icon(
-                          isExpanded ? Icons.expand_less : Icons.expand_more,
-                        )),
-                ],
-              ),
+                      style: ButtonStyle(
+                        iconColor: WidgetStatePropertyAll(
+                          widget.comment.isLiked
+                              ? Colors.red
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      label: Text(widget.comment.likes.toString()),
+                      onPressed: () {
+                        setState(() {
+                          if (widget.comment.isLiked) {
+                            widget.comment.isLiked = false;
+                            widget.comment.likes -= 1;
+                            return;
+                          }
+                          widget.comment.isLiked = true;
+                          widget.comment.likes += 1;
+                        });
+                      },
+                      icon: Icon(
+                        widget.comment.isLiked
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
+                        size: 22,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton.icon(
+                      label: const Text("Reply"),
+                      onPressed: () {},
+                      icon: Icon(Icons.reply_outlined, size: 24),
+                    ),
+                  ],
+                ),
+                if (widget.comment.replies.isNotEmpty)
+                  TextButton.icon(
+                    onPressed: () {
+                      widget.expand(0);
+                      setState(() {
+                        isExpanded = !isExpanded;
+                      });
+                    },
+                    iconAlignment: IconAlignment.end,
+                    label: Text(
+                      isExpanded
+                          ? "Hide replies"
+                          : "See ${widget.comment.replies.length.toString()} replies",
+                    ),
+                    icon: Icon(
+                      isExpanded ? Icons.expand_less : Icons.expand_more,
+                    ),
+                  ),
+              ],
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -280,30 +291,37 @@ class _CommentReplyWidgetState extends State<CommentReplyWidget> {
           ),
           const SizedBox(width: 12),
           Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                widget.reply.person.userName,
-                style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurface),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                overflow: TextOverflow.clip,
-                widget.reply.text,
-                style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface),
-              ),
-              Row(
-                children: [
-                  TextButton.icon(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  widget.reply.person.userName,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  overflow: TextOverflow.clip,
+                  widget.reply.text,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                Row(
+                  children: [
+                    TextButton.icon(
                       style: ButtonStyle(
-                          iconColor: WidgetStatePropertyAll(
-                        widget.reply.isLiked ? Colors.red : Theme.of(context).colorScheme.primary,
-                      )),
-                      label: Text(
-                        widget.reply.likes.toString(),
+                        iconColor: WidgetStatePropertyAll(
+                          widget.reply.isLiked
+                              ? Colors.red
+                              : Theme.of(context).colorScheme.primary,
+                        ),
                       ),
+                      label: Text(widget.reply.likes.toString()),
                       onPressed: () {
                         setState(() {
                           if (widget.reply.isLiked) {
@@ -316,23 +334,23 @@ class _CommentReplyWidgetState extends State<CommentReplyWidget> {
                         });
                       },
                       icon: Icon(
-                        widget.reply.isLiked ? Icons.favorite : Icons.favorite_outline,
+                        widget.reply.isLiked
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
                         size: 22,
-                      )),
-                  const SizedBox(width: 8),
-                  TextButton.icon(
-                      label: const Text(
-                        "Reply",
                       ),
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton.icon(
+                      label: const Text("Reply"),
                       onPressed: () {},
-                      icon: Icon(
-                        Icons.reply_outlined,
-                        size: 24,
-                      )),
-                ],
-              ),
-            ],
-          )),
+                      icon: Icon(Icons.reply_outlined, size: 24),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -340,5 +358,5 @@ class _CommentReplyWidgetState extends State<CommentReplyWidget> {
 }
 
 //  setState(() {
-                    //isReplyOpen[panelIndex] = isExpanded;
-                  //});
+//isReplyOpen[panelIndex] = isExpanded;
+//});

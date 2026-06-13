@@ -101,7 +101,8 @@ class ProfileRepository implements IProfileRepository {
 
       // Get data of user by ID as key from map
       _profile = Profile.fromJson(
-          dataObj[_userID] ?? jsonDecode(dummy) as Map<String, dynamic>);
+        dataObj[_userID] ?? jsonDecode(dummy) as Map<String, dynamic>,
+      );
     } catch (e) {
       rethrow;
     }

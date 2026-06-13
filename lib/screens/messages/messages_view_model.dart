@@ -34,7 +34,8 @@ class MessagesViewModel extends ChangeNotifier {
       _chatData = chats.where((element) {
         if (element.newMessage > 0 && _currentFilters.contains('Unread')) {
           return true;
-        } else if (element.newMessage == 0 && _currentFilters.contains('Read')) {
+        } else if (element.newMessage == 0 &&
+            _currentFilters.contains('Read')) {
           return true;
         } else if (element.isActive && _currentFilters.contains('Active')) {
           return true;

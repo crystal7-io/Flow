@@ -12,45 +12,67 @@ class StoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        minVerticalPadding: 24,
-        visualDensity: const VisualDensity(vertical: 4),
-        onTap: () {
-          context.push('/storyview',
-              extra: StoryGroup(person: person, stories: [
-                Story(
-                    duration: const Duration(seconds: 7),
-                    pathToMedia:
-                        "https://drive.google.com/uc?export=view&id=${posts[0].coverImagePath}",
-                    type: StoryType.image,
-                    uploadTime: "47 min")
-              ]));
-        },
-        leading: Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(
-                  width: 2.2, color: Theme.of(context).colorScheme.primary)),
-          child: CachedNetworkImage(
-            height: 55,
-            width: 55,
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-            placeholderFadeInDuration: const Duration(seconds: 0),
-            placeholder: (context, url) => Icon(Icons.account_circle_rounded,
-                color: Theme.of(context).colorScheme.onSurfaceVariant),
-            fit: BoxFit.contain,
-            imageUrl: person.pfpPath,
+      minVerticalPadding: 24,
+      visualDensity: const VisualDensity(vertical: 4),
+      onTap: () {
+        context.push(
+          '/storyview',
+          extra: StoryGroup(
+            person: person,
+            stories: [
+              Story(
+                duration: const Duration(seconds: 7),
+                pathToMedia:
+                    "https://drive.google.com/uc?export=view&id=${posts[0].coverImagePath}",
+                type: StoryType.image,
+                uploadTime: "47 min",
+              ),
+            ],
+          ),
+        );
+      },
+      leading: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40),
+          border: Border.all(
+            width: 2.2,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
-        title: Text(person.name,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: 0)),
-        subtitle: Text(person.userName,
-            style: const TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0)),
-        trailing: Text(
-          "$notifNum new",
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-        ));
+        child: CachedNetworkImage(
+          height: 55,
+          width: 55,
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+          placeholderFadeInDuration: const Duration(seconds: 0),
+          placeholder: (context, url) => Icon(
+            Icons.account_circle_rounded,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+          fit: BoxFit.contain,
+          imageUrl: person.pfpPath,
+        ),
+      ),
+      title: Text(
+        person.name,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0,
+        ),
+      ),
+      subtitle: Text(
+        person.userName,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0,
+        ),
+      ),
+      trailing: Text(
+        "$notifNum new",
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+    );
   }
 }

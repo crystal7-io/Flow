@@ -46,8 +46,8 @@ typedef ExpansionViewCallback = void Function(int panelIndex, bool isExpanded);
 
 /// Signature for the callback that's called when the header of the
 /// [ExpansionView] needs to rebuild.
-typedef ExpansionViewHeaderBuilder = Widget Function(
-    BuildContext context, bool isExpanded);
+typedef ExpansionViewHeaderBuilder =
+    Widget Function(BuildContext context, bool isExpanded);
 
 /// A material expansion panel. It has a header and a body and can be either
 /// expanded or collapsed. The body of the panel is only visible when it is
@@ -168,8 +168,8 @@ class ExpansionViewList extends StatefulWidget {
     this.elevation = 2,
     this.expandIconColor,
     this.materialGapSize = 16.0,
-  })  : _allowOnlyOnePanelOpen = false,
-        initialOpenPanelValue = null;
+  }) : _allowOnlyOnePanelOpen = false,
+       initialOpenPanelValue = null;
 
   /// Creates a radio expansion panel list widget.
   ///
@@ -267,12 +267,15 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
   void initState() {
     super.initState();
     if (widget._allowOnlyOnePanelOpen) {
-      assert(_allIdentifiersUnique(),
-          'All ExpansionViewRadio identifier values must be unique.');
+      assert(
+        _allIdentifiersUnique(),
+        'All ExpansionViewRadio identifier values must be unique.',
+      );
       if (widget.initialOpenPanelValue != null) {
         _currentOpenPanel = searchPanelByValue(
-            widget.children.cast<ExpansionViewRadio>(),
-            widget.initialOpenPanelValue);
+          widget.children.cast<ExpansionViewRadio>(),
+          widget.initialOpenPanelValue,
+        );
       }
     }
   }
@@ -282,14 +285,17 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
     super.didUpdateWidget(oldWidget);
 
     if (widget._allowOnlyOnePanelOpen) {
-      assert(_allIdentifiersUnique(),
-          'All ExpansionViewRadio identifier values must be unique.');
+      assert(
+        _allIdentifiersUnique(),
+        'All ExpansionViewRadio identifier values must be unique.',
+      );
       // If the previous widget was non-radio ExpansionViewList, initialize the
       // open panel to widget.initialOpenPanelValue
       if (!oldWidget._allowOnlyOnePanelOpen) {
         _currentOpenPanel = searchPanelByValue(
-            widget.children.cast<ExpansionViewRadio>(),
-            widget.initialOpenPanelValue);
+          widget.children.cast<ExpansionViewRadio>(),
+          widget.initialOpenPanelValue,
+        );
       }
     } else {
       _currentOpenPanel = null;
@@ -321,9 +327,11 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
 
       // If another ExpansionViewRadio was already open, apply its
       // expansionCallback (if any) to false, because it's closing.
-      for (int childIndex = 0;
-          childIndex < widget.children.length;
-          childIndex += 1) {
+      for (
+        int childIndex = 0;
+        childIndex < widget.children.length;
+        childIndex += 1
+      ) {
         final ExpansionViewRadio child =
             widget.children[childIndex] as ExpansionViewRadio;
         if (widget.expansionCallback != null &&
@@ -342,7 +350,9 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
   }
 
   ExpansionViewRadio? searchPanelByValue(
-      List<ExpansionViewRadio> panels, Object? value) {
+    List<ExpansionViewRadio> panels,
+    Object? value,
+  ) {
     for (final ExpansionViewRadio panel in panels) {
       if (panel.value == value) {
         return panel;
@@ -365,9 +375,12 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
       if (_isChildExpanded(index) &&
           index != 0 &&
           !_isChildExpanded(index - 1)) {
-        items.add(MaterialGap(
+        items.add(
+          MaterialGap(
             key: _SaltedKey<BuildContext, int>(context, index * 2 - 1),
-            size: widget.materialGapSize));
+            size: widget.materialGapSize,
+          ),
+        );
       }
 
       final ExpansionView child = widget.children[index];
@@ -388,8 +401,9 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
         ),
       );
       if (!child.canTapOnHeader) {
-        final MaterialLocalizations localizations =
-            MaterialLocalizations.of(context);
+        final MaterialLocalizations localizations = MaterialLocalizations.of(
+          context,
+        );
         expandIconContainer = Semantics(
           label: _isChildExpanded(index)
               ? localizations.expandedIconTapHint
@@ -409,7 +423,8 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
                   : EdgeInsets.zero,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
-                    minHeight: _kPanelHeaderCollapsedHeight),
+                  minHeight: _kPanelHeaderCollapsedHeight,
+                ),
                 child: headerWidget,
               ),
             ),
@@ -434,10 +449,16 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
               AnimatedCrossFade(
                 firstChild: Container(height: 0.0),
                 secondChild: child.body,
-                firstCurve:
-                    const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
-                secondCurve:
-                    const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
+                firstCurve: const Interval(
+                  0.0,
+                  0.6,
+                  curve: Curves.fastOutSlowIn,
+                ),
+                secondCurve: const Interval(
+                  0.4,
+                  1.0,
+                  curve: Curves.fastOutSlowIn,
+                ),
                 sizeCurve: Curves.fastOutSlowIn,
                 crossFadeState: _isChildExpanded(index)
                     ? CrossFadeState.showSecond
@@ -450,9 +471,12 @@ class _ExpansionViewListState extends State<ExpansionViewList> {
       );
 
       if (_isChildExpanded(index) && index != widget.children.length - 1) {
-        items.add(MaterialGap(
+        items.add(
+          MaterialGap(
             key: _SaltedKey<BuildContext, int>(context, index * 2 + 1),
-            size: widget.materialGapSize));
+            size: widget.materialGapSize,
+          ),
+        );
       }
     }
 

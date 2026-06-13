@@ -28,22 +28,23 @@ class CustomAlertDialog extends StatelessWidget {
         animation: curve,
         builder: (context, child) {
           return AnimatedContainer(
-              width: MediaQuery.widthOf(context) - 108,
-              curve: curve.curve,
-              duration: Durations.medium1,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHigh,
-                borderRadius: BorderRadius.circular(28),
+            width: MediaQuery.widthOf(context) - 108,
+            curve: curve.curve,
+            duration: Durations.medium1,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHigh,
+              borderRadius: BorderRadius.circular(28),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Align(
+                alignment: Alignment.topCenter,
+                heightFactor: curve.value,
+                child: child,
               ),
-              clipBehavior: Clip.hardEdge,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  heightFactor: curve.value,
-                  child: child,
-                ),
-              ));
+            ),
+          );
         },
         child: SizedBox(
           width: 320,

@@ -50,37 +50,37 @@ class CarouselPostObject extends Post {
 }
 
 class ImagePostObject extends Post {
-  ImagePostObject(
-      {required super.person,
-      required super.type,
-      required super.dateTime,
-      required super.postId,
-      required super.subTitle,
-      required this.imagePath,
-      super.likes = 0,
-      super.isLiked = false,
-      super.saved = false,
-      required super.aspectRatio,
-      super.comments = const [],
-      super.tags})
-      : super(coverImagePath: imagePath);
+  ImagePostObject({
+    required super.person,
+    required super.type,
+    required super.dateTime,
+    required super.postId,
+    required super.subTitle,
+    required this.imagePath,
+    super.likes = 0,
+    super.isLiked = false,
+    super.saved = false,
+    required super.aspectRatio,
+    super.comments = const [],
+    super.tags,
+  }) : super(coverImagePath: imagePath);
   String imagePath;
 }
 
 class ReelPostObject extends Post {
-  ReelPostObject(
-      {required super.person,
-      required super.type,
-      required super.dateTime,
-      required super.postId,
-      required super.subTitle,
-      required this.sourcePath,
-      super.likes = 0,
-      super.isLiked = false,
-      super.saved = false,
-      required super.aspectRatio,
-      super.comments = const [],
-      super.tags})
-      : super(coverImagePath: sourcePath);
+  ReelPostObject({
+    required super.person,
+    required super.type,
+    required super.dateTime,
+    required super.postId,
+    required super.subTitle,
+    required this.sourcePath,
+    super.likes = 0,
+    super.isLiked = false,
+    super.saved = false,
+    required super.aspectRatio,
+    super.comments = const [],
+    super.tags,
+  }) : super(coverImagePath: sourcePath);
   String sourcePath;
 }

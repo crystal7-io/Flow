@@ -20,7 +20,9 @@ class SettingsView extends StatelessWidget {
         title: Text(
           "Settings",
           style: TextStyle(
-              fontSize: 24, color: Theme.of(context).colorScheme.onSurface),
+            fontSize: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
       ),
       body: ListView(
@@ -28,12 +30,10 @@ class SettingsView extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: SearchBar(
-              padding:
-                  WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
-              leading: Icon(
-                Symbols.search,
-                weight: 600,
+              padding: WidgetStatePropertyAll(
+                EdgeInsets.symmetric(horizontal: 16),
               ),
+              leading: Icon(Symbols.search, weight: 600),
               elevation: WidgetStatePropertyAll(0),
               hintText: "Search settings",
             ),
@@ -99,9 +99,7 @@ class SettingsView extends StatelessWidget {
   }
 
   void _pushSharedAxis(BuildContext context, Widget screen) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => screen),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => screen));
   }
 
   Widget _buildSettingsTile(
@@ -113,9 +111,10 @@ class SettingsView extends StatelessWidget {
   }) {
     return ListTile(
       titleTextStyle: TextStyle(
-          fontSize: 18,
-          color: Theme.of(context).colorScheme.onSurface,
-          fontWeight: FontWeight.w400),
+        fontSize: 18,
+        color: Theme.of(context).colorScheme.onSurface,
+        fontWeight: FontWeight.w400,
+      ),
       contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       onTap: onTap,
       leading: Icon(icon),

@@ -36,11 +36,12 @@ class _SavePostSheetState extends State<SavePostSheet> {
               height: 55,
               width: 55,
               child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  height: 55,
-                  width: 55,
-                  imageUrl:
-                      "https://drive.google.com/uc?export=view&id=${posts.first.coverImagePath}"),
+                fit: BoxFit.cover,
+                height: 55,
+                width: 55,
+                imageUrl:
+                    "https://drive.google.com/uc?export=view&id=${posts.first.coverImagePath}",
+              ),
             ),
           ),
           title: const Text("Saved"),
@@ -78,11 +79,13 @@ class _SavePostSheetState extends State<SavePostSheet> {
                 const Text("You don't have any collection yet"),
                 const SizedBox(height: 8),
                 TextButton(
-                    onPressed: () {}, child: const Text("Create a collection"))
+                  onPressed: () {},
+                  child: const Text("Create a collection"),
+                ),
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

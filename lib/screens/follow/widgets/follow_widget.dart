@@ -39,8 +39,10 @@ class _FollowsState extends State<Follows> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.push('/profile/true',
-            extra: getAccountFromUserName(widget.person.userName));
+        context.push(
+          '/profile/true',
+          extra: getAccountFromUserName(widget.person.userName),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -58,52 +60,57 @@ class _FollowsState extends State<Follows> {
                         const Icon(Icons.error),
                     placeholderFadeInDuration: const Duration(seconds: 0),
                     placeholder: (context, url) => Icon(
-                        Icons.account_circle_rounded,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      Icons.account_circle_rounded,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                     fit: BoxFit.contain,
                     imageUrl: widget.person.pfpPath,
                   ),
                 ),
                 const SizedBox(width: 8),
                 SizedBox(
-                    width: 110,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(widget.person.name,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontSize: 16,
-                              overflow: TextOverflow.ellipsis,
-                              fontFamily: 'Manrope',
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: 0.10,
-                            )),
-                        Text(
-                          widget.person.userName,
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontSize: 12,
-                            fontFamily: 'Manrope',
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: 0.10,
-                          ),
+                  width: 110,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.person.name,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 16,
+                          overflow: TextOverflow.ellipsis,
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.10,
                         ),
-                      ],
-                    )),
+                      ),
+                      Text(
+                        widget.person.userName,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 12,
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
             _isFollowing
                 ? TextButton(
                     onPressed: followPress,
-                    child: const Text(
-                      "Unfollow",
-                    ))
+                    child: const Text("Unfollow"),
+                  )
                 : SizedBox(
                     height: 36,
                     child: FilledButton.tonal(
-                        onPressed: followPress, child: const Text("Follow")))
+                      onPressed: followPress,
+                      child: const Text("Follow"),
+                    ),
+                  ),
           ],
         ),
       ),

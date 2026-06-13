@@ -45,7 +45,8 @@ class UserProfileViewModel extends ChangeNotifier {
   }
 
   void _checkChanges() {
-    bool dirty = userNameController.text != _originalUserName ||
+    bool dirty =
+        userNameController.text != _originalUserName ||
         displayNameController.text != _originalDisplayName ||
         bioController.text != _originalBio;
     if (dirty != _isDirty) {

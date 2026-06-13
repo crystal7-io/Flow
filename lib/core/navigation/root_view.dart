@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:redesigned/core/utils/animations.dart';
 import 'package:redesigned/widgets/utils/m3expressive/fab_menu.dart';
-import 'package:redesigned/widgets/utils/open_container.dart' as container_transform;
+import 'package:redesigned/widgets/utils/open_container.dart'
+    as container_transform;
 import 'package:redesigned/widgets/navigation/bottom_navigation_bar.dart';
 import 'package:redesigned/widgets/navigation/navigation_rail.dart';
 import 'package:redesigned/screens/messages/new_chat/new_chat_view.dart';
@@ -24,10 +25,11 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
 
   late final _barAnimation = BarAnimation(parent: _controller);
   late final _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      reverseDuration: const Duration(milliseconds: 1250),
-      value: 0,
-      vsync: this);
+    duration: const Duration(milliseconds: 1000),
+    reverseDuration: const Duration(milliseconds: 1250),
+    value: 0,
+    vsync: this,
+  );
   late final _railAnimation = RailAnimation(parent: _controller);
   late final _railFabAnimation = RailFabAnimation(parent: _controller);
 
@@ -38,14 +40,18 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness:
-          context.read<AppService>().isDark(context) ? Brightness.light : Brightness.dark,
-      statusBarColor: Colors.transparent,
-      systemNavigationBarContrastEnforced: false,
-      systemStatusBarContrastEnforced: false,
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness:
+            context.read<AppService>().isDark(context)
+            ? Brightness.light
+            : Brightness.dark,
+        statusBarColor: Colors.transparent,
+        systemNavigationBarContrastEnforced: false,
+        systemStatusBarContrastEnforced: false,
+      ),
+    );
   }
 
   @override
@@ -60,11 +66,13 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
     final bool shouldShow = width > 600;
 
     if (shouldShow) {
-      if (status != AnimationStatus.forward && status != AnimationStatus.completed) {
+      if (status != AnimationStatus.forward &&
+          status != AnimationStatus.completed) {
         _controller.forward();
       }
     } else {
-      if (status != AnimationStatus.reverse && status != AnimationStatus.dismissed) {
+      if (status != AnimationStatus.reverse &&
+          status != AnimationStatus.dismissed) {
         _controller.reverse();
       }
     }
@@ -81,25 +89,32 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
   }
 
   Widget messageFAB() => container_transform.OpenContainer(
-      transitionType: container_transform.ContainerTransitionType.fadeThrough,
-      transitionDuration: Durations.long1,
-      reverseTransitionDuration: Durations.short4,
-      openColor: Theme.of(context).colorScheme.surface,
-      middleColor: Theme.of(context).colorScheme.surface,
-      closedColor: Theme.of(context).colorScheme.primaryContainer,
-      openElevation: 0,
-      clipBehavior: Clip.none,
-      closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      closedElevation: 0,
-      closedBuilder: (context, openContainer) => FloatingActionButton.extended(
-          heroTag: 'myfab',
-          onPressed: () {
-            openContainer();
-          },
-          icon: const Icon(Icons.edit_outlined),
-          label: const Text("Chat")),
-      openBuilder: (context, controller) => ChangeNotifierProvider<NewChatViewModel>(
-          create: (_) => NewChatViewModel(), child: const NewChatView()));
+    transitionType: container_transform.ContainerTransitionType.fadeThrough,
+    transitionDuration: Durations.long1,
+    reverseTransitionDuration: Durations.short4,
+    openColor: Theme.of(context).colorScheme.surface,
+    middleColor: Theme.of(context).colorScheme.surface,
+    closedColor: Theme.of(context).colorScheme.primaryContainer,
+    openElevation: 0,
+    clipBehavior: Clip.none,
+    closedShape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(28),
+    ),
+    closedElevation: 0,
+    closedBuilder: (context, openContainer) => FloatingActionButton.extended(
+      heroTag: 'myfab',
+      onPressed: () {
+        openContainer();
+      },
+      icon: const Icon(Icons.edit_outlined),
+      label: const Text("Chat"),
+    ),
+    openBuilder: (context, controller) =>
+        ChangeNotifierProvider<NewChatViewModel>(
+          create: (_) => NewChatViewModel(),
+          child: const NewChatView(),
+        ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +128,8 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
 
       transitionBuilder: (child, animation) {
         // Check if this child is the one leaving the screen
-        final bool isExiting = animation.status == AnimationStatus.completed ||
+        final bool isExiting =
+            animation.status == AnimationStatus.completed ||
             animation.status == AnimationStatus.reverse;
 
         // If it's exiting, force its opacity to 0 instantly so it never lingers
@@ -128,47 +144,46 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
       },
       layoutBuilder: (currentChild, previousChildren) => Stack(
         alignment: Alignment.topLeft,
-        children: [
-          ...previousChildren,
-          if (currentChild != null) currentChild,
-        ],
+        children: [...previousChildren, if (currentChild != null) currentChild],
       ),
-      child: !context.watch<AppService>().isNavBarVisible || MediaQuery.sizeOf(context).width > 600
+      child:
+          !context.watch<AppService>().isNavBarVisible ||
+              MediaQuery.sizeOf(context).width > 600
           ? const SizedBox(key: ValueKey('fab_empty'))
           : currentIndex == 0
-              ? FloatingActionButtonMenu(
-                  key: const ValueKey('home_fab_menu'),
-                  children: [
-                    FloatingAcitonMenuButton(
-                      icon: Icons.movie_filter_outlined,
-                      label: "Slice",
-                      delay: Duration(milliseconds: 80),
-                    ),
-                    FloatingAcitonMenuButton(
-                      icon: Icons.message_outlined,
-                      label: "Message",
-                      delay: Duration(milliseconds: 40),
-                    ),
-                    FloatingAcitonMenuButton(
-                      onPressed: () {
-                        context.push('/create-post');
-                      },
-                      icon: Icons.image_outlined,
-                      label: "Post",
-                      delay: Duration(milliseconds: 0),
-                    )
-                  ],
-                )
-              : currentIndex == 2
-                  ? Align(
-                      key: const ValueKey('message_fab_aligned'),
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: messageFAB(),
-                      ),
-                    )
-                  : const SizedBox(key: ValueKey('fab_empty_other')),
+          ? FloatingActionButtonMenu(
+              key: const ValueKey('home_fab_menu'),
+              children: [
+                FloatingAcitonMenuButton(
+                  icon: Icons.movie_filter_outlined,
+                  label: "Slice",
+                  delay: Duration(milliseconds: 80),
+                ),
+                FloatingAcitonMenuButton(
+                  icon: Icons.message_outlined,
+                  label: "Message",
+                  delay: Duration(milliseconds: 40),
+                ),
+                FloatingAcitonMenuButton(
+                  onPressed: () {
+                    context.push('/create-post');
+                  },
+                  icon: Icons.image_outlined,
+                  label: "Post",
+                  delay: Duration(milliseconds: 0),
+                ),
+              ],
+            )
+          : currentIndex == 2
+          ? Align(
+              key: const ValueKey('message_fab_aligned'),
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: messageFAB(),
+              ),
+            )
+          : const SizedBox(key: ValueKey('fab_empty_other')),
     );
     Widget content = Scaffold(
       bottomNavigationBar: AnimatedContainer(
@@ -181,7 +196,9 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
           child: AnimatedSlide(
             duration: Durations.medium3,
             curve: Easing.emphasizedDecelerate,
-            offset: context.watch<AppService>().isNavBarVisible ? Offset.zero : const Offset(0, 1),
+            offset: context.watch<AppService>().isNavBarVisible
+                ? Offset.zero
+                : const Offset(0, 1),
             child: RepaintBoundary(
               child: DisappearingBottomNavigationBar(
                 key: const ValueKey('bottom_bar'),
@@ -261,14 +278,11 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
                       )
                     : const SizedBox(key: ValueKey('empty_rail')),
               ),
-              Expanded(child: widget.child)
+              Expanded(child: widget.child),
             ],
           ),
           Positioned.fill(
-            child: IgnorePointer(
-              ignoring: false,
-              child: floatingMenu,
-            ),
+            child: IgnorePointer(ignoring: false, child: floatingMenu),
           ),
         ],
       ),
@@ -278,7 +292,11 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
       final rootAnimation = CurvedAnimation(
         parent: animation,
         curve: const Interval(0.0, 0.8, curve: Easing.standard),
-        reverseCurve: const Interval(0.0, 0.8, curve: Easing.emphasizedAccelerate),
+        reverseCurve: const Interval(
+          0.0,
+          0.8,
+          curve: Easing.emphasizedAccelerate,
+        ),
       );
 
       return SlideTransition(

@@ -35,12 +35,14 @@ class ChatViewModel extends ChangeNotifier {
     if (_currentInput.trim().isEmpty) return;
 
     chats.insert(
-        0,
-        ChatText(
-            text: _currentInput,
-            sentByUser: true,
-            time: "now",
-            textid: chats.length));
+      0,
+      ChatText(
+        text: _currentInput,
+        sentByUser: true,
+        time: "now",
+        textid: chats.length,
+      ),
+    );
     _currentInput = "";
     textEditingController.clear();
     notifyListeners();
@@ -61,23 +63,23 @@ class ChatViewModel extends ChangeNotifier {
   }
 
   List<String> get emojiList => [
-        "❤️",
-        "👍",
-        "🎉",
-        "💀",
-        "😀",
-        "😄",
-        "😁",
-        "😂",
-        "🤣",
-        "😊",
-        "😇",
-        "😉",
-        "😍",
-        "🥰",
-        "🤗",
-        "🤓",
-        "😎",
-        "🥳",
-      ];
+    "❤️",
+    "👍",
+    "🎉",
+    "💀",
+    "😀",
+    "😄",
+    "😁",
+    "😂",
+    "🤣",
+    "😊",
+    "😇",
+    "😉",
+    "😍",
+    "🥰",
+    "🤗",
+    "🤓",
+    "😎",
+    "🥳",
+  ];
 }

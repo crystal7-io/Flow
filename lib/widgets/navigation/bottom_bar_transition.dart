@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:redesigned/core/utils/animations.dart';
 
 class BottomBarTransition extends StatefulWidget {
-  const BottomBarTransition(
-      {super.key,
-      required this.animation,
-      required this.backgroundColor,
-      required this.child});
+  const BottomBarTransition({
+    super.key,
+    required this.animation,
+    required this.backgroundColor,
+    required this.child,
+  });
 
   final Animation<double> animation;
   final Color backgroundColor;
@@ -34,22 +35,23 @@ class _BottomBarTransition extends State<BottomBarTransition> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: widget.animation,
-        builder: (context, child) {
-          return ClipRect(
-            child: DecoratedBox(
-              decoration: BoxDecoration(color: widget.backgroundColor),
-              child: Align(
-                alignment: Alignment.topLeft,
-                heightFactor: heightAnimation.value,
-                child: FractionalTranslation(
-                  translation: offsetAnimation.value,
-                  child: child,
-                ),
+      animation: widget.animation,
+      builder: (context, child) {
+        return ClipRect(
+          child: DecoratedBox(
+            decoration: BoxDecoration(color: widget.backgroundColor),
+            child: Align(
+              alignment: Alignment.topLeft,
+              heightFactor: heightAnimation.value,
+              child: FractionalTranslation(
+                translation: offsetAnimation.value,
+                child: child,
               ),
             ),
-          );
-        },
-        child: widget.child);
+          ),
+        );
+      },
+      child: widget.child,
+    );
   }
 }

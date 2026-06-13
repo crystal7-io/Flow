@@ -39,7 +39,9 @@ class SignUpViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await _authService.signUpWithEmailAndPassword(
-          userNameController.text, passwordController.text);
+        userNameController.text,
+        passwordController.text,
+      );
     } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
         print('Firebase Auth Error (SignUp): ${e.code} - ${e.message}');

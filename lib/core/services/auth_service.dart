@@ -3,8 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:redesigned/core/constants/app_config.dart';
 
 class AuthService extends ChangeNotifier {
-  final FirebaseAuth? _firebaseAuth =
-      AppConfig.useAuth ? FirebaseAuth.instance : null;
+  final FirebaseAuth? _firebaseAuth = AppConfig.useAuth
+      ? FirebaseAuth.instance
+      : null;
 
   /// Currently signed in User
   User? _currentUser;
@@ -35,7 +36,9 @@ class AuthService extends ChangeNotifier {
 
   // Sign in with email and password
   Future<UserCredential?> signInWithEmailAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     if (!AppConfig.useAuth || _firebaseAuth == null) return null;
     try {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
@@ -52,7 +55,9 @@ class AuthService extends ChangeNotifier {
 
   // Sign up with email and password
   Future<UserCredential?> signUpWithEmailAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     if (!AppConfig.useAuth || _firebaseAuth == null) return null;
     try {
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
