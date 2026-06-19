@@ -23,7 +23,11 @@ class ProfilePictureViewer extends StatelessWidget {
   final Post post;
   final Animation<double> animation;
 
-  const ProfilePictureViewer({super.key, required this.post, required this.animation});
+  const ProfilePictureViewer({
+    super.key,
+    required this.post,
+    required this.animation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,9 @@ class ProfilePictureViewer extends StatelessWidget {
               animation: animation,
               builder: (context, child) {
                 return Scaffold(
-                  backgroundColor: colorScheme.surface.withValues(alpha: animation.value),
+                  backgroundColor: colorScheme.surface.withValues(
+                    alpha: animation.value,
+                  ),
                   body: Stack(
                     children: [
                       child!,
@@ -62,7 +68,9 @@ class ProfilePictureViewer extends StatelessWidget {
                             width: 56,
                             child: IconButton(
                               style: ButtonStyle(
-                                iconColor: WidgetStatePropertyAll(colorScheme.onSurfaceVariant),
+                                iconColor: WidgetStatePropertyAll(
+                                  colorScheme.onSurfaceVariant,
+                                ),
                                 backgroundColor: WidgetStatePropertyAll(
                                   colorScheme.surfaceContainerHigh,
                                 ),
@@ -83,16 +91,23 @@ class ProfilePictureViewer extends StatelessWidget {
                     const SizedBox(height: 64),
                     Hero(
                       tag: 'pfp_${post.postId}',
-                      createRectTween: (begin, end) => ExpressiveRectTween(begin: begin, end: end),
+                      createRectTween: (begin, end) =>
+                          ExpressiveRectTween(begin: begin, end: end),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0),
                         child: BlobAvatar(
                           child: CachedNetworkImage(
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                            placeholderFadeInDuration: const Duration(seconds: 0),
-                            progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                              child: CircularProgressIndicator(value: downloadProgress.progress),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                            placeholderFadeInDuration: const Duration(
+                              seconds: 0,
                             ),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                                  child: CircularProgressIndicator(
+                                    value: downloadProgress.progress,
+                                  ),
+                                ),
                             fit: BoxFit.contain,
                             imageUrl: post.person.pfpPath,
                           ),
@@ -156,18 +171,19 @@ class ProfilePictureViewer extends StatelessWidget {
               Text(
                 post.person.name,
                 style: GoogleFonts.permanentMarker(
-                  textStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
-                  ),
+                  textStyle: Theme.of(context).textTheme.headlineLarge
+                      ?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onSurface,
+                      ),
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 post.person.userName,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
@@ -192,12 +208,17 @@ class ProfilePictureViewer extends StatelessWidget {
                       ),
                       label: Text(
                         model.isFollowing ? "Followed" : "Follow",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       style: ButtonStyle(
                         shape: WidgetStatePropertyAll(
                           model.isFollowing
-                              ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))
+                              ? RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                )
                               : StadiumBorder(),
                         ),
                         foregroundColor: WidgetStatePropertyAll(
@@ -206,7 +227,9 @@ class ProfilePictureViewer extends StatelessWidget {
                               : colorScheme.onPrimary,
                         ),
                         backgroundColor: WidgetStatePropertyAll(
-                          model.isFollowing ? colorScheme.secondaryContainer : colorScheme.primary,
+                          model.isFollowing
+                              ? colorScheme.secondaryContainer
+                              : colorScheme.primary,
                         ),
                       ),
                       onPressed: model.toggleFollowing,
@@ -242,7 +265,10 @@ class ProfilePictureViewer extends StatelessWidget {
           animation: svgRevealAnim,
           child: SvgPicture.asset(
             "assets/zigzag.svg",
-            colorFilter: ColorFilter.mode(colorScheme.outlineVariant, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(
+              colorScheme.outlineVariant,
+              BlendMode.srcIn,
+            ),
           ),
         ),
         const SizedBox(height: 28),
@@ -292,18 +318,18 @@ class ProfilePictureViewer extends StatelessWidget {
             Text(
               value,
               style: GoogleFonts.limelight(
-                textStyle: Theme.of(
-                  context,
-                ).textTheme.displaySmall?.copyWith(color: colorScheme.onSurfaceVariant),
+                textStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurface,
               ),
             ),
             Text(
               label,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -317,14 +343,22 @@ class _StaggeredBubble extends StatelessWidget {
   final Widget child;
   final Alignment alignment;
 
-  const _StaggeredBubble({required this.animation, required this.child, required this.alignment});
+  const _StaggeredBubble({
+    required this.animation,
+    required this.child,
+    required this.alignment,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
       builder: (context, child) {
-        return Transform.scale(scale: animation.value, alignment: alignment, child: child);
+        return Transform.scale(
+          scale: animation.value,
+          alignment: alignment,
+          child: child,
+        );
       },
       child: child,
     );
@@ -343,7 +377,11 @@ class _HorizontalReveal extends StatelessWidget {
       animation: animation,
       builder: (context, child) {
         return ClipRect(
-          child: Align(alignment: Alignment.center, widthFactor: animation.value, child: child),
+          child: Align(
+            alignment: Alignment.center,
+            widthFactor: animation.value,
+            child: child,
+          ),
         );
       },
       child: child,

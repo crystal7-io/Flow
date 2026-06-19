@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class LightOpenContainer<T> extends StatefulWidget {
-  final Widget Function(BuildContext context, VoidCallback openContainer) closedBuilder;
-  final Widget Function(BuildContext context, VoidCallback closeContainer) openBuilder;
+  final Widget Function(BuildContext context, VoidCallback openContainer)
+  closedBuilder;
+  final Widget Function(BuildContext context, VoidCallback closeContainer)
+  openBuilder;
   final void Function(T? data)? onClosed;
   final Duration transitionDuration;
   final Duration reverseTransitionDuration;
@@ -31,7 +33,9 @@ class LightOpenContainer<T> extends StatefulWidget {
     this.closedShape = const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
-    this.openShape = const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+    this.openShape = const RoundedRectangleBorder(
+      borderRadius: BorderRadius.zero,
+    ),
     this.useRootNavigator = false,
   });
 
@@ -43,25 +47,31 @@ class _LightOpenContainerState<T> extends State<LightOpenContainer<T>> {
   final GlobalKey _key = GlobalKey();
 
   Future<void> _open() async {
-    final RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
-    final Rect initialRect = renderBox.localToGlobal(Offset.zero) & renderBox.size;
+    final RenderBox renderBox =
+        _key.currentContext!.findRenderObject() as RenderBox;
+    final Rect initialRect =
+        renderBox.localToGlobal(Offset.zero) & renderBox.size;
 
-    final T? result = await Navigator.of(context, rootNavigator: widget.useRootNavigator).push<T>(
-      _LightContainerRoute<T>(
-        initialRect: initialRect,
-        closedBuilder: widget.closedBuilder,
-        openBuilder: widget.openBuilder,
-        transitionDuration: widget.transitionDuration,
-        reverseTransitionDuration: widget.reverseTransitionDuration,
-        curve: widget.curve,
-        reverseCurve: widget.reverseCurve,
-        closedColor: widget.closedColor,
-        openColor: widget.openColor,
-        closedShape: widget.closedShape,
-        openShape: widget.openShape,
-        useRootNavigator: widget.useRootNavigator,
-      ),
-    );
+    final T? result =
+        await Navigator.of(
+          context,
+          rootNavigator: widget.useRootNavigator,
+        ).push<T>(
+          _LightContainerRoute<T>(
+            initialRect: initialRect,
+            closedBuilder: widget.closedBuilder,
+            openBuilder: widget.openBuilder,
+            transitionDuration: widget.transitionDuration,
+            reverseTransitionDuration: widget.reverseTransitionDuration,
+            curve: widget.curve,
+            reverseCurve: widget.reverseCurve,
+            closedColor: widget.closedColor,
+            openColor: widget.openColor,
+            closedShape: widget.closedShape,
+            openShape: widget.openShape,
+            useRootNavigator: widget.useRootNavigator,
+          ),
+        );
 
     if (widget.onClosed != null) {
       widget.onClosed!(result);
@@ -102,7 +112,8 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
   }) : super(
          opaque: false,
          barrierColor: Colors.transparent,
-         pageBuilder: (context, animation, secondaryAnimation) => const SizedBox.shrink(),
+         pageBuilder: (context, animation, secondaryAnimation) =>
+             const SizedBox.shrink(),
        );
 
   @override
@@ -132,24 +143,30 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
     // Closed Element:
     // Forward: Fades out in first 20% (0.0 -> 0.2)
     // Reverse: Fades back in at last 30% of the close time (0.7 -> 1.0 map on exit countdown)
-    final Animation<double> closedOpacity = Tween<double>(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(
-        parent: animation,
-        curve: const Interval(0.0, 0.2, curve: Curves.fastOutSlowIn),
-        reverseCurve: const Interval(0.7, 1.0, curve: Curves.fastOutSlowIn),
-      ),
-    );
+    final Animation<double> closedOpacity = Tween<double>(begin: 1.0, end: 0.0)
+        .animate(
+          CurvedAnimation(
+            parent: animation,
+            curve: const Interval(0.0, 0.2, curve: Curves.fastOutSlowIn),
+            reverseCurve: const Interval(0.7, 1.0, curve: Curves.fastOutSlowIn),
+          ),
+        );
 
     // Open Element:
     // Forward: Fades in starting at 40% (0.4 -> 1.0)
     // Reverse: Vanishes completely within first 10% of exit time (0.9 -> 1.0 map on exit countdown)
-    final Animation<double> openOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: animation,
-        curve: const Interval(0.40, 1.0, curve: Curves.fastOutSlowIn),
-        reverseCurve: const Interval(0.90, 1.0, curve: Curves.fastOutSlowIn),
-      ),
-    );
+    final Animation<double> openOpacity = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: animation,
+            curve: const Interval(0.40, 1.0, curve: Curves.fastOutSlowIn),
+            reverseCurve: const Interval(
+              0.90,
+              1.0,
+              curve: Curves.fastOutSlowIn,
+            ),
+          ),
+        );
 
     final VoidCallback popAction = () =>
         Navigator.of(context, rootNavigator: useRootNavigator).pop();
@@ -160,7 +177,11 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
         return LayoutBuilder(
           builder: (context, constraints) {
             final Rect targetRect = Offset.zero & constraints.biggest;
-            final Rect currentRect = Rect.lerp(initialRect, targetRect, geometricAnimation.value)!;
+            final Rect currentRect = Rect.lerp(
+              initialRect,
+              targetRect,
+              geometricAnimation.value,
+            )!;
 
             final ShapeBorder currentShape = ShapeBorder.lerp(
               closedShape,
@@ -174,7 +195,11 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
                   rect: currentRect,
                   child: Container(
                     decoration: ShapeDecoration(
-                      color: Color.lerp(closedColor, openColor, geometricAnimation.value),
+                      color: Color.lerp(
+                        closedColor,
+                        openColor,
+                        geometricAnimation.value,
+                      ),
                       shape: currentShape,
                     ),
                     clipBehavior: Clip.antiAlias,

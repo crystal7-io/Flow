@@ -36,7 +36,12 @@ class ChatViewModel extends ChangeNotifier {
 
     chats.insert(
       0,
-      ChatText(text: _currentInput, sentByUser: true, time: "now", textid: chats.length),
+      ChatText(
+        text: _currentInput,
+        sentByUser: true,
+        time: "now",
+        textid: chats.length,
+      ),
     );
     _currentInput = "";
     textEditingController.clear();

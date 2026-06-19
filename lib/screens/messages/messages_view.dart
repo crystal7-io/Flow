@@ -18,8 +18,9 @@ class MessagesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (context, constraints) =>
-          constraints.maxWidth > 840 ? const MessageScreenDesktop() : const MessageScreenMobile(),
+      builder: (context, constraints) => constraints.maxWidth > 840
+          ? const MessageScreenDesktop()
+          : const MessageScreenMobile(),
     );
   }
 }
@@ -35,7 +36,10 @@ class MessageScreenMobile extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 64,
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text("Messages", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
+        title: const Text(
+          "Messages",
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+        ),
         actions: <Widget>[
           const MessageSearchAnchor(),
           ClipRRect(
@@ -73,10 +77,17 @@ class MessageScreenMobile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: FilterChip(
                       side: BorderSide.none,
-                      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHigh,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       label: Text(e),
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                      labelPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 2,
+                      ),
                       selected: viewModel.currentFilters.contains(e),
                       onSelected: (bool isSelected) {
                         viewModel.toggleFilter(e, isSelected);
@@ -102,10 +113,11 @@ class MessageScreenMobile extends StatelessWidget {
               onClosed: (_) {
                 context.read<AppService>().setNavBarVisible(true);
               },
-              openBuilder: (context, _) => ChangeNotifierProvider<ChatViewModel>(
-                create: (_) => ChatViewModel(e.person),
-                child: const ChatView(),
-              ),
+              openBuilder: (context, _) =>
+                  ChangeNotifierProvider<ChatViewModel>(
+                    create: (_) => ChatViewModel(e.person),
+                    child: const ChatView(),
+                  ),
             ),
           ),
           const SizedBox(height: 120),
@@ -143,7 +155,11 @@ class MessageScreenDesktop extends StatelessWidget {
                       backgroundColor: WidgetStatePropertyAll(
                         Theme.of(context).colorScheme.surfaceContainerHigh,
                       ),
-                      leading: const SizedBox(height: 40, width: 40, child: Icon(Symbols.search)),
+                      leading: const SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: Icon(Symbols.search),
+                      ),
                       hintText: "Search messages",
                       onTap: () {},
                       elevation: const WidgetStatePropertyAll(0),
@@ -155,11 +171,16 @@ class MessageScreenDesktop extends StatelessWidget {
                               CachedNetworkImage(
                                 height: 40,
                                 width: 40,
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
-                                placeholderFadeInDuration: const Duration(seconds: 0),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                                placeholderFadeInDuration: const Duration(
+                                  seconds: 0,
+                                ),
                                 placeholder: (context, url) => Icon(
                                   Icons.account_circle_rounded,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                                 fit: BoxFit.contain,
                                 imageUrl: linkToPfp,
@@ -188,14 +209,21 @@ class MessageScreenDesktop extends StatelessWidget {
                             child: FilterChip(
                               side: BorderSide(
                                 color: viewModel.currentFilters.contains(e)
-                                    ? Theme.of(context).colorScheme.primaryContainer
-                                    : Theme.of(context).colorScheme.outlineVariant,
+                                    ? Theme.of(
+                                        context,
+                                      ).colorScheme.primaryContainer
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.outlineVariant,
                               ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               label: Text(e),
-                              labelPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                              labelPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 2,
+                              ),
                               selected: viewModel.currentFilters.contains(e),
                               onSelected: (bool isSelected) {
                                 viewModel.toggleFilter(e, isSelected);
@@ -233,7 +261,9 @@ class MessageScreenDesktop extends StatelessWidget {
                         child: const ChatView(),
                       )
                     : Container(
-                        decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
                         padding: const EdgeInsets.symmetric(),
                         child: const Center(child: Text("Messages")),
                       ),
@@ -248,7 +278,11 @@ class MessageScreenDesktop extends StatelessWidget {
 }
 
 class ChatWidgetDesktop extends StatelessWidget {
-  const ChatWidgetDesktop({super.key, required this.chat, required this.onPressed});
+  const ChatWidgetDesktop({
+    super.key,
+    required this.chat,
+    required this.onPressed,
+  });
   final Chat chat;
   final VoidCallback onPressed;
   @override
@@ -286,7 +320,9 @@ class ChatWidgetDesktop extends StatelessWidget {
               : chat.lastMessage,
           style: TextStyle(
             fontSize: 14,
-            fontWeight: chat.newMessage == 0 ? FontWeight.w500 : FontWeight.w700,
+            fontWeight: chat.newMessage == 0
+                ? FontWeight.w500
+                : FontWeight.w700,
             letterSpacing: 0,
           ),
         ),
@@ -361,7 +397,8 @@ class ChatWidget extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     chat.lastMessageState == LastMessageState.sentByUserAndSeen
                         ? "Seen"
-                        : chat.lastMessageState == LastMessageState.sentByUserAndUnseen
+                        : chat.lastMessageState ==
+                              LastMessageState.sentByUserAndUnseen
                         ? "Sent"
                         : chat.newMessage > 1
                         ? "${chat.newMessage} new messages"
@@ -369,7 +406,9 @@ class ChatWidget extends StatelessWidget {
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 14,
-                      fontWeight: chat.newMessage == 0 ? FontWeight.w400 : FontWeight.w600,
+                      fontWeight: chat.newMessage == 0
+                          ? FontWeight.w400
+                          : FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -407,12 +446,16 @@ class MessageSearchAnchor extends StatelessWidget {
       closedBuilder: (context, openContainer) => SizedBox(
         height: 45,
         width: 45,
-        child: IconButton(onPressed: openContainer, icon: const Icon(Icons.search, weight: 600)),
+        child: IconButton(
+          onPressed: openContainer,
+          icon: const Icon(Icons.search, weight: 600),
+        ),
       ),
-      openBuilder: (context, controller) => ChangeNotifierProvider<SearchMessageViewModel>(
-        create: (_) => SearchMessageViewModel(),
-        child: const SearchMessageView(),
-      ),
+      openBuilder: (context, controller) =>
+          ChangeNotifierProvider<SearchMessageViewModel>(
+            create: (_) => SearchMessageViewModel(),
+            child: const SearchMessageView(),
+          ),
     );
   }
 }
