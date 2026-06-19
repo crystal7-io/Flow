@@ -21,7 +21,8 @@ class AppService extends ChangeNotifier {
       return true;
     }
     if (_themeMode == ThemeMode.system &&
-        SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark) {
+        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark) {
       return true;
     }
     return false;

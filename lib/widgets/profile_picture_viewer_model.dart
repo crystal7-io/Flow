@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:libmonet/libmonet.dart';
-import 'package:palette_generator/palette_generator.dart';
-import 'package:redesigned/main.dart';
+import 'package:redesigned/core/utils/color.dart';
 
 class ProfilePictureViewerModel extends ChangeNotifier {
   final ScrollController scrollController = ScrollController();
@@ -23,27 +22,17 @@ class ProfilePictureViewerModel extends ChangeNotifier {
 
   void extractColors(String imagePath, Brightness brightness) async {
     try {
-      final paletteGenerator = await PaletteGenerator.fromImageProvider(
-        CachedNetworkImageProvider(imagePath),
-        maximumColorCount: 16,
-      );
-
-      final Color extractedColor =
-          paletteGenerator.dominantColor?.color ??
-          paletteGenerator.vibrantColor?.color ??
-          Colors.amber;
-      // final ColorScheme newScheme = await ColorScheme.fromImageProvider(
-      //   provider: CachedNetworkImageProvider(imagePath),
-      //   brightness: brightness,
-      // );
-
+      final seedColor =
+          await DynamicSchemeExtension.extractColorFromImageProvider(
+            CachedNetworkImageProvider(imagePath),
+          );
       _colorScheme = DynamicScheme.withDefaults(
-        sourceColor: TonalPaletteSourceColor.fromArgb(extractedColor.toARGB32()),
-        variant: Variant.vibrant,
-        isDark: brightness == Brightness.dark,
-        platform: Platform.phone,
-        specVersion: SpecVersion.spec2026,
-      ).toColorScheme();
+        sourceColor: TonalPaletteSourceColor.fromArgb(seedColor.toARGB32()),
+        variant: .vibrant,
+        isDark: brightness == .dark,
+        platform: .phone,
+        specVersion: .spec2026,
+      ).toColorScheme(lazy: true);
       notifyListeners();
     } catch (e) {
       debugPrint("Error extracting color scheme: $e");

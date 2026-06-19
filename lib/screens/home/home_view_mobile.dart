@@ -36,11 +36,17 @@ class MobileHomeView extends StatelessWidget {
                   child: OpenContainer(
                     closedElevation: 0,
                     closedColor: Theme.of(context).colorScheme.surfaceContainer,
-                    openColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                    closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(55)),
+                    openColor: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerLow,
+                    closedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(55),
+                    ),
                     useRootNavigator: true,
                     closedBuilder: (context, action) => Material(
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                       child: InkWell(
                         onTap: () {
                           viewModel.onSearchTap();
@@ -57,13 +63,17 @@ class MobileHomeView extends StatelessWidget {
                                     Symbols.search,
                                     opticalSize: 24,
                                     weight: 400,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                                   SizedBox(width: 14),
                                   Text(
                                     "Search Flow",
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -71,15 +81,22 @@ class MobileHomeView extends StatelessWidget {
                               ),
                               Spacer(),
                               ClipRRect(
-                                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
                                 child: CachedNetworkImage(
                                   height: 40,
                                   width: 40,
-                                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                                  placeholderFadeInDuration: const Duration(seconds: 0),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  placeholderFadeInDuration: const Duration(
+                                    seconds: 0,
+                                  ),
                                   placeholder: (context, url) => Icon(
                                     Icons.account_circle_rounded,
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                                   fit: BoxFit.cover,
                                   imageUrl: viewModel.profilePictureLink,
@@ -91,10 +108,11 @@ class MobileHomeView extends StatelessWidget {
                       ),
                     ),
 
-                    openBuilder: (context, action) => ChangeNotifierProvider<SearchViewModel>(
-                      create: (_) => SearchViewModel(),
-                      child: const SearchView(),
-                    ),
+                    openBuilder: (context, action) =>
+                        ChangeNotifierProvider<SearchViewModel>(
+                          create: (_) => SearchViewModel(),
+                          child: const SearchView(),
+                        ),
                   ),
                 ),
               ),
@@ -108,13 +126,17 @@ class MobileHomeView extends StatelessWidget {
                     children: [
                       const Padding(
                         padding: EdgeInsets.only(left: 12),
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: []),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [],
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: ListView.separated(
-                          separatorBuilder: (context, index) => const SizedBox(height: 12),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 12),
                           itemCount: viewModel.posts.length,
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,

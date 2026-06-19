@@ -56,8 +56,6 @@ dependencies:
   # Implements new color generation algorithms introduced in M3E.
   # TODO: unpin version when 2.0.0 stable is released
   libmonet: 2.0.0-dev.15
-  palette_generator: ^0.3.3+7
-  
 dev_dependencies:
   flutter_test:
     sdk: flutter
