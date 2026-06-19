@@ -12,7 +12,7 @@ class AppService extends ChangeNotifier {
     notifyListeners();
   }
 
-  final Color _seedColor = const Color.fromARGB(255, 153, 185, 26);
+  final Color _seedColor = const Color.fromARGB(255, 164, 26, 185);
   // final Color _seedColor = const Color.fromARGB(255, 91, 223, 192);
   Color get seedColor => _seedColor;
 
@@ -21,8 +21,7 @@ class AppService extends ChangeNotifier {
       return true;
     }
     if (_themeMode == ThemeMode.system &&
-        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
-            Brightness.dark) {
+        SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark) {
       return true;
     }
     return false;

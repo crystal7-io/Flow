@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/chat.dart';
+import 'package:redesigned/data/mock_data.dart';
 import 'package:redesigned/screens/messages/chat/chat_view_model.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -73,25 +74,17 @@ class MobileChatView extends StatelessWidget {
               children: [
                 Text(
                   person.name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 Text(
                   person.userName,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
           ],
         ),
-        actions: <Widget>[
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
-        ],
+        actions: <Widget>[IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))],
       ),
       body: Consumer<ChatViewModel>(
         builder: (context, vm, child) {
@@ -117,19 +110,16 @@ class MobileChatView extends StatelessWidget {
                           return UserChat(
                             onLongPress: () {},
                             isTopSame:
-                                index < vm.chats.length - 1 &&
-                                vm.chats[index + 1].sentByUser,
+                                index < vm.chats.length - 1 && vm.chats[index + 1].sentByUser,
                             chatText: chat,
                           );
                         } else {
                           return InterlocutorChat(
-                            isBottomSame:
-                                index > 1 && !vm.chats[index - 1].sentByUser,
+                            isBottomSame: index > 1 && !vm.chats[index - 1].sentByUser,
                             pfpPath: person.profilePicturePath,
                             chatText: chat,
                             isTopSame:
-                                index < vm.chats.length - 1 &&
-                                !vm.chats[index + 1].sentByUser,
+                                index < vm.chats.length - 1 && !vm.chats[index + 1].sentByUser,
                           );
                         }
                       },
@@ -137,6 +127,7 @@ class MobileChatView extends StatelessWidget {
                   ),
                 ),
                 const _MobileInputWidget(),
+                SizedBox(height: MediaQuery.paddingOf(context).bottom + 12),
               ],
             ),
           );
@@ -168,20 +159,13 @@ class _MobileInputWidget extends StatelessWidget {
                   controller: viewModel.textEditingController,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainerHigh,
+                    fillColor: Theme.of(context).colorScheme.surfaceContainerHigh,
                     isDense: true,
                     hintText: "Message...",
-                    hintStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                    hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                     prefixIcon: IconButton(
                       onPressed: () {},
-                      icon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add, size: 24),
-                      ),
+                      icon: IconButton(onPressed: () {}, icon: const Icon(Icons.add, size: 24)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -256,27 +240,18 @@ class DesktopChatView extends StatelessWidget {
               children: [
                 Text(
                   person.name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 Text(
                   person.userName,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               ],
             ),
           ],
         ),
         actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.videocam_outlined),
-          ),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.videocam_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.phone_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
         ],
@@ -302,8 +277,7 @@ class DesktopChatView extends StatelessWidget {
                     );
                   } else {
                     return InterlocutorChat(
-                      isBottomSame:
-                          index > 1 && !viewModel.chats[index - 1].sentByUser,
+                      isBottomSame: index > 1 && !viewModel.chats[index - 1].sentByUser,
                       pfpPath: person.profilePicturePath,
                       chatText: chat,
                       isTopSame:
@@ -335,13 +309,8 @@ class DesktopChatView extends StatelessWidget {
             isDense: false,
             fillColor: Theme.of(context).colorScheme.surfaceContainerHigh,
             hintText: "Message...",
-            hintStyle: TextStyle(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            prefixIcon: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.camera_alt, size: 24),
-            ),
+            hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+            prefixIcon: IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt, size: 24)),
             suffixIcon: viewModel.currentInput.isEmpty
                 ? Row(
                     mainAxisSize: MainAxisSize.min,
@@ -352,15 +321,9 @@ class DesktopChatView extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: const Icon(
-                          Icons.emoji_emotions_outlined,
-                          size: 24,
-                        ),
+                        icon: const Icon(Icons.emoji_emotions_outlined, size: 24),
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.mic, size: 24),
-                      ),
+                      IconButton(onPressed: () {}, icon: const Icon(Icons.mic, size: 24)),
                       const SizedBox(width: 4),
                     ],
                   )
@@ -368,10 +331,7 @@ class DesktopChatView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: TextButton(
                       onPressed: viewModel.sendMessage,
-                      child: const Text(
-                        "Send",
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
+                      child: const Text("Send", style: TextStyle(fontWeight: FontWeight.w700)),
                     ),
                   ),
             focusedBorder: OutlineInputBorder(
@@ -392,18 +352,9 @@ class DesktopChatView extends StatelessWidget {
 // Reusable Menu Items to save memory
 List<Widget> _buildChatMenu(BuildContext context) => [
   const MenuItemButton(leadingIcon: Icon(Icons.reply), child: Text("Reply")),
-  const MenuItemButton(
-    leadingIcon: Icon(Icons.send_outlined),
-    child: Text("Forward"),
-  ),
-  const MenuItemButton(
-    leadingIcon: Icon(Icons.copy_outlined),
-    child: Text("Copy"),
-  ),
-  const MenuItemButton(
-    leadingIcon: Icon(Icons.delete_outline),
-    child: Text("Delete"),
-  ),
+  const MenuItemButton(leadingIcon: Icon(Icons.send_outlined), child: Text("Forward")),
+  const MenuItemButton(leadingIcon: Icon(Icons.copy_outlined), child: Text("Copy")),
+  const MenuItemButton(leadingIcon: Icon(Icons.delete_outline), child: Text("Delete")),
 ];
 
 class InterlocutorChat extends StatelessWidget {
@@ -426,74 +377,43 @@ class InterlocutorChat extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(top: isTopSame ? 2 : 16),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Avatar logic
-          SizedBox(
-            width: 36,
-            child: !isTopSame
-                ? ClipOval(
-                    child: CachedNetworkImage(
-                      height: 36,
-                      width: 36,
-                      imageUrl: pfpPath,
-                      errorWidget: (_, __, ___) => const Icon(Icons.error),
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : null,
-          ),
-          const SizedBox(width: 8),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (!isTopSame) const SizedBox(height: 4),
-                if (chatText.repliedTo != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: chatText.repliedTo != null
-                        ? Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            // Convert the int to a String here
-                            child: ReplyWidget(
-                              reply: chatText.repliedTo.toString(),
-                            ),
-                          )
-                        : SizedBox(),
-                  ),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.sizeOf(context).width * 0.75,
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 14,
-                    ),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(isBottomSame ? 8 : 20),
-                        topLeft: const Radius.circular(8),
-                        topRight: const Radius.circular(20),
-                        bottomRight: const Radius.circular(20),
-                      ),
-                    ),
-                    child: Text(
-                      chatText.text,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
+          if (!isTopSame) const SizedBox(height: 4),
+          if (chatText.repliedTo != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: chatText.repliedTo != null
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      // Convert the int to a String here
+                      child: ReplyWidget(reply: chatTexts[chatText.repliedTo].text),
+                    )
+                  : SizedBox(),
+            ),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.75),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.secondaryContainer,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(isBottomSame ? 8 : 28),
+                  topLeft: const Radius.circular(8),
+                  topRight: const Radius.circular(28),
+                  bottomRight: const Radius.circular(28),
                 ),
-              ],
+              ),
+              child: Text(
+                chatText.text,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
+              ),
             ),
           ),
-          const SizedBox(width: 40), // Offset for the other side
         ],
       ),
     );
@@ -523,27 +443,20 @@ class UserChat extends StatelessWidget {
         children: [
           const SizedBox(width: 60), // Space for interlocutor side
           ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.sizeOf(context).width * 0.75,
-            ),
+            constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.75),
             child: MenuAnchor(
               menuChildren: _buildChatMenu(context),
               builder: (context, controller, child) {
                 return GestureDetector(
-                  onLongPress: () => controller.isOpen
-                      ? controller.close()
-                      : controller.open(),
+                  onLongPress: () => controller.isOpen ? controller.close() : controller.open(),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 14,
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.primaryContainer,
                       borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(20),
-                        bottomLeft: const Radius.circular(20),
-                        topRight: Radius.circular(isTopSame ? 8 : 20),
+                        topLeft: const Radius.circular(28),
+                        bottomLeft: const Radius.circular(28),
+                        topRight: Radius.circular(isTopSame ? 8 : 28),
                         bottomRight: const Radius.circular(8),
                       ),
                     ),
@@ -551,7 +464,7 @@ class UserChat extends StatelessWidget {
                       chatText.text,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w500,
-                        color: theme.colorScheme.onPrimary,
+                        color: theme.colorScheme.onPrimaryContainer,
                       ),
                     ),
                   ),
@@ -576,7 +489,7 @@ class ReplyWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(22),
         color: Theme.of(context).colorScheme.surfaceContainer,
       ),
-      child: Text(reply),
+      child: Text(reply, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
     );
   }
 }

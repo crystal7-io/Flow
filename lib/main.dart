@@ -16,9 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (AppConfig.useAuth) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } else {
     // Ensure default user is initialized for local development
     await LocalUserDataSource().initializeDefaultUser();
@@ -35,28 +33,22 @@ class MainApp extends StatelessWidget {
     return AppProvider(
       child: Consumer<AppService>(
         builder: (context, appService, child) {
-          DynamicScheme createDynamicScheme(
-            Brightness brightness,
-            bool highContrast,
-          ) => DynamicScheme.withDefaults(
-            sourceColor: TonalPaletteSourceColor.fromArgb(
-              appService.seedColor.toARGB32(),
-            ),
-            variant: Variant.tonalSpot,
-            isDark: brightness == Brightness.dark,
-            contrastLevel: highContrast ? 1.0 : 0.0,
-            platform: Platform.phone,
-            specVersion: SpecVersion.spec2026,
-          );
+          DynamicScheme createDynamicScheme(Brightness brightness, bool highContrast) =>
+              DynamicScheme.withDefaults(
+                // sourceColor: TonalPaletteSourceColor.fromArgb(appService.seedColor.toARGB32()),
+                variant: Variant.vibrant,
+                isDark: brightness == Brightness.dark,
+                contrastLevel: highContrast ? 1.0 : 0.0,
+                platform: Platform.phone,
+                specVersion: SpecVersion.spec2026,
+              );
 
           ThemeData createTheme({required ColorScheme colorScheme}) {
             return ThemeData(
               useMaterial3: true,
               colorScheme: colorScheme,
               textTheme: GoogleFonts.googleSansFlexTextTheme(),
-              splashFactory: kIsWeb
-                  ? InkRipple.splashFactory
-                  : InkSparkle.splashFactory,
+              splashFactory: kIsWeb ? InkRipple.splashFactory : InkSparkle.splashFactory,
               iconTheme: IconThemeData(
                 fill: 0.0,
                 weight: 400.0,
@@ -70,12 +62,10 @@ class MainApp extends StatelessWidget {
 
           return MaterialApp.router(
             routerConfig: context.read<GoRouter>(),
-            theme: createTheme(
-              colorScheme: createDynamicScheme(.light, false).toColorScheme(),
-            ),
-            darkTheme: createTheme(
-              colorScheme: createDynamicScheme(.dark, false).toColorScheme(),
-            ),
+            theme: createTheme(colorScheme: createDynamicScheme(.light, false).toColorScheme()),
+            // theme: createTheme(colorScheme: lightColorScheme),
+            darkTheme: createTheme(colorScheme: createDynamicScheme(.dark, false).toColorScheme()),
+            // darkTheme: createTheme(colorScheme: darkColorScheme),
             highContrastTheme: createTheme(
               colorScheme: createDynamicScheme(.light, true).toColorScheme(),
             ),
