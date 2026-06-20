@@ -1,13 +1,6 @@
 import 'package:redesigned/core/models/person.dart';
 
-enum NotifType {
-  commentLike,
-  commentReply,
-  postLike,
-  postComment,
-  storyLike,
-  follow,
-}
+enum NotifType { commentLike, commentReply, postLike, postComment, storyLike, follow }
 
 abstract class Notif {
   final NotifType notifType;
@@ -33,10 +26,7 @@ class CommentReplyNotficaiton extends Notif {
     required this.commentText,
     required this.isLiked,
     required super.contextImagePath,
-  }) : super(
-         notifType: NotifType.commentReply,
-         textContent: "Replied to your comment",
-       );
+  }) : super(notifType: NotifType.commentReply, textContent: "Replied to your comment");
   final String commentText;
   final String reply;
   final bool isLiked;
@@ -50,10 +40,7 @@ class CommentLikeNotficaiton extends Notif {
     required this.postID,
     required this.commentText,
     required super.contextImagePath,
-  }) : super(
-         notifType: NotifType.commentLike,
-         textContent: "liked your comment",
-       );
+  }) : super(notifType: NotifType.commentLike, textContent: "liked your comment");
   String text = "";
   final String commentText;
   final int postID;
@@ -67,10 +54,7 @@ class PostCommentNotficaiton extends Notif {
     required this.postID,
     required this.isLiked,
     required super.contextImagePath,
-  }) : super(
-         notifType: NotifType.commentReply,
-         textContent: "commented on your post",
-       );
+  }) : super(notifType: NotifType.commentReply, textContent: "commented on your post");
   String text = "";
   final String reply;
   final bool isLiked;
@@ -92,10 +76,7 @@ class FollowNotification extends Notif {
     required super.notifier,
     required super.time,
     required super.contextImagePath,
-  }) : super(
-         notifType: NotifType.follow,
-         textContent: "Who you might know is on Instagram",
-       );
+  }) : super(notifType: NotifType.follow, textContent: "Started following you");
 }
 
 class StoryLikeNotification extends Notif {

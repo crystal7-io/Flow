@@ -3,8 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:redesigned/core/utils/animations.dart';
 import 'package:redesigned/widgets/utils/m3expressive/fab_menu.dart';
-import 'package:redesigned/widgets/utils/open_container.dart'
-    as container_transform;
+import 'package:redesigned/widgets/utils/open_container.dart' as container_transform;
 import 'package:redesigned/widgets/navigation/bottom_navigation_bar.dart';
 import 'package:redesigned/widgets/navigation/navigation_rail.dart';
 import 'package:redesigned/screens/messages/new_chat/new_chat_view.dart';
@@ -43,8 +42,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness:
-            context.read<AppService>().isDark(context)
+        systemNavigationBarIconBrightness: context.read<AppService>().isDark(context)
             ? Brightness.light
             : Brightness.dark,
         statusBarColor: Colors.transparent,
@@ -66,13 +64,11 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
     final bool shouldShow = width > 600;
 
     if (shouldShow) {
-      if (status != AnimationStatus.forward &&
-          status != AnimationStatus.completed) {
+      if (status != AnimationStatus.forward && status != AnimationStatus.completed) {
         _controller.forward();
       }
     } else {
-      if (status != AnimationStatus.reverse &&
-          status != AnimationStatus.dismissed) {
+      if (status != AnimationStatus.reverse && status != AnimationStatus.dismissed) {
         _controller.reverse();
       }
     }
@@ -97,9 +93,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
     closedColor: Theme.of(context).colorScheme.primaryContainer,
     openElevation: 0,
     clipBehavior: Clip.none,
-    closedShape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(28),
-    ),
+    closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
     closedElevation: 0,
     closedBuilder: (context, openContainer) => FloatingActionButton.extended(
       heroTag: 'myfab',
@@ -109,11 +103,10 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
       icon: const Icon(Icons.edit_outlined),
       label: const Text("Chat"),
     ),
-    openBuilder: (context, controller) =>
-        ChangeNotifierProvider<NewChatViewModel>(
-          create: (_) => NewChatViewModel(),
-          child: const NewChatView(),
-        ),
+    openBuilder: (context, controller) => ChangeNotifierProvider<NewChatViewModel>(
+      create: (_) => NewChatViewModel(),
+      child: const NewChatView(),
+    ),
   );
 
   @override
@@ -135,20 +128,14 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
         // If it's exiting, force its opacity to 0 instantly so it never lingers
         return FadeTransition(
           opacity: isExiting ? const AlwaysStoppedAnimation(0.0) : animation,
-          child: ScaleTransition(
-            alignment: Alignment.bottomRight,
-            scale: animation,
-            child: child,
-          ),
+          child: ScaleTransition(alignment: Alignment.bottomRight, scale: animation, child: child),
         );
       },
       layoutBuilder: (currentChild, previousChildren) => Stack(
         alignment: Alignment.topLeft,
         children: [...previousChildren, if (currentChild != null) currentChild],
       ),
-      child:
-          !context.watch<AppService>().isNavBarVisible ||
-              MediaQuery.sizeOf(context).width > 600
+      child: !context.watch<AppService>().isNavBarVisible || MediaQuery.sizeOf(context).width > 600
           ? const SizedBox(key: ValueKey('fab_empty'))
           : currentIndex == 0
           ? FloatingActionButtonMenu(
@@ -178,10 +165,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
           ? Align(
               key: const ValueKey('message_fab_aligned'),
               alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: messageFAB(),
-              ),
+              child: Padding(padding: const EdgeInsets.all(16.0), child: messageFAB()),
             )
           : const SizedBox(key: ValueKey('fab_empty_other')),
     );
@@ -196,9 +180,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
           child: AnimatedSlide(
             duration: Durations.medium3,
             curve: Easing.emphasizedDecelerate,
-            offset: context.watch<AppService>().isNavBarVisible
-                ? Offset.zero
-                : const Offset(0, 1),
+            offset: context.watch<AppService>().isNavBarVisible ? Offset.zero : const Offset(0, 1),
             child: RepaintBoundary(
               child: DisappearingBottomNavigationBar(
                 key: const ValueKey('bottom_bar'),
@@ -281,9 +263,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
               Expanded(child: widget.child),
             ],
           ),
-          Positioned.fill(
-            child: IgnorePointer(ignoring: false, child: floatingMenu),
-          ),
+          Positioned.fill(child: IgnorePointer(ignoring: false, child: floatingMenu)),
         ],
       ),
     );
@@ -292,11 +272,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
       final rootAnimation = CurvedAnimation(
         parent: animation,
         curve: const Interval(0.0, 0.8, curve: Easing.standard),
-        reverseCurve: const Interval(
-          0.0,
-          0.8,
-          curve: Easing.emphasizedAccelerate,
-        ),
+        reverseCurve: const Interval(0.0, 0.8, curve: Easing.emphasizedAccelerate),
       );
 
       return SlideTransition(

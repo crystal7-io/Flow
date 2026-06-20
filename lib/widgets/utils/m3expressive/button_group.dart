@@ -24,10 +24,7 @@ class ButtonGroupItem {
     this.backgroundColor,
     this.foregroundColor,
     this.roundBorder = true,
-  }) : assert(
-         label != null || icon != null,
-         'An item must contain at least a label or an icon.',
-       );
+  }) : assert(label != null || icon != null, 'An item must contain at least a label or an icon.');
 }
 
 /// A highly expressive row-bound button cluster utilizing spring physics
@@ -173,10 +170,7 @@ class _StandardButtonGroupState extends State<StandardButtonGroup>
             );
 
             if (widget.expandEqually) {
-              return Expanded(
-                flex: (1000 + deltaFlex).toInt(),
-                child: buttonWidget,
-              );
+              return Expanded(flex: (1000 + deltaFlex).toInt(), child: buttonWidget);
             }
 
             return buttonWidget;
@@ -223,9 +217,7 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
       _baseContentWidth = widget.item.width!;
       _isWidthCalculated = true;
     } else {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) => _measureFreshBounds(),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) => _measureFreshBounds());
     }
   }
 
@@ -233,8 +225,7 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
   void _measureFreshBounds() {
     if (widget.item.width != null || widget.expandEqually) return;
 
-    final renderBox =
-        _contentKey.currentContext?.findRenderObject() as RenderBox?;
+    final renderBox = _contentKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox != null && mounted) {
       setState(() {
         _baseContentWidth = renderBox.size.width;
@@ -251,18 +242,14 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
     final targetHeight = item.height ?? 40.0;
 
     final resolvedBgColor =
-        item.backgroundColor ??
-        Theme.of(context).colorScheme.surfaceContainerHigh;
-    final resolvedFgColor =
-        item.foregroundColor ?? Theme.of(context).colorScheme.onSurface;
+        item.backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHigh;
+    final resolvedFgColor = item.foregroundColor ?? Theme.of(context).colorScheme.onSurface;
     final resolvedIconColor =
         item.foregroundColor ?? Theme.of(context).colorScheme.onSurfaceVariant;
 
     final ShapeBorder resolvedShape = item.roundBorder
         ? const StadiumBorder()
-        : const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          );
+        : const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12.0)));
 
     final EdgeInsets basePadding = hasText && hasIcon
         ? const EdgeInsets.only(left: 16.0, right: 24.0)
@@ -281,10 +268,9 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
         if (hasText)
           Text(
             (item.label as Text).data ?? '',
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-              color: resolvedFgColor,
-              fontWeight: FontWeight.w600,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.labelLarge!.copyWith(color: resolvedFgColor, fontWeight: FontWeight.w600),
           ),
       ],
     );
@@ -294,19 +280,13 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
         opacity: 0.0,
         child: SizedBox(
           height: targetHeight,
-          child: Padding(
-            key: _contentKey,
-            padding: basePadding,
-            child: buttonContent,
-          ),
+          child: Padding(key: _contentKey, padding: basePadding, child: buttonContent),
         ),
       );
     }
 
     return SizedBox(
-      width: widget.expandEqually
-          ? null
-          : (_baseContentWidth + widget.deltaWidth),
+      width: widget.expandEqually ? null : (_baseContentWidth + widget.deltaWidth),
       height: targetHeight,
       child: Material(
         color: resolvedBgColor,

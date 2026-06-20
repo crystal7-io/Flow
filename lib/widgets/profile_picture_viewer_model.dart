@@ -22,10 +22,9 @@ class ProfilePictureViewerModel extends ChangeNotifier {
 
   void extractColors(String imagePath, Brightness brightness) async {
     try {
-      final seedColor =
-          await DynamicSchemeExtension.extractColorFromImageProvider(
-            CachedNetworkImageProvider(imagePath),
-          );
+      final seedColor = await DynamicSchemeExtension.extractColorFromImageProvider(
+        CachedNetworkImageProvider(imagePath),
+      );
       _colorScheme = DynamicScheme.withDefaults(
         sourceColor: TonalPaletteSourceColor.fromArgb(seedColor.toARGB32()),
         variant: .vibrant,

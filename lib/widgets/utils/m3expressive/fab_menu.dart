@@ -11,8 +11,7 @@ class FloatingActionButtonMenu extends StatefulWidget {
   const FloatingActionButtonMenu({super.key, required this.children});
 
   @override
-  State<FloatingActionButtonMenu> createState() =>
-      _FloatingActionButtonMenuState();
+  State<FloatingActionButtonMenu> createState() => _FloatingActionButtonMenuState();
 }
 
 class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
@@ -24,8 +23,8 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
   static const double _initialFabHeight = 96.0;
   static const double _initialFabRadius = 28.0;
 
-  static const double _targetFabWidth = 64.0;
-  static const double _targetFabHeight = 64.0;
+  static const double _targetFabWidth = 56.0;
+  static const double _targetFabHeight = 56.0;
   static const double _targetFabRadius = 32.0;
 
   @override
@@ -73,8 +72,7 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
 
   @override
   Widget build(BuildContext context) {
-    final ValueListenable<ScaffoldGeometry> geometryListenable =
-        Scaffold.geometryOf(context);
+    final ValueListenable<ScaffoldGeometry> geometryListenable = Scaffold.geometryOf(context);
     final Size scaffoldSize = MediaQuery.sizeOf(context);
 
     return Stack(
@@ -83,15 +81,13 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
           AnimatedBuilder(
             animation: _fabController,
             builder: (context, child) {
-              final double clampedProgress = _fabController.value.clamp(
-                0.0,
-                1.0,
-              );
+              final double clampedProgress = _fabController.value.clamp(0.0, 1.0);
               return IgnorePointer(
                 ignoring: !_isMenuOpen,
                 child: ModalBarrier(
-                  color: Theme.of(context).colorScheme.surfaceContainerLowest
-                      .withAlpha((clampedProgress * 160).toInt()),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.scrim.withAlpha((clampedProgress * 200).toInt()),
                   dismissible: true,
                   onDismiss: _closeMenu,
                 ),
@@ -111,11 +107,8 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
               children: [
                 if (_isMenuOpen) ...[
                   for (int i = 0; i < widget.children.length; i++) ...[
-                    widget.children[i].copyWith(
-                      onMenuCloseRequested: _closeMenu,
-                    ),
-                    if (i < widget.children.length - 1)
-                      const SizedBox(height: 4),
+                    widget.children[i].copyWith(onMenuCloseRequested: _closeMenu),
+                    if (i < widget.children.length - 1) const SizedBox(height: 4),
                   ],
                   const SizedBox(height: 16),
                 ],
@@ -149,18 +142,9 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
                           end: 24.0,
                         ).transform(t);
 
-                        final double safeWidth = currentWidth.clamp(
-                          0.0,
-                          double.infinity,
-                        );
-                        final double safeHeight = currentHeight.clamp(
-                          0.0,
-                          double.infinity,
-                        );
-                        final double safeRadius = currentRadius.clamp(
-                          0.0,
-                          double.infinity,
-                        );
+                        final double safeWidth = currentWidth.clamp(0.0, double.infinity);
+                        final double safeHeight = currentHeight.clamp(0.0, double.infinity);
+                        final double safeRadius = currentRadius.clamp(0.0, double.infinity);
                         final double rotationAngle = t * (math.pi / 4.0);
 
                         return GestureDetector(
@@ -169,7 +153,9 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
                             width: safeWidth,
                             height: safeHeight,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: _isMenuOpen
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.primaryContainer,
                               borderRadius: BorderRadius.circular(safeRadius),
                               boxShadow: kElevationToShadow[6],
                             ),
@@ -179,13 +165,10 @@ class _FloatingActionButtonMenuState extends State<FloatingActionButtonMenu>
                                 angle: rotationAngle,
                                 child: Icon(
                                   Icons.add,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                  size: currentIconSize.clamp(
-                                    0.0,
-                                    double.infinity,
-                                  ),
+                                  color: _isMenuOpen
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : Theme.of(context).colorScheme.onPrimaryContainer,
+                                  size: currentIconSize.clamp(0.0, double.infinity),
                                 ),
                               ),
                             ),
@@ -221,8 +204,7 @@ class _ScaffoldResponsiveFlowDelegate extends FlowDelegate {
     double bottomOffset = 16.0;
 
     if (geometry.bottomNavigationBarTop != null) {
-      final navBarHeight =
-          scaffoldSize.height - geometry.bottomNavigationBarTop!;
+      final navBarHeight = scaffoldSize.height - geometry.bottomNavigationBarTop!;
       if (navBarHeight > 0) {
         bottomOffset += navBarHeight;
       }
@@ -269,8 +251,8 @@ class FloatingAcitonMenuButton extends StatefulWidget {
     required this.label,
     required this.delay,
     required this.onPressed,
-    required VoidCallback? onMenuCloseRequested,
-  }) : _onMenuCloseRequested = onMenuCloseRequested;
+    required this._onMenuCloseRequested,
+  });
 
   FloatingAcitonMenuButton copyWith({VoidCallback? onMenuCloseRequested}) {
     return FloatingAcitonMenuButton._internal(
@@ -284,8 +266,7 @@ class FloatingAcitonMenuButton extends StatefulWidget {
   }
 
   @override
-  State<FloatingAcitonMenuButton> createState() =>
-      _FloatingAcitonMenuButtonState();
+  State<FloatingAcitonMenuButton> createState() => _FloatingAcitonMenuButtonState();
 }
 
 class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
@@ -306,8 +287,7 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox? renderBox =
-          _childKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? renderBox = _childKey.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox != null) {
         if (mounted) {
           setState(() {
@@ -326,12 +306,7 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
     }
     if (!mounted) return;
 
-    final simulation = SpringSimulation(
-      ExpressiveMotionSpring.fastSpatial,
-      0.0,
-      1.0,
-      0.0,
-    );
+    final simulation = SpringSimulation(ExpressiveMotionSpring.fastSpatial, 0.0, 1.0, 0.0);
     _controller.animateWith(simulation);
   }
 
@@ -363,16 +338,13 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
       animation: _controller,
       builder: (context, child) {
         final double rawValue = _controller.value;
-        final double animatedWidth =
-            _naturalWidth * rawValue.clamp(0.0, double.infinity);
+        final double animatedWidth = _naturalWidth * rawValue.clamp(0.0, double.infinity);
 
         double opacityProgress = 0.0;
         if (rawValue > 0.0) {
           opacityProgress = (rawValue / 0.5).clamp(0.0, 1.0);
         }
-        final double animatedOpacity = Easing.standard.transform(
-          opacityProgress,
-        );
+        final double animatedOpacity = Easing.standard.transform(opacityProgress);
 
         return Opacity(
           opacity: animatedOpacity,
@@ -382,9 +354,7 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
             child: Material(
               clipBehavior: Clip.antiAlias,
               borderRadius: BorderRadius.circular(32),
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Theme.of(context).colorScheme.inversePrimary
-                  : Theme.of(context).colorScheme.primaryContainer,
+              color: Theme.of(context).colorScheme.primaryContainer,
               child: InkWell(onTap: _handleTap, child: child),
             ),
           ),
@@ -396,10 +366,7 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
         minHeight: 0.0,
         maxHeight: 64,
         alignment: Alignment.centerRight,
-        child: SizedBox(
-          width: overshootBufferWidth,
-          child: _buildButtonContent(),
-        ),
+        child: SizedBox(width: overshootBufferWidth, child: _buildButtonContent()),
       ),
     );
   }
@@ -411,11 +378,7 @@ class _FloatingAcitonMenuButtonState extends State<FloatingAcitonMenuButton>
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Icon(
-            widget.icon,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-            size: 24,
-          ),
+          Icon(widget.icon, color: Theme.of(context).colorScheme.onPrimaryContainer, size: 24),
           const SizedBox(width: 14),
           Text(
             widget.label,

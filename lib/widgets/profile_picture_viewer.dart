@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/post.dart';
 import 'package:redesigned/core/utils/avatar_shape.dart';
 import 'package:redesigned/widgets/profile_picture_viewer_model.dart';
-import 'package:redesigned/widgets/utils/m3expressive/expressive_button.dart';
+import 'package:redesigned/widgets/utils/m3expressive/button_group.dart';
 
 class ExpressiveRectTween extends MaterialRectArcTween {
   ExpressiveRectTween({super.begin, super.end});
@@ -23,11 +23,7 @@ class ProfilePictureViewer extends StatelessWidget {
   final Post post;
   final Animation<double> animation;
 
-  const ProfilePictureViewer({
-    super.key,
-    required this.post,
-    required this.animation,
-  });
+  const ProfilePictureViewer({super.key, required this.post, required this.animation});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +47,7 @@ class ProfilePictureViewer extends StatelessWidget {
               animation: animation,
               builder: (context, child) {
                 return Scaffold(
-                  backgroundColor: colorScheme.surface.withValues(
+                  backgroundColor: colorScheme.surfaceContainerHigh.withValues(
                     alpha: animation.value,
                   ),
                   body: Stack(
@@ -68,9 +64,7 @@ class ProfilePictureViewer extends StatelessWidget {
                             width: 56,
                             child: IconButton(
                               style: ButtonStyle(
-                                iconColor: WidgetStatePropertyAll(
-                                  colorScheme.onSurfaceVariant,
-                                ),
+                                iconColor: WidgetStatePropertyAll(colorScheme.onSurfaceVariant),
                                 backgroundColor: WidgetStatePropertyAll(
                                   colorScheme.surfaceContainerHigh,
                                 ),
@@ -91,23 +85,18 @@ class ProfilePictureViewer extends StatelessWidget {
                     const SizedBox(height: 64),
                     Hero(
                       tag: 'pfp_${post.postId}',
-                      createRectTween: (begin, end) =>
-                          ExpressiveRectTween(begin: begin, end: end),
+                      createRectTween: (begin, end) => ExpressiveRectTween(begin: begin, end: end),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0),
                         child: BlobAvatar(
                           child: CachedNetworkImage(
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            placeholderFadeInDuration: const Duration(
-                              seconds: 0,
+                            // color: colorScheme.primary,
+                            // colorBlendMode: BlendMode.modulate,
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                            placeholderFadeInDuration: const Duration(seconds: 0),
+                            progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(value: downloadProgress.progress),
                             ),
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                                  child: CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                  ),
-                                ),
                             fit: BoxFit.contain,
                             imageUrl: post.person.pfpPath,
                           ),
@@ -143,10 +132,10 @@ class ProfilePictureViewer extends StatelessWidget {
       parent: animation,
       curve: const Interval(0.85, 0.97, curve: Easing.emphasizedDecelerate),
     );
-    final profileAnim = CurvedAnimation(
-      parent: animation,
-      curve: const Interval(0.90, 1.0, curve: Easing.emphasizedDecelerate),
-    );
+    // final profileAnim = CurvedAnimation(
+    //   parent: animation,
+    //   curve: const Interval(0.90, 1.0, curve: Easing.emphasizedDecelerate),
+    // );
     final followersAnim = CurvedAnimation(
       parent: animation,
       curve: const Interval(0.92, 1.0, curve: Easing.emphasizedDecelerate),
@@ -171,11 +160,10 @@ class ProfilePictureViewer extends StatelessWidget {
               Text(
                 post.person.name,
                 style: GoogleFonts.permanentMarker(
-                  textStyle: Theme.of(context).textTheme.headlineLarge
-                      ?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onSurface,
-                      ),
+                  textStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
@@ -183,6 +171,8 @@ class ProfilePictureViewer extends StatelessWidget {
                 post.person.userName,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
                 ),
               ),
             ],
@@ -192,72 +182,105 @@ class ProfilePictureViewer extends StatelessWidget {
         // Action Buttons
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Expanded(
-                child: _StaggeredBubble(
-                  animation: followingAnim,
-                  alignment: Alignment.center,
-                  child: SizedBox(
-                    height: 72,
-                    child: FilledButton.icon(
-                      icon: Icon(
-                        model.isFollowing ? Symbols.done : Symbols.add,
-                        size: 24,
-                        weight: 800,
-                      ),
-                      label: Text(
-                        model.isFollowing ? "Followed" : "Follow",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        shape: WidgetStatePropertyAll(
-                          model.isFollowing
-                              ? RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
-                                )
-                              : StadiumBorder(),
-                        ),
-                        foregroundColor: WidgetStatePropertyAll(
-                          model.isFollowing
-                              ? colorScheme.onSecondaryContainer
-                              : colorScheme.onPrimary,
-                        ),
-                        backgroundColor: WidgetStatePropertyAll(
-                          model.isFollowing
-                              ? colorScheme.secondaryContainer
-                              : colorScheme.primary,
-                        ),
-                      ),
-                      onPressed: model.toggleFollowing,
-                    ),
-                  ),
+          child: _StaggeredBubble(
+            alignment: Alignment.center,
+            animation: followingAnim,
+            child: StandardButtonGroup(
+              alignment: MainAxisAlignment.center,
+              items: [
+                ButtonGroupItem(
+                  roundBorder: !model.isFollowing,
+                  width: MediaQuery.widthOf(context) - 180,
+                  backgroundColor: model.isFollowing ? colorScheme.surfaceDim : colorScheme.primary,
+                  foregroundColor: model.isFollowing
+                      ? colorScheme.primary
+                      : colorScheme.onSecondary,
+                  height: 64,
+                  onPressed: model.toggleFollowing,
+                  icon: model.isFollowing ? Symbols.done : Symbols.add,
+                  label: Text(model.isFollowing ? "Following" : "Follow"),
                 ),
-              ),
-              const SizedBox(width: 4),
-              _StaggeredBubble(
-                animation: profileAnim,
-                alignment: Alignment.center,
-                child: SizedBox(
-                  height: 72,
-                  child: ExpressiveSpringIconButton(
-                    unselectedBg: colorScheme.tertiaryContainer,
-                    unselectedContent: colorScheme.onTertiaryContainer,
-                    selectedBg: colorScheme.surfaceContainerHighest,
-                    selectedContent: colorScheme.onSurface,
-                    unselectedLength: 64,
-                    selectedLength: 78,
-                    isSelected: model.isStarred,
-                    onTap: model.toggleStar,
-                    icon: model.isStarred ? Icons.star : Icons.star_outline,
-                  ),
+                ButtonGroupItem(
+                  width: 56,
+                  height: 64,
+                  onPressed: model.toggleStar,
+                  icon: model.isStarred ? Icons.star : Symbols.star_outline,
+                  foregroundColor: model.isStarred
+                      ? colorScheme.secondary
+                      : colorScheme.onSecondary,
+                  backgroundColor: model.isStarred ? colorScheme.surfaceDim : colorScheme.secondary,
                 ),
-              ),
-            ],
+                ButtonGroupItem(
+                  backgroundColor: colorScheme.tertiaryContainer,
+                  foregroundColor: colorScheme.onTertiaryContainer,
+                  width: 56,
+                  height: 64,
+                  onPressed: () {},
+                  icon: Symbols.message,
+                ),
+              ],
+            ),
           ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: _StaggeredBubble(
+          //         animation: followingAnim,
+          //         alignment: Alignment.center,
+          //         child: SizedBox(
+          //           height: 72,
+          //           child: FilledButton.icon(
+          //             icon: Icon(
+          //               model.isFollowing ? Symbols.done : Symbols.add,
+          //               size: 24,
+          //               weight: 800,
+          //             ),
+          //             label: Text(
+          //               model.isFollowing ? "Followed" : "Follow",
+          //               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          //             ),
+          //             style: ButtonStyle(
+          //               shape: WidgetStatePropertyAll(
+          //                 model.isFollowing
+          //                     ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))
+          //                     : StadiumBorder(),
+          //               ),
+          //               foregroundColor: WidgetStatePropertyAll(
+          //                 model.isFollowing
+          //                     ? colorScheme.onSecondaryContainer
+          //                     : colorScheme.onSecondary,
+          //               ),
+          //               backgroundColor: WidgetStatePropertyAll(
+          //                 model.isFollowing ? colorScheme.secondaryContainer : colorScheme.primary,
+          //               ),
+          //             ),
+          //             onPressed: model.toggleFollowing,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     const SizedBox(width: 4),
+          //     _StaggeredBubble(
+          //       animation: profileAnim,
+          //       alignment: Alignment.center,
+          //       child: SizedBox(
+          //         height: 72,
+          //         child: ExpressiveSpringIconButton(
+          //           unselectedBg: colorScheme.tertiaryContainer,
+          //           unselectedContent: colorScheme.onTertiaryContainer,
+          //           icon: model.isStarred ? Icons.star : Icons.star_outline,
+          //           selectedBg: colorScheme.surfaceBright,
+          //           selectedContent: colorScheme.onSurface,
+          //           unselectedLength: 64,
+          //           selectedLength: 78,
+          //           isSelected: model.isStarred,
+          //           onTap: model.toggleStar,
+          //         ),
+          //       ),
+          //     ),
+
+          //   ],
+          // ),
         ),
         const SizedBox(height: 28),
 
@@ -265,10 +288,7 @@ class ProfilePictureViewer extends StatelessWidget {
           animation: svgRevealAnim,
           child: SvgPicture.asset(
             "assets/zigzag.svg",
-            colorFilter: ColorFilter.mode(
-              colorScheme.outlineVariant,
-              BlendMode.srcIn,
-            ),
+            colorFilter: ColorFilter.mode(colorScheme.outlineVariant, BlendMode.srcIn),
           ),
         ),
         const SizedBox(height: 28),
@@ -309,29 +329,36 @@ class ProfilePictureViewer extends StatelessWidget {
       animation: animation,
       alignment: Alignment.center,
       child: Material(
-        color: colorScheme.surface,
+        color: colorScheme.surfaceDim,
         shape: const StadiumBorder(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              value,
-              style: GoogleFonts.limelight(
-                textStyle: Theme.of(context).textTheme.displaySmall?.copyWith(
+        child: Padding(
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 28, vertical: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                value,
+                style: GoogleFonts.limelight(
+                  textStyle: Theme.of(
+                    context,
+                  ).textTheme.displaySmall?.copyWith(color: colorScheme.onSurfaceVariant),
+                  fontWeight: FontWeight.bold,
                   color: colorScheme.onSurfaceVariant,
                 ),
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
               ),
-            ),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+              Text(
+                label,
+                style: GoogleFonts.limelight(
+                  textStyle: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -343,22 +370,14 @@ class _StaggeredBubble extends StatelessWidget {
   final Widget child;
   final Alignment alignment;
 
-  const _StaggeredBubble({
-    required this.animation,
-    required this.child,
-    required this.alignment,
-  });
+  const _StaggeredBubble({required this.animation, required this.child, required this.alignment});
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
       builder: (context, child) {
-        return Transform.scale(
-          scale: animation.value,
-          alignment: alignment,
-          child: child,
-        );
+        return Transform.scale(scale: animation.value, alignment: alignment, child: child);
       },
       child: child,
     );
@@ -377,11 +396,7 @@ class _HorizontalReveal extends StatelessWidget {
       animation: animation,
       builder: (context, child) {
         return ClipRect(
-          child: Align(
-            alignment: Alignment.center,
-            widthFactor: animation.value,
-            child: child,
-          ),
+          child: Align(alignment: Alignment.center, widthFactor: animation.value, child: child),
         );
       },
       child: child,

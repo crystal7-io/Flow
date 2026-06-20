@@ -35,9 +35,7 @@ class NotificationsView extends StatelessWidget {
                   (filter) => Padding(
                     padding: const EdgeInsets.only(right: 6),
                     child: FilterChip(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       selected: viewModel.selectedFilters.contains(filter),
                       onSelected: (value) {
@@ -51,17 +49,11 @@ class NotificationsView extends StatelessWidget {
             ),
           ),
           _buildHeader(context, "New"),
-          ...viewModel.allNotifications[0].map(
-            (e) => NotifWidget(notification: e),
-          ),
+          ...viewModel.allNotifications[0].map((e) => NotifWidget(notification: e)),
           _buildHeader(context, "Today"),
-          ...viewModel.allNotifications[1].map(
-            (e) => NotifWidget(notification: e),
-          ),
+          ...viewModel.allNotifications[1].map((e) => NotifWidget(notification: e)),
           _buildHeader(context, "Yesterday"),
-          ...viewModel.allNotifications[2].map(
-            (e) => NotifWidget(notification: e),
-          ),
+          ...viewModel.allNotifications[2].map((e) => NotifWidget(notification: e)),
         ],
       ),
     );
@@ -145,9 +137,7 @@ class _NotifWidgetState extends State<NotifWidget> {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.2,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                               ),
@@ -166,35 +156,30 @@ class _NotifWidgetState extends State<NotifWidget> {
                           const SizedBox(height: 4),
                           Text(
                             widget.notification.textContent,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
+                              color: Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0,
                             ),
                           ),
                           if (type == NotifType.commentLike)
                             Text(
-                              (widget.notification as CommentLikeNotficaiton)
-                                  .commentText,
+                              (widget.notification as CommentLikeNotficaiton).commentText,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                                 fontSize: 14,
                               ),
                             )
                           else if (type == NotifType.commentReply)
                             Text(
-                              (widget.notification as CommentReplyNotficaiton)
-                                  .commentText,
+                              (widget.notification as CommentReplyNotficaiton).commentText,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                                 fontSize: 14,
                               ),
                             ),
@@ -203,9 +188,7 @@ class _NotifWidgetState extends State<NotifWidget> {
                     ),
                     const SizedBox(width: 16),
                     if (type == NotifType.follow)
-                      context.watch<AppService>().isFollowing(
-                            widget.notification.notifier,
-                          )
+                      context.watch<AppService>().isFollowing(widget.notification.notifier)
                           ? TextButton(
                               onPressed: () {
                                 context.read<AppService>().removeFollower(
@@ -223,25 +206,18 @@ class _NotifWidgetState extends State<NotifWidget> {
                               child: const Text("Follow"),
                             )
                     else if (type == NotifType.commentReply)
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.expand_more),
-                      )
+                      IconButton(onPressed: () {}, icon: const Icon(Icons.expand_more))
                     else
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: CachedNetworkImage(
                           height: 50,
                           width: 50,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
                           placeholderFadeInDuration: const Duration(seconds: 0),
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Center(
-                                child: CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                ),
-                              ),
+                          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(value: downloadProgress.progress),
+                          ),
                           fit: BoxFit.cover,
                           imageUrl:
                               "https://drive.google.com/uc?export=view&id=${widget.notification.contextImagePath}",
