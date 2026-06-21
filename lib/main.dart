@@ -17,9 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (AppConfig.useAuth) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } else {
     // Ensure default user is initialized for local development
     await LocalUserDataSource().initializeDefaultUser();
@@ -35,36 +33,27 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) => AppProvider(
     child: Consumer<AppService>(
       builder: (context, appService, child) {
-        DynamicScheme createDynamicScheme(
-          Brightness brightness,
-          bool highContrast,
-        ) => DynamicScheme.withDefaults(
-          // sourceColor: TonalPaletteSourceColor.fromArgb(
-          //   appService.seedColor.toARGB32(),
-          // ),
-          variant: .vibrant,
-          isDark: brightness == .dark,
-          contrastLevel: highContrast ? 1.0 : 0.0,
-          platform: .phone,
-          specVersion: .spec2026,
-        );
+        DynamicScheme createDynamicScheme(Brightness brightness, bool highContrast) =>
+            DynamicScheme.withDefaults(
+              // sourceColor: TonalPaletteSourceColor.fromArgb(
+              //   appService.seedColor.toARGB32(),
+              // ),
+              variant: .vibrant,
+              isDark: brightness == .dark,
+              contrastLevel: highContrast ? 1.0 : 0.0,
+              platform: .phone,
+              specVersion: .spec2026,
+            );
 
-        ColorScheme createColorScheme(
-          Brightness brightness,
-          bool highContrast,
-        ) => createDynamicScheme(
-          brightness,
-          highContrast,
-        ).toColorScheme(lazy: true);
+        ColorScheme createColorScheme(Brightness brightness, bool highContrast) =>
+            createDynamicScheme(brightness, highContrast).toColorScheme(lazy: true);
 
         ThemeData createTheme({required ColorScheme colorScheme}) {
           return ThemeData(
             useMaterial3: true,
             colorScheme: colorScheme,
             textTheme: GoogleFonts.googleSansFlexTextTheme(),
-            splashFactory: kIsWeb
-                ? InkRipple.splashFactory
-                : InkSparkle.splashFactory,
+            splashFactory: kIsWeb ? InkRipple.splashFactory : InkSparkle.splashFactory,
             iconTheme: IconThemeData(
               fill: 0.0,
               weight: 400.0,
@@ -81,12 +70,8 @@ class MainApp extends StatelessWidget {
           themeMode: appService.themeMode,
           theme: createTheme(colorScheme: createColorScheme(.light, false)),
           darkTheme: createTheme(colorScheme: createColorScheme(.dark, false)),
-          highContrastTheme: createTheme(
-            colorScheme: createColorScheme(.light, true),
-          ),
-          highContrastDarkTheme: createTheme(
-            colorScheme: createColorScheme(.dark, true),
-          ),
+          highContrastTheme: createTheme(colorScheme: createColorScheme(.light, true)),
+          highContrastDarkTheme: createTheme(colorScheme: createColorScheme(.dark, true)),
           routerConfig: context.read<GoRouter>(),
         );
       },

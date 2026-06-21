@@ -86,4 +86,8 @@ flutter:
     - stories/
     - assets/json/
     - assets/zigzag.svg
+  fonts:
+    - family: Google Sans Flex
+      fonts:
+        - asset: assets/fonts/googlesansflex/GoogleSansFlex.ttf
   uses-material-design: true

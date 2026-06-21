@@ -131,10 +131,8 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
           child: ScaleTransition(alignment: Alignment.bottomRight, scale: animation, child: child),
         );
       },
-      layoutBuilder: (currentChild, previousChildren) => Stack(
-        alignment: Alignment.topLeft,
-        children: [...previousChildren, if (currentChild != null) currentChild],
-      ),
+      layoutBuilder: (currentChild, previousChildren) =>
+          Stack(alignment: Alignment.topLeft, children: [...previousChildren, ?currentChild]),
       child: !context.watch<AppService>().isNavBarVisible || MediaQuery.sizeOf(context).width > 600
           ? const SizedBox(key: ValueKey('fab_empty'))
           : currentIndex == 0
