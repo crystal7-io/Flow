@@ -478,14 +478,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
-  flutter_carousel_widget:
-    dependency: "direct main"
-    description:
-      name: flutter_carousel_widget
-      sha256: "6473e6df04bfafea70efd58251fe5945d5aa8d19461575c1b9d83643f08e0c77"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
@@ -824,14 +816,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
-  m3_carousel:
-    dependency: "direct main"
-    description:
-      name: m3_carousel
-      sha256: "1b1afd3c445bb3aa76a39e04f1bf1c62541d36917818cdf609b7d5e5529aad6d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.1"
   m3e_buttons:
     dependency: "direct main"
     description:

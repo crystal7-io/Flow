@@ -38,7 +38,7 @@ class MainApp extends StatelessWidget {
               // sourceColor: TonalPaletteSourceColor.fromArgb(
               //   appService.seedColor.toARGB32(),
               // ),
-              variant: .vibrant,
+              variant: appService.variant,
               isDark: brightness == .dark,
               contrastLevel: highContrast ? 1.0 : 0.0,
               platform: .phone,

@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:libmonet/libmonet.dart';
+import 'package:redesigned/core/services/app_service.dart';
 import 'package:redesigned/core/utils/color.dart';
 
 class ProfilePictureViewerModel extends ChangeNotifier {
   final ScrollController scrollController = ScrollController();
+
+  final AppService _appService;
   // double _expansionProgress = 0.0;
 
   bool _isFollowing = false;
@@ -16,7 +19,7 @@ class ProfilePictureViewerModel extends ChangeNotifier {
   ColorScheme? _colorScheme;
   ColorScheme? get colorScheme => _colorScheme;
 
-  ProfilePictureViewerModel() {
+  ProfilePictureViewerModel({required this._appService}) {
     // scrollController.addListener(_onScroll);
   }
 
@@ -27,7 +30,7 @@ class ProfilePictureViewerModel extends ChangeNotifier {
       );
       _colorScheme = DynamicScheme.withDefaults(
         sourceColor: TonalPaletteSourceColor.fromArgb(seedColor.toARGB32()),
-        variant: .vibrant,
+        variant: _appService.variant,
         isDark: brightness == .dark,
         platform: .phone,
         specVersion: .spec2026,

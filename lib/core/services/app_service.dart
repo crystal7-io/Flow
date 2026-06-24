@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:libmonet/libmonet.dart';
 import 'package:redesigned/core/models/models.dart';
 import 'package:redesigned/data/mock_data.dart';
 
 class AppService extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
   ThemeMode get themeMode => _themeMode;
+
+  Variant _variant = .vibrant;
+  Variant get variant => _variant;
+
+  void changeThemeVariant(Variant value) {
+    _variant = value;
+    notifyListeners();
+  }
 
   void changeTheme(ThemeMode mode) {
     _themeMode = mode;
@@ -21,8 +30,7 @@ class AppService extends ChangeNotifier {
       return true;
     }
     if (_themeMode == ThemeMode.system &&
-        SchedulerBinding.instance.platformDispatcher.platformBrightness ==
-            Brightness.dark) {
+        SchedulerBinding.instance.platformDispatcher.platformBrightness == Brightness.dark) {
       return true;
     }
     return false;

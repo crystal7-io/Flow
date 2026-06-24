@@ -19,7 +19,6 @@ dependencies:
   firebase_auth: ^6.0.0
   cloud_firestore: ^6.0.0
   flutter_bounceable: ^1.1.0
-  flutter_carousel_widget: ^3.1.0
   flutter_launcher_icons: ^0.14.4
   flutter_masonry_view: ^0.0.2
   flutter_staggered_grid_view: ^0.7.0
@@ -28,7 +27,6 @@ dependencies:
   http: ^1.2.1
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
-  m3_carousel: ^2.0.2
   material_symbols_icons: ^4.2719.3
   # media_kit: ^1.1.10+1
   # media_kit_libs_video: ^1.0.4
@@ -89,5 +87,5 @@ flutter:
   fonts:
     - family: Google Sans Flex
       fonts:
-        - asset: assets/fonts/googlesansflex/GoogleSansFlex.ttf
+        - asset: assets/fonts/GoogleSansFlex.ttf
   uses-material-design: true
