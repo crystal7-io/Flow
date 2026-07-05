@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -18,11 +16,11 @@ class ProfileView extends StatelessWidget {
     final theme = Theme.of(context);
 
     // Full time length curve for elements entering screen
-    final fullEnterScreenCurve = CurvedAnimation(
-      parent: animation,
-      curve: Easing.standard,
-      reverseCurve: Easing.standardAccelerate,
-    );
+    // final fullEnterScreenCurve = CurvedAnimation(
+    //   parent: animation,
+    //   curve: Easing.standard,
+    //   reverseCurve: Easing.standardAccelerate,
+    // );
 
     // Background animation curve
     final backgroundCurve = CurvedAnimation(

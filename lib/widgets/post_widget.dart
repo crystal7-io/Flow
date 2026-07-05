@@ -8,7 +8,6 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:redesigned/core/models/post.dart';
 import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/core/utils/format_post_timestamp.dart';
-import 'package:redesigned/screens/profile/profile_view.dart';
 import 'package:redesigned/widgets/post_viewer.dart';
 import 'package:redesigned/widgets/profile_picture_viewer.dart';
 import 'package:redesigned/widgets/share_sheet.dart';

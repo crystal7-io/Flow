@@ -277,16 +277,17 @@ class _CommentSheetState extends State<CommentSheet> {
                     //   ),
                     // ),
                     const SizedBox(height: 6),
+
                     // Metadata: Time and Likes count
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 8),
-                    //   child: Text(
-                    //     "${_formatDateTime(comment.dateTime)}  •  ${comment.likes} Likes",
-                    //     style: theme.textTheme.bodySmall?.copyWith(
-                    //       color: theme.colorScheme.onSurfaceVariant,
-                    //     ),
-                    //   ),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(
+                        "${_formatDateTime(comment.dateTime)}  •  ${comment.likes} Likes",
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

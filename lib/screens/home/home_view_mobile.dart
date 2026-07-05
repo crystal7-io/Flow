@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/screens/home/home_view_model.dart';
@@ -10,7 +9,6 @@ import 'package:redesigned/widgets/utils/open_container.dart';
 import 'package:redesigned/widgets/post_widget.dart';
 import 'package:redesigned/core/services/app_service.dart';
 import 'package:redesigned/screens/search/search_view.dart';
-import 'package:redesigned/widgets/utils/sine_wave_divider.dart';
 import 'package:redesigned/widgets/utils/wave_divider.dart';
 
 class MobileHomeView extends StatelessWidget {

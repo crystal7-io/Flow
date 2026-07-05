@@ -18,7 +18,7 @@ class WaveText extends StatefulWidget {
 class _WaveTextState extends State<WaveText> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   final WaveStage _currentStage = WaveStage.forward;
-  bool _isDelaying = true;
+  // bool _isDelaying = true;
   Timer? _delayTimer;
 
   @override
@@ -26,17 +26,17 @@ class _WaveTextState extends State<WaveText> with SingleTickerProviderStateMixin
     super.initState();
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
 
-    if (widget.delay == Duration.zero) {
-      _isDelaying = false;
-      _controller.forward();
-    } else {
-      _delayTimer = Timer(widget.delay, () {
-        if (mounted) {
-          setState(() => _isDelaying = false);
-          _controller.forward();
-        }
-      });
-    }
+    // if (widget.delay == Duration.zero) {
+    //   _isDelaying = false;
+    //   _controller.forward();
+    // } else {
+    //   _delayTimer = Timer(widget.delay, () {
+    //     if (mounted) {
+    //       setState(() => _isDelaying = false);
+    //       _controller.forward();
+    //     }
+    //   });
+    // }
   }
 
   @override
