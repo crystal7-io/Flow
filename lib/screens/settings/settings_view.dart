@@ -15,27 +15,26 @@ class SettingsView extends StatelessWidget {
     final viewModel = context.watch<SettingsViewModel>();
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          "Settings",
-          style: TextStyle(
-            fontSize: 24,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   title: Text(
+      //     "Settings",
+      //     style: TextStyle(
+      //       fontSize: 24,
+      //       color: Theme.of(context).colorScheme.onSurface,
+      //     ),
+      //   ),
+      // ),
       body: ListView(
         children: [
+          SizedBox(height: MediaQuery.paddingOf(context).top + 8),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: SearchBar(
-              padding: WidgetStatePropertyAll(
-                EdgeInsets.symmetric(horizontal: 16),
-              ),
+              padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
               leading: Icon(Symbols.search, weight: 600),
               elevation: WidgetStatePropertyAll(0),
-              hintText: "Search settings",
+              hintText: "Search Settings",
             ),
           ),
           const SizedBox(height: 8),
@@ -58,8 +57,7 @@ class SettingsView extends StatelessWidget {
             icon: Icons.notifications_outlined,
             title: "Notifications",
             subtitle: "Control your alerts and messaging sounds.",
-            onTap: () =>
-                _pushSharedAxis(context, const NotificationSettingsScreen()),
+            onTap: () => _pushSharedAxis(context, const NotificationSettingsScreen()),
           ),
           _buildSettingsTile(
             context,

@@ -93,7 +93,7 @@ List<Post> posts = <Post>[
     postId: 002,
     person: accounts[22].person,
     subTitle: "Beautiful cloud mountain scenery",
-    sourcePath: "1n6UUe6Yk1ZTB5DKP55lP6CNZia7_r7KE",
+    sourcePath: "https://drive.google.com/uc?export=view&id=1n6UUe6Yk1ZTB5DKP55lP6CNZia7_r7KE",
     type: PostType.reel,
     dateTime: DateTime(2024, 3, 16, 5, 24, 54),
   ),
@@ -112,9 +112,9 @@ List<Post> posts = <Post>[
     aspectRatio: 3 / 2.5,
     person: accounts[19].person,
     imagePaths: [
-      "1uVVJIsFQT-qz23Nph1rzZt_a7qwDQqI9",
-      "1VFPF46ib6BmpNb18t5ovY4swmk_wuwq9",
-      "1O5rHhl8yg5XhPWdhddAu1Bw2VRyrWH43",
+      "https://drive.google.com/uc?export=view&id=1uVVJIsFQT-qz23Nph1rzZt_a7qwDQqI9",
+      "https://drive.google.com/uc?export=view&id=1VFPF46ib6BmpNb18t5ovY4swmk_wuwq9",
+      "https://drive.google.com/uc?export=view&id=1O5rHhl8yg5XhPWdhddAu1Bw2VRyrWH43",
     ],
     dateTime: DateTime(2024, 2, 23, 3, 43, 21),
     postId: 004,
@@ -142,9 +142,8 @@ List<Post> posts = <Post>[
   ImagePostObject(
     postId: 005,
     person: accounts[10].person,
-    subTitle:
-        "A wonderful scenery of hot air balloon . I wish I could visit there someday.",
-    imagePath: "1VyZJ9yYhXcw-wCxsItBulgl3ARzTjALo",
+    subTitle: "A wonderful scenery of hot air balloon . I wish I could visit there someday.",
+    imagePath: "https://drive.google.com/uc?export=view&id=1VyZJ9yYhXcw-wCxsItBulgl3ARzTjALo",
     aspectRatio: 4 / 5,
     type: PostType.image,
     tags: [
@@ -167,7 +166,7 @@ List<Post> posts = <Post>[
     person: accounts[27].person,
     subTitle:
         "Ready to dive in?  Immerse yourself in breathtaking VR worlds. Explore our VR offers.",
-    imagePath: "1HURvDDRB2QxF7z2vFnLQ6KnFxDI4Xryn",
+    imagePath: "https://drive.google.com/uc?export=view&id=1HURvDDRB2QxF7z2vFnLQ6KnFxDI4Xryn",
     type: PostType.image,
     dateTime: DateTime(2024, 3, 16, 5, 24, 54),
   ),
@@ -185,8 +184,8 @@ Post getPostFromPostID(int id) {
 List<List<Comment>> comments = [
   [
     Comment(
-      person: accounts[25].person,
-      text: "For Inazuma’s sake, someone please stop her",
+      person: accounts[17].person,
+      text: "Wow, absolutely incredible work! This made my day.",
       dateTime: "8 min",
       replies: <CommentReply>[
         CommentReply(
@@ -221,22 +220,59 @@ List<List<Comment>> comments = [
         ),
       ],
     ),
+
     Comment(
-      person: accounts[20].person,
-      text:
-          "All soldiers, alert. Gather all ships and  take people out of Inazuma.",
+      person: accounts[5].person,
+      text: "Honestly, I am such a huge fan of everything you do. Keep pushing forward! 🚀",
       dateTime: "18 min",
     ),
+    Comment(person: accounts[13].person, text: "Good work!!", dateTime: "26 min"),
     Comment(
-      person: accounts[24].person,
-      text: "Always ready for free food 🔥",
-      dateTime: "26 min",
-    ),
-    Comment(
-      person: accounts[16].person,
-      text: "Will I get some beer there ?",
+      person: accounts[11].person,
+      text: "This is exactly what I needed to see today. Brilliant stuff.",
       dateTime: "39 min",
     ),
+    Comment(person: accounts[0].person, text: "So inspiring honestly.", dateTime: "42 min"),
+    Comment(
+      person: accounts[22].person,
+      text: "The dedication here is unmatched. Seriously impressive results!",
+      dateTime: "45 min",
+    ),
+    Comment(person: accounts[7].person, text: "Love this so much!", dateTime: "51 min"),
+    Comment(
+      person: accounts[19].person,
+      text: "You can really tell how much effort went into this. Outstanding job!",
+      dateTime: "58 min",
+    ),
+    Comment(person: accounts[3].person, text: "Pure perfection 💯", dateTime: "1 hr"),
+    Comment(
+      person: accounts[6].person,
+      text: "Count me in as a lifelong supporter, this is legendary.",
+      dateTime: "1 hr",
+    ),
+    Comment(person: accounts[1].person, text: "Keep it up!", dateTime: "2 hr"),
+    Comment(
+      person: accounts[14].person,
+      text: "I've been following your journey for a while and you just keep getting better.",
+      dateTime: "2 hr",
+    ),
+    Comment(
+      person: accounts[8].person,
+      text: "Such a vibe, love the energy here.",
+      dateTime: "3 hr",
+    ),
+    Comment(
+      person: accounts[2].person,
+      text: "This deserves way more recognition. Amazing work!",
+      dateTime: "3 hr",
+    ),
+    Comment(person: accounts[12].person, text: "So clean!", dateTime: "4 hr"),
+    Comment(
+      person: accounts[26].person,
+      text: "You genuinely inspire me to work harder. Thank you for sharing this!",
+      dateTime: "4 hr",
+    ),
+    Comment(person: accounts[4].person, text: "Simply awesome 🙌", dateTime: "5 hr"),
   ],
 ];
 
@@ -365,17 +401,11 @@ List<Chat> chats = [
     lastTime: "13:35",
     isActive: true,
   ),
-  Chat(
-    person: accounts[12].person,
-    newMessage: 0,
-    lastMessage: "Byee!!!",
-    lastTime: "10:23",
-  ),
+  Chat(person: accounts[12].person, newMessage: 0, lastMessage: "Byee!!!", lastTime: "10:23"),
   Chat(
     person: accounts[21].person,
     newMessage: 1,
-    lastMessage:
-        "A human gave me a flower today, do you know what to do with this ?",
+    lastMessage: "A human gave me a flower today, do you know what to do with this ?",
     lastTime: "10:04",
     isActive: true,
   ),
@@ -413,6 +443,70 @@ List<Chat> chats = [
     lastMessage: "Cya Later!",
     lastTime: "2 day",
   ),
+  // 10 New Chats Added Below (avoiding 20 and 25):
+  Chat(
+    person: accounts[0].person,
+    newMessage: 5,
+    lastMessage: "Are you free right now?",
+    lastTime: "18:45",
+    isActive: true,
+  ),
+  Chat(
+    person: accounts[1].person,
+    newMessage: 0,
+    lastMessage: "Sounds good to me.",
+    lastMessageState: LastMessageState.sentByUserAndSeen,
+    lastTime: "17:10",
+  ),
+  Chat(
+    person: accounts[2].person,
+    newMessage: 1,
+    lastMessage: "Don't forget the documents!",
+    lastTime: "15:30",
+    isActive: true,
+  ),
+  Chat(person: accounts[3].person, newMessage: 0, lastMessage: "On my way!", lastTime: "14:15"),
+  Chat(
+    person: accounts[4].person,
+    newMessage: 4,
+    lastMessage: "Can you review this code?",
+    lastTime: "11:50",
+    isActive: true,
+  ),
+  Chat(
+    person: accounts[5].person,
+    newMessage: 0,
+    lastMessage: "Thanks for the help!",
+    lastMessageState: LastMessageState.sentByUserAndSeen,
+    lastTime: "09:15",
+  ),
+  Chat(
+    person: accounts[26].person,
+    newMessage: 2,
+    lastMessage: "Let's grab lunch tomorrow.",
+    lastTime: "08:30",
+  ),
+  Chat(
+    person: accounts[14].person,
+    newMessage: 0,
+    lastMessage: "Got it.",
+    lastMessageState: LastMessageState.sentByUserAndUnseen,
+    lastTime: "Yesterday",
+  ),
+  Chat(
+    person: accounts[15].person,
+    newMessage: 1,
+    lastMessage: "Where are you?",
+    lastTime: "Yesterday",
+    isActive: true,
+  ),
+  Chat(
+    person: accounts[23].person,
+    newMessage: 0,
+    lastMessage: "See you at the meeting.",
+    lastMessageState: LastMessageState.sentByUserAndSeen,
+    lastTime: "3 day",
+  ),
 ];
 
 List<Account> accounts = [
@@ -423,6 +517,7 @@ List<Account> accounts = [
       userName: "EthanB_7",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1t8ON-QsNgAC1ry7OHNzBbG1uLiLIjES2',
+      profilePictureShape: 'circle',
     ),
     followers: [],
     following: [],
@@ -435,6 +530,7 @@ List<Account> accounts = [
       userName: "lucas_ands1",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1Y0QB4V0MeyoRUO0QQZu5qFMhT7ajlxzb',
+      profilePictureShape: 'heart',
     ),
     followers: [],
     following: [],
@@ -447,6 +543,7 @@ List<Account> accounts = [
       userName: "am_i_ayaya",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1dlzU80M9PEuPhX2qKo1QpvsWyaXIcv-F',
+      profilePictureShape: 'flower',
     ),
     followers: [],
     following: [],
@@ -459,6 +556,7 @@ List<Account> accounts = [
       userName: "jack_mil_25",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1dlzU80M9PEuPhX2qKo1QpvsWyaXIcv-F',
+      profilePictureShape: 'square',
     ),
     followers: [],
     following: [],
@@ -471,6 +569,7 @@ List<Account> accounts = [
       userName: "this.is.liam123",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1SiEfxr1q--HXdBy8q1ckx7IirlLt3R52',
+      profilePictureShape: 'slanted',
     ),
     followers: [],
     following: [],
@@ -483,6 +582,7 @@ List<Account> accounts = [
       userName: "chris_t71",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1sp3oMTRkRXPRMXZfaRq6cRt3oNrNvwCt',
+      profilePictureShape: 'cookie6Sided',
     ),
     followers: [],
     following: [],
@@ -495,6 +595,7 @@ List<Account> accounts = [
       userName: "evans_mat",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1QD_kj1U4vstuKn1wBCWtzbrtlMYsG-7y',
+      profilePictureShape: 'clover4Leaf',
     ),
     followers: [],
     following: [],
@@ -507,6 +608,7 @@ List<Account> accounts = [
       userName: "j_chloe",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1C5XUQeqY8bvi2DE0KRi7zc_XIW3721C1',
+      profilePictureShape: 'ghostish',
     ),
     followers: [],
     following: [],
@@ -519,6 +621,7 @@ List<Account> accounts = [
       userName: "archie_white7",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1KSuYNIP2S9luQxptHYzOoKa8URJozIe1',
+      profilePictureShape: 'arch',
     ),
     bio: "Shaping spaces, one sketch at a time.",
     followers: [],
@@ -532,6 +635,7 @@ List<Account> accounts = [
       userName: "sylvieshine9",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1HNDR8qiIArymcwzzThjXPblRf04nnSMn',
+      profilePictureShape: 'pill',
     ),
     bio: "Your Friendly Celebrity Archon of Teyvat",
     pronouns: "she/her",
@@ -546,6 +650,7 @@ List<Account> accounts = [
       userName: "director_hu54",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1CQm-RSOfQxlKrXTOHlj_5JqhsqLsu8rq',
+      profilePictureShape: 'ghostish',
     ),
     followers: [],
     following: [],
@@ -558,6 +663,7 @@ List<Account> accounts = [
       userName: "its_davy_young",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1fuW9MzvqzgKl7Pt90v4eNUpMCRde1aGW',
+      profilePictureShape: 'pill',
     ),
     followers: [],
     following: [],
@@ -570,6 +676,7 @@ List<Account> accounts = [
       userName: "m_jose_4",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1_ItVD4thjd2pjrthRRwL3zOcRYncTKJV',
+      profilePictureShape: 'puffy',
     ),
     followers: [],
     following: [],
@@ -582,6 +689,7 @@ List<Account> accounts = [
       userName: "emyy_3_davy",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=11X_C6Kuddo4oN3NEBl9uyJ_rjEp0UDdN',
+      profilePictureShape: 'puffy',
     ),
     followers: [],
     following: [],
@@ -594,6 +702,7 @@ List<Account> accounts = [
       userName: "sarah.is.here3",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1ImyUUqXDNoOMAG-CQd6wAmCJpUS4F1nQ',
+      profilePictureShape: 'clamShell',
     ),
     followers: [],
     following: [],
@@ -606,6 +715,7 @@ List<Account> accounts = [
       userName: "olivia_brow23",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1WkCovKGcGiTR1IbeJVIb8q4I7jZSdAxl',
+      profilePictureShape: 'fan',
     ),
     followers: [],
     following: [],
@@ -618,6 +728,7 @@ List<Account> accounts = [
       userName: "your_sophie_here",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1BLZvqwu3Sah4NkisgGo1oMq-HSIpy2qV',
+      profilePictureShape: 'cookie12Sided',
     ),
     followers: [],
     following: [],
@@ -630,6 +741,7 @@ List<Account> accounts = [
       userName: "iam_ellie_vance",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1FjyMwEPYPNPXkOBKMGRApIS9LHwHpGGe',
+      profilePictureShape: 'cookie4Sided',
     ),
     followers: [],
     following: [],
@@ -642,6 +754,7 @@ List<Account> accounts = [
       userName: "emma_wil71",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1FTdyeb7AQRE1GPxPCQNQPIw4lCN5p5r6',
+      profilePictureShape: 'softBurst',
     ),
     followers: [],
     following: [],
@@ -654,6 +767,7 @@ List<Account> accounts = [
       userName: "cook.with.jane",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1nnB-bR3zVtWpgrDfSDEyFM0vi0iVss1S',
+      profilePictureShape: 'bun',
     ),
     followers: ['director_hu54', 'princess_purple', 'furina_sunshine'],
     following: ['furina_sunshine'],
@@ -666,6 +780,7 @@ List<Account> accounts = [
       userName: "maddie_white_79",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1-Kbjq30deI8v3Hb5SZo-7mUGkx-4Te1z',
+      profilePictureShape: 'diamond',
     ),
     followers: [],
     following: [],
@@ -678,6 +793,7 @@ List<Account> accounts = [
       userName: "i.am.jenny.ig",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1SrM-csyz5iCWM3rzDGK_OVCJ83I1swN4',
+      profilePictureShape: 'ghostish',
     ),
     followers: [],
     following: [],
@@ -690,6 +806,7 @@ List<Account> accounts = [
       userName: "sofia_garxcia",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1ECGhGr_tUXRlbPSOM0w8qa_OZ0krp9h7',
+      profilePictureShape: 'clover8Leaf',
     ),
     followers: [],
     following: [],
@@ -702,6 +819,7 @@ List<Account> accounts = [
       userName: "alkahol.iz.nat.fo.kidz",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1foQW29-ihziU6MMFYY7mc0VxLCYGkT81',
+      profilePictureShape: 'boom',
     ),
     followers: [],
     following: [],
@@ -713,7 +831,8 @@ List<Account> accounts = [
       name: "Walt Z",
       userName: "eons_adrift",
       profilePicturePath:
-          'https://drive.google.com/uc?export=view&id=1ip4pOCckeEwKwDPxDl-cfA09rWifMwyD',
+          'https://drive.google.com/uc?export=view&id=1fuW9MzvqzgKl7Pt90v4eNUpMCRde1aGW',
+      profilePictureShape: 'bun',
     ),
     followers: [],
     following: [],
@@ -726,6 +845,7 @@ List<Account> accounts = [
       userName: "conqurer_of_demons",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1u0z89yW1WxTUutqhQ-8DrcBlC1IAC5tI',
+      profilePictureShape: 'gem',
     ),
     followers: [],
     following: [],
@@ -738,6 +858,7 @@ List<Account> accounts = [
       userName: "hannah_smi_34",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=15hTDclZREA7NSTgiTEclmSEW3xZNz_YH',
+      profilePictureShape: 'softBoom',
     ),
     followers: [],
     following: [],
@@ -750,6 +871,7 @@ List<Account> accounts = [
       userName: "is.this.helen.32",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1fTisKjCd5c_VEbSBgyIE0pissAajfVyk',
+      profilePictureShape: 'ghostish',
     ),
     followers: [],
     following: [],
@@ -762,13 +884,13 @@ List<Account> accounts = [
       userName: "mr.zhang",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1JVAFXYHJXOTyRwoU9wtTlVOFm1w-I7_P',
+      profilePictureShape: 'cookie4Sided',
     ),
     followers: [],
     following: [],
     posts: [],
   ),
 ];
-
 Person getPersonFromUserName(String userName) {
   for (var element in accounts) {
     if (element.person.userName == userName) {
@@ -819,73 +941,95 @@ List<Note> notes = [
   Note(person: accounts[10].person, note: "Finally completed my long work !"),
   Note(person: accounts[24].person, note: "blahhh!"),
   Note(person: accounts[16].person, note: "I'll be sleeping whole day today"),
-  Note(
-    person: accounts[19].person,
-    note: "I am never cooking fried tofu again 😭",
-  ),
+  Note(person: accounts[19].person, note: "I am never cooking fried tofu again 😭"),
 ];
 
 List<ChatText> chatTexts = [
+  ChatText(textid: 0, text: "cyaa, byee", time: "8:26", repliedTo: 1, sentByUser: true),
+  ChatText(textid: 1, text: "byee", time: "8:26"),
+  ChatText(textid: 2, text: "Okayy than, see ya tomorrow", time: "8:25"),
   ChatText(
-    text: "cyaa, byee",
-    time: "8:26",
-    textid: 13,
-    repliedTo: 12,
-    sentByUser: true,
-  ),
-  ChatText(text: "byee", time: "8:26", textid: 12),
-  ChatText(text: "Okayy than, see ya tomorrow", time: "8:25", textid: 11),
-  ChatText(
+    textid: 3,
     text: "Alr, I will call them all",
     time: "8:25",
-    textid: 10,
-    repliedTo: 9,
-    sentByUser: true,
-  ),
-  ChatText(
-    text: "Ya, it's been a long time since we all went out together",
-    time: "8:25",
-    textid: 9,
-    repliedTo: 8,
-  ),
-  ChatText(
-    text: "Okay, should I call others too ??",
-    time: "8:25",
-    textid: 8,
-    sentByUser: true,
-  ),
-  ChatText(textid: 7, text: "I am in 👍", time: "8:24", repliedTo: 5),
-  ChatText(
-    textid: 6,
-    text: "A new park just opened last week",
-    time: "8:24",
-    sentByUser: true,
-  ),
-  ChatText(
-    textid: 5,
-    text: "So wanna go hangout morrow ?",
-    time: "8:24",
+    repliedTo: 4,
     sentByUser: true,
   ),
   ChatText(
     textid: 4,
+    text: "Ya, it's been a long time since we all went out together",
+    time: "8:25",
+    repliedTo: 5,
+  ),
+  ChatText(textid: 5, text: "Okay, should I call others too ??", time: "8:25", sentByUser: true),
+  ChatText(textid: 6, text: "I am in 👍", time: "8:24", repliedTo: 8),
+  ChatText(textid: 7, text: "A new park just opened last week", time: "8:24", sentByUser: true),
+  ChatText(textid: 8, text: "So wanna go hangout morrow ?", time: "8:24", sentByUser: true),
+  ChatText(
+    textid: 9,
     text: "Had hard time getting into my room, its on second floor",
     time: "8:24",
   ),
+  ChatText(textid: 10, text: "Heyy, don't remind me it", time: "8:23", repliedTo: 11),
   ChatText(
-    textid: 3,
-    text: "Heyy, don't remind me it",
-    time: "8:23",
-    repliedTo: 2,
-  ),
-  ChatText(
-    textid: 2,
+    textid: 11,
     text: "Hope you don't get scared while sleepin at night",
     time: "8:23",
     sentByUser: true,
   ),
-  ChatText(textid: 1, text: "Just got shifted to the new house", time: "8:23"),
-  ChatText(textid: 0, text: "hii", time: "8:23"),
+  ChatText(textid: 12, text: "Just got shifted to the new house", time: "8:23"),
+  ChatText(textid: 13, text: "hii", time: "8:23"),
+
+  ChatText(textid: 14, text: "Done! Back online now.", time: "8:22"),
+  ChatText(textid: 15, text: "Will do!", time: "8:21"),
+  ChatText(
+    textid: 16,
+    text: "Cool, text me when you're fully settled in.",
+    time: "8:20",
+    sentByUser: true,
+  ),
+  ChatText(textid: 17, text: "Anyway, I need to go unlock the main gate.", time: "8:19"),
+  ChatText(textid: 18, text: "Haha maybe a little bit 👻", time: "8:17", sentByUser: true),
+  ChatText(
+    textid: 19,
+    text: "Oh shut up, you're just trying to scare me.",
+    time: "8:16",
+    repliedTo: 20,
+  ),
+  ChatText(
+    textid: 20,
+    text: "The one with the overgrown garden. People say it's haunted.",
+    time: "8:15",
+    sentByUser: true,
+  ),
+  ChatText(textid: 21, text: "Wait, what creepy house??", time: "8:13", repliedTo: 22),
+  ChatText(
+    textid: 22,
+    text: "Except for that creepy old house down the street?",
+    time: "8:12",
+    sentByUser: true,
+  ),
+  ChatText(textid: 23, text: "Not yet, it looks pretty quiet though.", time: "8:11"),
+  ChatText(
+    textid: 24,
+    text: "By the way, did you check out the neighborhood?",
+    time: "8:10",
+    sentByUser: true,
+  ),
+  ChatText(textid: 25, text: "Priorities indeed haha", time: "8:08", sentByUser: true),
+  ChatText(
+    textid: 26,
+    text: "Priorities! 😂 Of course, that was first.",
+    time: "8:07",
+    repliedTo: 27,
+  ),
+  ChatText(textid: 27, text: "Sweet. Did you unpack the PC yet?", time: "8:06", sentByUser: true),
+  ChatText(textid: 28, text: "Nah, the movers handled the heavy lifting.", time: "8:05"),
+  ChatText(textid: 29, text: "Need any help carrying stuff?", time: "8:04", sentByUser: true),
+  ChatText(textid: 30, text: "Yes! The truck just left.", time: "8:03"),
+  ChatText(textid: 31, text: "Are you finally moving today?", time: "8:03", sentByUser: true),
+  ChatText(textid: 32, text: "Yeah, just packing up some boxes. What's up?", time: "8:02"),
+  ChatText(textid: 33, text: "Hey! You free to chat?", time: "8:01", sentByUser: true),
 ];
 
 List<Reel> reels = [

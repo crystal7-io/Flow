@@ -54,6 +54,7 @@ dependencies:
   # Implements new color generation algorithms introduced in M3E.
   # TODO: unpin version when 2.0.0 stable is released
   libmonet: 2.0.0-dev.15
+  flutter_animate: ^4.5.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -84,6 +85,7 @@ flutter:
     - stories/
     - assets/json/
     - assets/zigzag.svg
+    - assets/zigzag-s.svg
   fonts:
     - family: Google Sans Flex
       fonts:

@@ -14,7 +14,7 @@ class StoriesView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Stories",
+          "Uploads",
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w500,
@@ -34,8 +34,7 @@ class StoriesView extends StatelessWidget {
                     child: CachedNetworkImage(
                       height: 64,
                       width: 64,
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                       placeholderFadeInDuration: const Duration(seconds: 0),
                       placeholder: (context, url) => Icon(
                         Icons.account_circle_rounded,
@@ -49,19 +48,10 @@ class StoriesView extends StatelessWidget {
                   const Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        "Crystal",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      Text("Crystal", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                       Text(
                         "crystal_arucs",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),

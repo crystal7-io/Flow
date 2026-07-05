@@ -268,9 +268,9 @@ class _ExpressiveGroupButtonState extends State<_ExpressiveGroupButton> {
         if (hasText)
           Text(
             (item.label as Text).data ?? '',
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge!.copyWith(color: resolvedFgColor, fontWeight: FontWeight.w600),
+            style: Theme.of(context).textTheme.labelLarge!
+                .copyWith(color: resolvedFgColor, fontWeight: FontWeight.w600)
+                .merge((item.label as Text).style),
           ),
       ],
     );

@@ -38,6 +38,7 @@ class MainApp extends StatelessWidget {
               // sourceColor: TonalPaletteSourceColor.fromArgb(
               //   appService.seedColor.toARGB32(),
               // ),
+              sourceColor: TonalPaletteSourceColor.fromArgb(4294939067),
               variant: appService.variant,
               isDark: brightness == .dark,
               contrastLevel: highContrast ? 1.0 : 0.0,
@@ -52,7 +53,9 @@ class MainApp extends StatelessWidget {
           return ThemeData(
             useMaterial3: true,
             colorScheme: colorScheme,
-            textTheme: GoogleFonts.googleSansFlexTextTheme(),
+            textTheme: GoogleFonts.googleSansFlexTextTheme(
+              ThemeData(brightness: colorScheme.brightness).textTheme,
+            ),
             splashFactory: kIsWeb ? InkRipple.splashFactory : InkSparkle.splashFactory,
             iconTheme: IconThemeData(
               fill: 0.0,

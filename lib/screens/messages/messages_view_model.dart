@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:redesigned/core/models/models.dart';
 import 'package:redesigned/data/mock_data.dart';
 
+// Filters indices
+int unread = 0;
+int group = 1;
+int starred = 2;
+
 class MessagesViewModel extends ChangeNotifier {
-  final Set<String> _currentFilters = {};
-  Set<String> get currentFilters => _currentFilters;
+  Set<int> _currentFilters = {};
+  Set<int> get currentFilters => _currentFilters;
 
   List<Chat> _chatData = chats;
   List<Chat> get chatData => _chatData;
@@ -17,32 +22,42 @@ class MessagesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleFilter(String filter, bool isSelected) {
-    if (isSelected) {
-      _currentFilters.add(filter);
+  /// Function called when a filter is selected on UI side
+  /// This changes [_currentFilters] indices and calls [_applyFilters]
+  /// Method which applies filters
+  void toggleFilter(int filter, bool value) {
+    if (filter == -1 && value) {
+      _currentFilters.removeAll({0, 1, 2});
     } else {
-      _currentFilters.remove(filter);
+      if (value) {
+        _currentFilters.add(filter);
+      } else {
+        _currentFilters.remove(filter);
+      }
     }
     _applyFilters();
     notifyListeners();
   }
 
+  /// This function applies filters to [_chatData] based on
+  /// Filters indices in [_currentFilters]
   void _applyFilters() {
-    if (_currentFilters.isEmpty) {
-      _chatData = chats;
-    } else {
-      _chatData = chats.where((element) {
-        if (element.newMessage > 0 && _currentFilters.contains('Unread')) {
-          return true;
-        } else if (element.newMessage == 0 &&
-            _currentFilters.contains('Read')) {
-          return true;
-        } else if (element.isActive && _currentFilters.contains('Active')) {
-          return true;
-        } else {
-          return false;
-        }
-      }).toList();
+    _chatData = chats;
+    // Unread Filter
+    if (_currentFilters.contains(unread)) {
+      _chatData = _chatData.where((element) => element.newMessage > 0).toList();
+    }
+
+    // Groups Filter
+    // (NOTE:Currently set to return false always as data dont have Groups Items)
+    if (_currentFilters.contains(group)) {
+      _chatData = _chatData.where((element) => false).toList();
+    }
+
+    // Starred Filter
+    // (NOTE:Currently set to return false always as data dont have starred Items)
+    if (_currentFilters.contains(starred)) {
+      _chatData = _chatData.where((element) => false).toList();
     }
   }
 }

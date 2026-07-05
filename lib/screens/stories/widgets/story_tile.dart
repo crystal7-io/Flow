@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:redesigned/core/models/models.dart';
+import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/data/mock_data.dart';
 
 class StoryTile extends StatelessWidget {
@@ -31,15 +32,8 @@ class StoryTile extends StatelessWidget {
           ),
         );
       },
-      leading: Container(
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
-          border: Border.all(
-            width: 2.2,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
+      leading: ClipPath(
+        clipper: DynamicAvatarClipper(person.profilePictureShape),
         child: CachedNetworkImage(
           height: 55,
           width: 55,
@@ -53,21 +47,14 @@ class StoryTile extends StatelessWidget {
           imageUrl: person.pfpPath,
         ),
       ),
+
       title: Text(
         person.name,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0,
-        ),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, letterSpacing: 0),
       ),
       subtitle: Text(
         person.userName,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0,
-        ),
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0),
       ),
       trailing: Text(
         "$notifNum new",

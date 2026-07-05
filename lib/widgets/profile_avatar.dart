@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redesigned/core/models/models.dart';
+import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 
 class ProfileAvatarWidget extends StatelessWidget {
   const ProfileAvatarWidget({super.key, required this.person, this.size});
@@ -10,8 +11,8 @@ class ProfileAvatarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(size ?? 76),
+        ClipPath(
+          clipper: DynamicAvatarClipper(person.profilePictureShape),
           child: CachedNetworkImage(
             height: size ?? 76,
             width: size ?? 76,
@@ -40,12 +41,7 @@ class ProfileAvatarWidget extends StatelessWidget {
 }
 
 class ProfileAvatarTouchable extends StatelessWidget {
-  const ProfileAvatarTouchable({
-    super.key,
-    required this.person,
-    required this.onTap,
-    this.size,
-  });
+  const ProfileAvatarTouchable({super.key, required this.person, required this.onTap, this.size});
   final void Function() onTap;
   final Person person;
   final double? size;

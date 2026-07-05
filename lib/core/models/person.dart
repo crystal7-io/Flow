@@ -3,6 +3,7 @@ class Person {
   String userName;
   String name;
   String profilePicturePath;
+  String profilePictureShape;
   final bool isStoryVisible;
   final bool newStory;
 
@@ -11,6 +12,7 @@ class Person {
     required this.userName,
     required this.name,
     required this.profilePicturePath,
+    this.profilePictureShape = 'circle',
     this.isStoryVisible = false,
     this.newStory = false,
   });
@@ -20,10 +22,8 @@ class Person {
       id: json['id'] as String? ?? '',
       userName: json['userName'] as String? ?? '',
       name: json['name'] as String? ?? '',
-      profilePicturePath:
-          json['profilePicturePath'] as String? ??
-          json['pfpPath'] as String? ??
-          '',
+      profilePicturePath: json['profilePicturePath'] as String? ?? json['pfpPath'] as String? ?? '',
+      profilePictureShape: json['profilePictureShape'] as String? ?? 'circle',
       isStoryVisible: json['isStoryVisible'] as bool? ?? false,
       newStory: json['newStory'] as bool? ?? false,
     );
@@ -35,6 +35,7 @@ class Person {
       'userName': userName,
       'name': name,
       'profilePicturePath': profilePicturePath,
+      'profilePictureShape': profilePictureShape,
       'isStoryVisible': isStoryVisible,
       'newStory': newStory,
     };
@@ -50,6 +51,7 @@ class FollowPerson extends Person {
     required super.name,
     required super.userName,
     required super.profilePicturePath,
+    super.profilePictureShape = 'circle',
     required this.isFollowing,
     super.isStoryVisible,
     super.newStory,

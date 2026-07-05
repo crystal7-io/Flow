@@ -49,8 +49,7 @@ final router = GoRouter(
   },
   routes: [
     ShellRoute(
-      pageBuilder: (context, state, child) =>
-          NoTransitionPage(child: RootView(child: child)),
+      pageBuilder: (context, state, child) => NoTransitionPage(child: RootView(child: child)),
       routes: [
         GoRoute(
           name: 'home',
@@ -107,22 +106,20 @@ final router = GoRouter(
         ),
       ],
     ),
-    GoRoute(
-      path: '/signin',
-      builder: (context, state) => const AuthControllerView(),
-    ),
-    GoRoute(
-      path: '/profile/:userID',
-      pageBuilder: ((context, state) => SlideTransitionPage(
-        state: state,
-        child: ChangeNotifierProvider<ProfileViewModel>(
-          create: (_) => ProfileViewModel(
-            ProfileRepository(state.pathParameters['userID'] as String),
-          ),
-          child: const ProfileView(),
-        ),
-      )),
-    ),
+    GoRoute(path: '/signin', builder: (context, state) => const AuthControllerView()),
+    // UPDATE PROFILE PAGE LATER
+    // GoRoute(
+    //   path: '/profile/:userID',
+    //   pageBuilder: ((context, state) => SlideTransitionPage(
+    //     state: state,
+    //     child: ChangeNotifierProvider<ProfileViewModel>(
+    //       create: (_) => ProfileViewModel(
+    //         ProfileRepository(state.pathParameters['userID'] as String),
+    //       ),
+    //       child: const ProfileView(),
+    //     ),
+    //   )),
+    // ),
     GoRoute(
       path: '/follow/:name',
       pageBuilder: ((context, state) {

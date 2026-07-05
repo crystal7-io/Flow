@@ -6,7 +6,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChatViewModel extends ChangeNotifier {
   final Person person;
-  List<ChatText> chats = [...chatTexts];
+  List<ChatText> chats = chatTexts;
   final ItemScrollController scrollController = ItemScrollController();
   final TextEditingController textEditingController = TextEditingController();
 
@@ -36,12 +36,7 @@ class ChatViewModel extends ChangeNotifier {
 
     chats.insert(
       0,
-      ChatText(
-        text: _currentInput,
-        sentByUser: true,
-        time: "now",
-        textid: chats.length,
-      ),
+      ChatText(text: _currentInput, sentByUser: true, time: "now", textid: chats.length),
     );
     _currentInput = "";
     textEditingController.clear();

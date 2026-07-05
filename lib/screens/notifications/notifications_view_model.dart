@@ -5,10 +5,10 @@ import 'package:redesigned/data/mock_data.dart';
 class NotificationsViewModel extends ChangeNotifier {
   final List<String> notifFilters = [
     "Story likes",
-    "Story Replies",
     "Comment likes",
-    "Comment Replies",
     "Post like",
+    "Story replies",
+    "Comment replies",
     "Post replies",
     "Suggestions",
   ];

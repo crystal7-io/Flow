@@ -1,127 +1,100 @@
 import 'package:flutter/material.dart';
 
-class LightOpenContainer<T> extends StatefulWidget {
-  final Widget Function(BuildContext context, VoidCallback openContainer)
-  closedBuilder;
-  final Widget Function(BuildContext context, VoidCallback closeContainer)
-  openBuilder;
-  final void Function(T? data)? onClosed;
-  final Duration transitionDuration;
-  final Duration reverseTransitionDuration;
+class CustomOpenContainer extends StatefulWidget {
+  final Widget Function(BuildContext context, VoidCallback open, bool visible) closedBuilder;
+  final WidgetBuilder openBuilder;
+  final VoidCallback? onClosed;
+  final Color closedColor;
+
+  // Custom Animation Parameters
   final Curve curve;
   final Curve reverseCurve;
+  final Duration duration;
+  final Duration reverseDuration;
 
-  // Custom Color & Shape parameters
-  final Color closedColor;
-  final Color openColor;
-  final ShapeBorder closedShape;
-  final ShapeBorder openShape;
-  final bool useRootNavigator;
-
-  const LightOpenContainer({
+  const CustomOpenContainer({
     super.key,
     required this.closedBuilder,
     required this.openBuilder,
     this.onClosed,
-    this.transitionDuration = const Duration(milliseconds: 500),
-    this.reverseTransitionDuration = const Duration(milliseconds: 300),
+    required this.closedColor,
     this.curve = Curves.easeInOutCubicEmphasized,
     this.reverseCurve = Easing.emphasizedAccelerate,
-    this.closedColor = Colors.transparent,
-    this.openColor = Colors.transparent,
-    // Defaults: Rounded tile shape transitioning to full screen sharp edge
-    this.closedShape = const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(12)),
-    ),
-    this.openShape = const RoundedRectangleBorder(
-      borderRadius: BorderRadius.zero,
-    ),
-    this.useRootNavigator = false,
+    this.duration = const Duration(milliseconds: 450),
+    this.reverseDuration = const Duration(milliseconds: 350),
   });
 
   @override
-  State<LightOpenContainer<T>> createState() => _LightOpenContainerState<T>();
+  State<CustomOpenContainer> createState() => _CustomOpenContainerState();
 }
 
-class _LightOpenContainerState<T> extends State<LightOpenContainer<T>> {
-  final GlobalKey _key = GlobalKey();
+class _CustomOpenContainerState extends State<CustomOpenContainer> {
+  final GlobalKey _containerKey = GlobalKey();
+  bool _visible = true;
 
-  Future<void> _open() async {
-    final RenderBox renderBox =
-        _key.currentContext!.findRenderObject() as RenderBox;
-    final Rect initialRect =
-        renderBox.localToGlobal(Offset.zero) & renderBox.size;
+  void _openView() async {
+    final RenderBox? renderBox = _containerKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.hasSize) return;
 
-    final T? result =
-        await Navigator.of(
-          context,
-          rootNavigator: widget.useRootNavigator,
-        ).push<T>(
-          _LightContainerRoute<T>(
-            initialRect: initialRect,
-            closedBuilder: widget.closedBuilder,
-            openBuilder: widget.openBuilder,
-            transitionDuration: widget.transitionDuration,
-            reverseTransitionDuration: widget.reverseTransitionDuration,
-            curve: widget.curve,
-            reverseCurve: widget.reverseCurve,
-            closedColor: widget.closedColor,
-            openColor: widget.openColor,
-            closedShape: widget.closedShape,
-            openShape: widget.openShape,
-            useRootNavigator: widget.useRootNavigator,
-          ),
-        );
+    final Rect initialRect = renderBox.localToGlobal(Offset.zero) & renderBox.size;
 
-    if (widget.onClosed != null) {
-      widget.onClosed!(result);
+    setState(() => _visible = false);
+
+    await Navigator.of(context).push(
+      _OpenContainerRoute(
+        containerKey: _containerKey,
+        initialRect: initialRect,
+        closedColor: widget.closedColor,
+        closedBuilder: widget.closedBuilder,
+        openBuilder: widget.openBuilder,
+        curve: widget.curve,
+        reverseCurve: widget.reverseCurve,
+        duration: widget.duration,
+        reverseDuration: widget.reverseDuration,
+      ),
+    );
+
+    if (mounted) {
+      setState(() => _visible = true);
+      widget.onClosed?.call();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return KeyedSubtree(key: _key, child: widget.closedBuilder(context, _open));
+    return Container(key: _containerKey, child: widget.closedBuilder(context, _openView, _visible));
   }
 }
 
-class _LightContainerRoute<T> extends PageRouteBuilder<T> {
+class _OpenContainerRoute extends PageRouteBuilder {
+  final GlobalKey containerKey;
   final Rect initialRect;
-  final Widget Function(BuildContext, VoidCallback) closedBuilder;
-  final Widget Function(BuildContext, VoidCallback) openBuilder;
+  final Color closedColor;
+  final Widget Function(BuildContext context, VoidCallback open, bool visible) closedBuilder;
+  final WidgetBuilder openBuilder;
   final Curve curve;
   final Curve reverseCurve;
-  final Color closedColor;
-  final Color openColor;
-  final ShapeBorder closedShape;
-  final ShapeBorder openShape;
-  final bool useRootNavigator;
 
-  _LightContainerRoute({
+  _OpenContainerRoute({
+    required this.containerKey,
     required this.initialRect,
+    required this.closedColor,
     required this.closedBuilder,
     required this.openBuilder,
-    required super.transitionDuration,
-    required super.reverseTransitionDuration,
     required this.curve,
     required this.reverseCurve,
-    required this.closedColor,
-    required this.openColor,
-    required this.closedShape,
-    required this.openShape,
-    required this.useRootNavigator,
+    required Duration duration,
+    required Duration reverseDuration,
   }) : super(
+         transitionDuration: duration,
+         reverseTransitionDuration: reverseDuration,
          opaque: false,
-         barrierColor: Colors.transparent,
-         pageBuilder: (context, animation, secondaryAnimation) =>
-             const SizedBox.shrink(),
+         barrierDismissible: false,
+         pageBuilder: (context, animation, secondaryAnimation) => const SizedBox.shrink(),
        );
 
   @override
-  Widget buildPage(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-  ) {
+  Widget buildPage(BuildContext context, Animation<double> anim, Animation<double> secAnim) {
     return const SizedBox.shrink();
   }
 
@@ -132,97 +105,113 @@ class _LightContainerRoute<T> extends PageRouteBuilder<T> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    final CurvedAnimation geometricAnimation = CurvedAnimation(
+    final Animation<double> curvedAnimation = CurvedAnimation(
       parent: animation,
       curve: curve,
       reverseCurve: reverseCurve,
     );
 
-    // --- SEPARATED ENTRY/EXIT INTERVALS ---
+    // Determine direction: Is the user closing the view?
+    final bool isReversing = animation.status == AnimationStatus.reverse;
 
-    // Closed Element:
-    // Forward: Fades out in first 20% (0.0 -> 0.2)
-    // Reverse: Fades back in at last 30% of the close time (0.7 -> 1.0 map on exit countdown)
-    final Animation<double> closedOpacity = Tween<double>(begin: 1.0, end: 0.0)
-        .animate(
-          CurvedAnimation(
-            parent: animation,
-            curve: const Interval(0.0, 0.2, curve: Curves.fastOutSlowIn),
-            reverseCurve: const Interval(0.7, 1.0, curve: Curves.fastOutSlowIn),
-          ),
-        );
+    // 1. Controls closedBuilder (the list item)
+    final Animation<double> exitOpacity = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: animation,
+        curve: Interval(
+          isReversing ? 0.15 : 0.0, // When closing, it finishes fading in at 60% remaining progress
+          isReversing ? 0.75 : 0.1, // When closing, it starts fading in at 85% progress
+        ),
+      ),
+    );
 
-    // Open Element:
-    // Forward: Fades in starting at 40% (0.4 -> 1.0)
-    // Reverse: Vanishes completely within first 10% of exit time (0.9 -> 1.0 map on exit countdown)
-    final Animation<double> openOpacity = Tween<double>(begin: 0.0, end: 1.0)
-        .animate(
-          CurvedAnimation(
-            parent: animation,
-            curve: const Interval(0.40, 1.0, curve: Curves.fastOutSlowIn),
-            reverseCurve: const Interval(
-              0.90,
-              1.0,
-              curve: Curves.fastOutSlowIn,
+    // 2. Controls openBuilder (the full chat screen)
+    final Animation<double> enterOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: animation,
+        curve: Interval(
+          isReversing ? 0.0 : 0.15,
+          isReversing
+              ? 0.1
+              : 0.75, // When closing, it drops to 0% opacity extremely fast (between 1.0 -> 0.85)
+        ),
+      ),
+    );
+
+    if (animation.isCompleted) {
+      return openBuilder(context);
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final Rect targetRect = Offset.zero & constraints.biggest;
+        final Rect currentRect = Rect.lerp(initialRect, targetRect, curvedAnimation.value)!;
+
+        final ShapeBorder currentShape = ShapeBorder.lerp(
+          const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+          const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          curvedAnimation.value,
+        )!;
+
+        // Determine the absolute direction to toggle structural gates
+        final bool isReversing = animation.status == AnimationStatus.reverse;
+
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            FadeTransition(
+              opacity: curvedAnimation,
+              child: Container(color: Theme.of(context).colorScheme.scrim.withValues(alpha: 0.85)),
             ),
-          ),
-        );
 
-    final VoidCallback popAction = () =>
-        Navigator.of(context, rootNavigator: useRootNavigator).pop();
-
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (context, _) {
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final Rect targetRect = Offset.zero & constraints.biggest;
-            final Rect currentRect = Rect.lerp(
-              initialRect,
-              targetRect,
-              geometricAnimation.value,
-            )!;
-
-            final ShapeBorder currentShape = ShapeBorder.lerp(
-              closedShape,
-              openShape,
-              geometricAnimation.value,
-            )!;
-
-            return Stack(
-              children: [
-                Positioned.fromRect(
-                  rect: currentRect,
-                  child: Container(
-                    decoration: ShapeDecoration(
-                      color: Color.lerp(
-                        closedColor,
-                        openColor,
-                        geometricAnimation.value,
-                      ),
-                      shape: currentShape,
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        if (closedOpacity.value > 0.0)
-                          FadeTransition(
-                            opacity: closedOpacity,
-                            child: closedBuilder(context, () {}),
-                          ),
-                        if (openOpacity.value > 0.0)
-                          FadeTransition(
-                            opacity: openOpacity,
-                            child: openBuilder(context, popAction),
-                          ),
-                      ],
-                    ),
-                  ),
+            Positioned.fromRect(
+              rect: currentRect,
+              child: Material(
+                clipBehavior: Clip.antiAlias,
+                animationDuration: Duration.zero,
+                shape: currentShape,
+                color: Color.lerp(
+                  closedColor,
+                  Theme.of(context).colorScheme.surface,
+                  curvedAnimation.value,
                 ),
-              ],
-            );
-          },
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    // 1. Gated Closed Builder: Discarded as soon as we transition past the threshold
+                    if (isReversing ? animation.value < 0.85 : animation.value < 0.25)
+                      if (exitOpacity.value > 0.0)
+                        Opacity(
+                          opacity: exitOpacity.value,
+                          child: OverflowBox(
+                            alignment: Alignment.topLeft,
+                            minWidth: initialRect.width,
+                            maxWidth: initialRect.width,
+                            minHeight: initialRect.height,
+                            maxHeight: initialRect.height,
+                            child: closedBuilder(context, () {}, true),
+                          ),
+                        ),
+
+                    // 2. Gated Open Builder: Only mounted when the closed builder is completely gone
+                    if (isReversing ? animation.value >= 0.85 : animation.value >= 0.25)
+                      if (enterOpacity.value > 0.0)
+                        Opacity(
+                          opacity: enterOpacity.value,
+                          child: OverflowBox(
+                            alignment: Alignment.topLeft,
+                            minWidth: targetRect.width,
+                            maxWidth: targetRect.width,
+                            minHeight: targetRect.height,
+                            maxHeight: targetRect.height,
+                            child: openBuilder(context),
+                          ),
+                        ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

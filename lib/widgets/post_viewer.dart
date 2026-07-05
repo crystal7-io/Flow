@@ -37,7 +37,7 @@ class ImagePostViewer extends StatelessWidget {
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                   fit: BoxFit.contain,
-                  imageUrl: "https://drive.google.com/uc?export=view&id=$image",
+                  imageUrl: image,
                 ),
               ),
             ),
@@ -106,7 +106,7 @@ class CarouselPostViewer extends StatelessWidget {
                                       ),
                                     ),
                                 fit: BoxFit.cover,
-                                imageUrl: "https://drive.google.com/uc?export=view&id=$e",
+                                imageUrl: e,
                               ),
                             ),
                           ),

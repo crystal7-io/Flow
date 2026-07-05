@@ -1,16 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 // import 'package:media_kit/media_kit.dart';
 // import 'package:media_kit_video/media_kit_video.dart';
 import 'package:redesigned/core/models/post.dart';
+import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/core/utils/format_post_timestamp.dart';
+import 'package:redesigned/screens/profile/profile_view.dart';
 import 'package:redesigned/widgets/post_viewer.dart';
 import 'package:redesigned/widgets/profile_picture_viewer.dart';
+import 'package:redesigned/widgets/share_sheet.dart';
 import 'package:redesigned/widgets/utils/m3expressive/button_group.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:redesigned/widgets/comment_sheet.dart';
+
+// Time Dilation:
+// import 'package:flutter/scheduler.dart' as sche;
 
 class MobilePost extends StatefulWidget {
   const MobilePost({super.key, required this.post});
@@ -25,583 +33,202 @@ class _MobilePostState extends State<MobilePost> {
   bool saved = false;
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   decoration: BoxDecoration(
-    //       borderRadius: const BorderRadius.all(Radius.circular(14)),
-    //       color: Theme.of(context).colorScheme.surfaceContainerLow),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     children: <Widget>[
-    //       Padding(
-    //         padding: const EdgeInsets.only(left: 8, top: 8, bottom: 12),
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: [
-    //             GestureDetector(
-    //                 onTap: () {
-    //                   Account acc =
-    //                       getAccountFromUserName(widget.post.person.userName);
-    //                   showModalBottomSheet(
-    //                       showDragHandle: true,
-    //                       useRootNavigator: true,
-    //                       context: context,
-    //                       builder: (BuildContext context) {
-    //                         return ProfileBottomsheet(acc: acc);
-    //                       });
-    //                 },
-    //                 child: Row(
-    //                   children: [
-    //                     CachedNetworkImage(
-    //                       height: 36,
-    //                       width: 36,
-    //                       errorWidget: (context, url, error) =>
-    //                           const Icon(Icons.error),
-    //                       placeholderFadeInDuration: const Duration(seconds: 0),
-    //                       placeholder: (context, url) => Icon(
-    //                           Icons.account_circle_rounded,
-    //                           color: Theme.of(context)
-    //                               .colorScheme
-    //                               .onSurfaceVariant),
-    //                       fit: BoxFit.contain,
-    //                       imageUrl: widget.post.person.pfpPath,
-    //                     ),
-    //                     const SizedBox(width: 8),
-    //                     Column(
-    //                       crossAxisAlignment: CrossAxisAlignment.start,
-    //                       children: [
-    //                         Text(
-    //                           widget.post.person.name,
-    //                           style: const TextStyle(
-    //                               fontSize: 14, fontWeight: FontWeight.w600),
-    //                         ),
-    //                         Text(
-    //                           widget.post.person.userName,
-    //                           style: const TextStyle(
-    //                               fontSize: 12, fontWeight: FontWeight.w600),
-    //                         )
-    //                       ],
-    //                     )
-    //                   ],
-    //                 )),
-    //             Row(
-    //               children: [
-    //                 Text(
-    //                   "3 hrs",
-    //                   style: TextStyle(
-    //                       fontSize: 15,
-    //                       fontWeight: FontWeight.w600,
-    //                       color: Theme.of(context).colorScheme.outline),
-    //                 ),
-    //                 const SizedBox(
-    //                   width: 8,
-    //                 ),
-    //                 IconButton(
-    //                     onPressed: () {
-    //                       showModalBottomSheet<void>(
-    //                           context: context,
-    //                           isScrollControlled: true,
-    //                           useRootNavigator: true,
-    //                           backgroundColor:
-    //                               Theme.of(context).colorScheme.surface,
-    //                           showDragHandle: true,
-    //                           builder: (BuildContext context) {
-    //                             return ListView(
-    //                               shrinkWrap: true,
-    //                               children: [
-    //                                 Padding(
-    //                                     padding: const EdgeInsets.symmetric(
-    //                                         horizontal: 12, vertical: 8),
-    //                                     child: Row(
-    //                                       mainAxisAlignment:
-    //                                           MainAxisAlignment.spaceEvenly,
-    //                                       children: [
-    //                                         SizedBox(
-    //                                             height: 50,
-    //                                             width: 150,
-    //                                             child: FilledButton.tonalIcon(
-    //                                                 onPressed: () {},
-    //                                                 icon: const Icon(Icons
-    //                                                     .play_circle_outline),
-    //                                                 label: const Text(
-    //                                                   "Remix",
-    //                                                   style: TextStyle(
-    //                                                       fontWeight:
-    //                                                           FontWeight.w600),
-    //                                                 ))),
-    //                                         const SizedBox(
-    //                                           width: 16,
-    //                                         ),
-    //                                         SizedBox(
-    //                                             height: 50,
-    //                                             width: 150,
-    //                                             child: FilledButton.tonalIcon(
-    //                                                 onPressed: () {},
-    //                                                 icon: const Icon(
-    //                                                     Icons.qr_code),
-    //                                                 label: const Text(
-    //                                                   "QR Code",
-    //                                                   style: TextStyle(
-    //                                                       fontWeight:
-    //                                                           FontWeight.w600),
-    //                                                 ))),
-    //                                       ],
-    //                                     )),
-    //                                 const Divider(),
-    //                                 ListItem(
-    //                                   leading: const Icon(
-    //                                       Icons.visibility_off_outlined),
-    //                                   title: "Not interested",
-    //                                   onTap: () {},
-    //                                 ),
-    //                                 ListItem(
-    //                                   leading: const Icon(Icons.error_outline),
-    //                                   title: "About this post",
-    //                                   onTap: () {},
-    //                                 ),
-    //                                 ListItem(
-    //                                   leading: const Icon(Icons.tune_outlined),
-    //                                   title: "Manage suggested content",
-    //                                   onTap: () {},
-    //                                 ),
-    //                                 ListItem(
-    //                                   color:
-    //                                       Theme.of(context).colorScheme.error,
-    //                                   leading:
-    //                                       const Icon(Icons.warning_amber_sharp),
-    //                                   title: "Report this post",
-    //                                   onTap: () {},
-    //                                 ),
-    //                               ],
-    //                             );
-    //                           });
-    //                     },
-    //                     icon: const Icon(Icons.more_vert))
-    //               ],
-    //             )
-    //           ],
-    //         ),
-    //       ),
-    //       widget.post.type == PostType.image
-    //           ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
-    //           : widget.post.type == PostType.carosel
-    //               ? CarouselPostWidget(
-    //                   imagePost: widget.post as CarouselPostObject)
-    //               : ReelPost(post: widget.post as ReelPostObject),
-    //       // : ReelPost(post: widget.post as ReelPostObject),
-    //       const SizedBox(height: 10),
-    //       Row(
-    //         children: [
-    //           const SizedBox(width: 12),
-    //           Expanded(
-    //             child: Text(
-    //               textAlign: TextAlign.left,
-    //               maxLines: 2,
-    //               overflow: TextOverflow.ellipsis,
-    //               widget.post.subTitle,
-    //               style: const TextStyle(
-    //                   fontSize: 14,
-    //                   fontWeight: FontWeight.w500,
-    //                   letterSpacing: 0),
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //       const SizedBox(height: 12),
-    //       Row(
-    //         mainAxisSize: MainAxisSize.max,
-    //         children: [
-    //           const SizedBox(width: 12),
-    //           SelectButton(
-    //             isSelected: liked,
-    //             selectedColor: Colors.red,
-    //             onPressed: () {
-    //               setState(() {
-    //                 liked = !liked;
-    //               });
-    //             },
-    //             title: "2.3K",
-    //             selectedIcon: Icons.favorite,
-    //             unselectedIcon: Icons.favorite_outline,
-    //           ),
-    //           const SizedBox(width: 12),
-    //           SizedBox(
-    //               height: 40,
-    //               child: IconButton.filledTonal(
-    //                   onPressed: () {
-    //                     showFlexibleBottomSheet(
-    //                         useRootNavigator: true,
-    //                         context: context,
-    //                         anchors: [0, 0.6, 1],
-    //                         bottomSheetBorderRadius:
-    //                             const BorderRadius.vertical(
-    //                                 top: Radius.circular(24)),
-    //                         maxHeight: 1,
-    //                         initHeight: 0.6,
-    //                         bottomSheetColor: Theme.of(context)
-    //                             .colorScheme
-    //                             .surfaceContainerLow,
-    //                         minHeight: 0,
-    //                         useRootScaffold: true,
-    //                         isSafeArea: true,
-    //                         builder: (BuildContext context,
-    //                                 ScrollController controller, double d) =>
-    //                             CommentSheet(
-    //                               controller: controller,
-    //                             ));
-    //                   },
-    //                   // label: const Text("2.3K"),
-    //                   icon: Icon(MdiIcons.commentTextOutline))),
-    //           const SizedBox(width: 12),
-    //           SizedBox(
-    //               height: 40,
-    //               child: IconButton.filledTonal(
-    //                   onPressed: () {
-    //                     showFlexibleBottomSheet(
-    //                         useRootNavigator: true,
-    //                         context: context,
-    //                         anchors: [0, 0.6, 1],
-    //                         bottomSheetBorderRadius:
-    //                             const BorderRadius.vertical(
-    //                                 top: Radius.circular(24)),
-    //                         maxHeight: 1,
-    //                         initHeight: 0.6,
-    //                         bottomSheetColor: Theme.of(context)
-    //                             .colorScheme
-    //                             .surfaceContainerLow,
-    //                         minHeight: 0,
-    //                         useRootScaffold: true,
-    //                         isSafeArea: true,
-    //                         builder: (BuildContext context,
-    //                                 ScrollController controller, double d) =>
-    //                             ShareSheet(
-    //                               controller: controller,
-    //                             ));
-    //                   },
-    //                   // label: const Text("Share"),
-    //                   icon: Icon(MdiIcons.sendVariantOutline))),
-    //           const Spacer(),
-    //           SizedBox(
-    //               height: 40,
-    //               child: IconButton.filledTonal(
-    //                 onPressed: () {
-    //                   showFlexibleBottomSheet(
-    //                     useRootNavigator: true,
-    //                     isCollapsible: true,
-    //                     maxHeight: 1,
-    //                     initHeight: 1,
-    //                     isExpand: false,
-    //                     isSafeArea: true,
-    //                     bottomSheetBorderRadius: const BorderRadius.vertical(
-    //                         top: Radius.circular(24)),
-    //                     context: context,
-    //                     builder:
-    //                         (context, scrollController, bottomSheetOffset) =>
-    //                             SavePostSheet(
-    //                       controller: scrollController,
-    //                     ),
-    //                   );
-    //                 },
-    //                 icon: const Icon(Icons.bookmark_outline),
-    //               )
-    //               //  SelectButton(
-    //               //   isSelected: saved,
-    //               //   title: "Save",
-    //               //   onPressed: () {
-    //               //     setState(() {
-    //               //       saved = !saved;
-    //               //     });
-    //               //   },
-    //               //   selectedIcon: Icons.bookmark,
-    //               //   unselectedIcon: Icons.bookmark_outline,
-    //               // )
-    //               ),
-    //           const SizedBox(width: 12)
-    //         ],
-    //       ),
-    //       const SizedBox(height: 12),
-    //       Row(
-    //         children: [
-    //           TextButton(
-    //               onPressed: () {},
-    //               // icon: Stack(
-    //               //   children: [
-    //               //     ClipRRect(
-    //               //       borderRadius: BorderRadius.circular(24),
-    //               //       child: CachedNetworkImage(
-    //               //         height: 24,
-    //               //         width: 24,
-    //               //         errorWidget: (context, url, error) =>
-    //               //             const Icon(Icons.error),
-    //               //         placeholderFadeInDuration: const Duration(seconds: 0),
-    //               //         placeholder: (context, url) => Icon(
-    //               //             Icons.account_circle_rounded,
-    //               //             color: Theme.of(context)
-    //               //                 .colorScheme
-    //               //                 .onSurfaceVariant),
-    //               //         fit: BoxFit.contain,
-    //               //         imageUrl: accounts[21].person.pfpPath,
-    //               //       ),
-    //               //     ),
-    //               //     Padding(
-    //               //       padding: const EdgeInsets.only(top: 3, left: 3),
-    //               //       child: ClipRRect(
-    //               //         borderRadius: BorderRadius.circular(24),
-    //               //         child: CachedNetworkImage(
-    //               //           height: 24,
-    //               //           width: 24,
-    //               //           errorWidget: (context, url, error) =>
-    //               //               const Icon(Icons.error),
-    //               //           placeholderFadeInDuration:
-    //               //               const Duration(seconds: 0),
-    //               //           placeholder: (context, url) => Icon(
-    //               //               Icons.account_circle_rounded,
-    //               //               color: Theme.of(context)
-    //               //                   .colorScheme
-    //               //                   .onSurfaceVariant),
-    //               //           fit: BoxFit.contain,
-    //               //           imageUrl: accounts[24].person.pfpPath,
-    //               //         ),
-    //               //       ),
-    //               //     )
-    //               //   ],
-    //               // ),
-    //               child: const Text("23.5K Likes")),
-    //           const SizedBox(height: 4),
-    //           const Text("6.4K Replies")
-    //         ],
-    //       ),
-    //       Row(
-    //         mainAxisSize: MainAxisSize.min,
-    //         children: [
-    //           ExpressiveButton(
-    //               isSelected: liked,
-    //               icon: Symbols.comment,
-    //               onTap: () {
-    //                 setState(() {
-    //                   liked = !liked;
-    //                 });
-    //               },
-    //               selectedBg: Theme.of(context).colorScheme.primary,
-    //               unselectedBg:
-    //                   Theme.of(context).colorScheme.surfaceContainerHigh,
-    //               selectedContent: Theme.of(context).colorScheme.onPrimary,
-    //               unselectedContent: Theme.of(context).colorScheme.onSurface),
-    //           SizedBox(width: 4),
-    //           ExpressiveButton(
-    //               isSelected: !liked,
-    //               icon: Symbols.favorite,
-    //               onTap: () {
-    //                 setState(() {
-    //                   liked = !liked;
-    //                 });
-    //               },
-    //               selectedBg: Theme.of(context).colorScheme.primary,
-    //               unselectedBg:
-    //                   Theme.of(context).colorScheme.surfaceContainerHigh,
-    //               selectedContent: Theme.of(context).colorScheme.onPrimary,
-    //               unselectedContent: Theme.of(context).colorScheme.onSurface),
-    //           SizedBox(width: 4),
-    //           ExpressiveButton(
-    //               icon: Icons.home,
-    //               isSelected: saved,
-    //               onTap: () {
-    //                 setState(() {
-    //                   saved = !saved;
-    //                 });
-    //               },
-    //               text: "Hello",
-    //               selectedBg: Theme.of(context).colorScheme.primary,
-    //               unselectedBg:
-    //                   Theme.of(context).colorScheme.surfaceContainerHigh,
-    //               selectedContent: Theme.of(context).colorScheme.onPrimary,
-    //               unselectedContent: Theme.of(context).colorScheme.onSurface),
-    //         ],
-    //       )
-    //     ],
-    //   ),
-    // );
-    return Padding(
-      padding: EdgeInsetsGeometry.only(bottom: 8),
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsetsGeometry.only(left: 16, top: 12, bottom: 0),
+          child: Row(
+            mainAxisAlignment: .start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: EdgeInsetsGeometry.all(4),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).push(
-                          PageRouteBuilder(
-                            opaque: false,
-                            barrierDismissible: true,
-                            transitionDuration: Durations.extralong1,
-                            reverseTransitionDuration: Durations.medium4,
-                            pageBuilder: (context, animation, secondaryAnimation) {
-                              return ProfilePictureViewer(
-                                post: widget.post,
-                                animation: CurvedAnimation(
-                                  parent: animation,
-                                  curve: Easing.emphasizedDecelerate,
-                                  reverseCurve: Easing.emphasizedAccelerate,
-                                ),
-                              );
-                            },
-                          ),
-                        );
+              GestureDetector(
+                onTap: () {
+                  // sche.timeDilation = 8;
+                  Navigator.of(context, rootNavigator: true).push(
+                    PageRouteBuilder(
+                      opaque: false,
+                      barrierDismissible: true,
+                      transitionDuration: Durations.long3,
+                      reverseTransitionDuration: Durations.medium1,
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return ProfilePictureViewer(post: widget.post, animation: animation);
+                        // ProfileView(person: widget.post.person, animation: animation);
                       },
-                      child: Hero(
-                        tag: 'pfp_${widget.post.postId}',
-                        createRectTween: (begin, end) =>
-                            ExpressiveRectTween(begin: begin, end: end),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(MediaQuery.widthOf(context)),
-                          child: CachedNetworkImage(
-                            height: 42,
-                            width: 42,
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                            placeholderFadeInDuration: const Duration(seconds: 0),
-                            placeholder: (context, url) => Icon(
-                              Icons.account_circle_rounded,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                            fit: BoxFit.contain,
-                            imageUrl: widget.post.person.pfpPath,
-                          ),
-                        ),
-                      ),
                     ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            widget.post.person.name,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).colorScheme.outline,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            widget.post.subTitle,
-                            style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 6),
-              widget.post.type == PostType.image
-                  ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
-                  : widget.post.type == PostType.carosel
-                  ? CarouselPostWidget(imagePost: widget.post as CarouselPostObject)
-                  : ReelPost(post: widget.post as ReelPostObject),
-              SizedBox(height: 4),
-              Padding(
-                padding: EdgeInsetsGeometry.symmetric(horizontal: 18),
-                child: Row(
-                  children: [
-                    Text(
-                      formatPostTimestamp(widget.post.dateTime),
-                      style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.outline),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 8),
-            ],
-          ),
-
-          // Row(
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: [
-          //     SizedBox(
-          //         width: 48,
-          //         height: 56,
-          //         child: IconButton.filledTonal(
-          //             style: ButtonStyle(
-          //                 backgroundColor: WidgetStatePropertyAll(
-          //                     Theme.of(context)
-          //                         .colorScheme
-          //                         .surfaceContainerHigh)),
-          //             onPressed: () {},
-          //             icon: Icon(
-          //               size: 24,
-          //               Symbols.forward,
-          //               weight: 600,
-          //             ))),
-          //     SizedBox(width: 4),
-          //     SizedBox(
-          //         width: 56,
-          //         height: 56,
-          //         child: IconButton.filledTonal(
-          //             style: ButtonStyle(
-          //                 backgroundColor: WidgetStatePropertyAll(
-          //                     Theme.of(context)
-          //                         .colorScheme
-          //                         .surfaceContainerHigh)),
-          //             onPressed: () {},
-          //             icon: Icon(
-          //               size: 24,
-          //               Symbols.comment,
-          //               weight: 600,
-          //             ))),
-          //     SizedBox(width: 4),
-          //     ExpressiveSpringButton(
-          //         keepRound: true,
-          //         unselectedLength: 32,
-          //         selectedLength: 46,
-          //         icon: liked ? Icons.favorite : Icons.favorite_border_outlined,
-          //         persistText: true,
-          //         text: "24K",
-          //         isSelected: liked,
-          //         onTap: () {
-          //           setState(() {
-          //             liked = !liked;
-          //           });
-          //         },
-          //         selectedBg: Theme.of(context).colorScheme.onPrimaryContainer,
-          //         selectedContent: Theme.of(context).colorScheme.inversePrimary,
-          //         unselectedBg:
-          //             Theme.of(context).colorScheme.onPrimaryFixedVariant,
-          //         unselectedContent:
-          //             Theme.of(context).colorScheme.primaryFixed),
-          //   ],
-          // ),
-          StandardButtonGroup(
-            alignment: MainAxisAlignment.end,
-            items: [
-              ButtonGroupItem(width: 44, height: 56, onPressed: () {}, icon: Symbols.forward),
-              ButtonGroupItem(width: 56, height: 56, onPressed: () {}, icon: Symbols.comment),
-              ButtonGroupItem(
-                backgroundColor: liked ? Theme.of(context).colorScheme.primaryFixed : null,
-                foregroundColor: liked ? Theme.of(context).colorScheme.onPrimaryFixed : null,
-                height: 56,
-                onPressed: () {
-                  setState(() {
-                    liked = !liked;
-                  });
+                  );
                 },
-                icon: liked ? Icons.favorite : Icons.favorite_border_outlined,
-                label: const Text("24K"),
+                child: Hero(
+                  tag: 'pfp_${widget.post.person.id}',
+                  // createRectTween: (begin, end) => ExpressiveRectTween(begin: begin, end: end),
+                  child: ClipPath(
+                    clipper: DynamicAvatarClipper(widget.post.person.profilePictureShape),
+                    child: CachedNetworkImage(
+                      height: 46,
+                      width: 46,
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      placeholderFadeInDuration: const Duration(seconds: 0),
+                      placeholder: (context, url) => Icon(
+                        Icons.account_circle_rounded,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      fit: BoxFit.cover,
+                      imageUrl: widget.post.person.pfpPath,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: .start,
+                mainAxisSize: .min,
+                children: [
+                  Text(
+                    widget.post.person.name,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontFamily: "Google Sans Flex",
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  Text(
+                    '@${widget.post.person.userName}',
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      fontFamily: "Google Sans Flex",
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        SizedBox(height: 6),
+        widget.post.type == PostType.image
+            ? ImagePostWidget(imagePost: widget.post as ImagePostObject)
+            : widget.post.type == PostType.carosel
+            ? CarouselPostWidget(imagePost: widget.post as CarouselPostObject)
+            : ReelPost(post: widget.post as ReelPostObject),
+        SizedBox(height: 8),
+        Padding(
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+          child: Align(
+            alignment: .centerLeft,
+            child: Text(
+              widget.post.subTitle,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                fontFamily: "Google Sans Flex",
+                color: Theme.of(context).colorScheme.onSurface,
+                fontVariations: [.weight(400), .new("ROND", 100)],
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 6),
+        Padding(
+          padding: EdgeInsetsGeometry.only(left: 18, right: 8),
+          child: Row(
+            children: [
+              Text(
+                formatPostTimestamp(widget.post.dateTime),
+                style: TextStyle(
+                  fontFamily: "Google Sans Flex",
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.outline,
+                  fontVariations: [.weight(700), .width(50), .new("ROND", 100)],
+                ),
+              ),
+              Spacer(),
+              StandardButtonGroup(
+                alignment: MainAxisAlignment.end,
+                spacing: 4,
+                items: [
+                  ButtonGroupItem(
+                    width: 44,
+                    height: 56,
+                    onPressed: () {
+                      showModalBottomSheet(
+                        useRootNavigator: true,
+                        context: context,
+                        showDragHandle: true,
+                        isScrollControlled: true,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        builder: (context) => DraggableScrollableSheet(
+                          initialChildSize: 0.6,
+                          minChildSize: 0.5,
+                          maxChildSize: 0.95,
+                          expand: false,
+                          snap: true,
+                          builder: (context, scrollController) {
+                            return ShareSheet(controller: scrollController);
+                          },
+                        ),
+                      );
+                    },
+                    icon: Symbols.forward,
+                  ),
+                  ButtonGroupItem(
+                    width: 56,
+                    height: 56,
+                    onPressed: () {
+                      showModalBottomSheet(
+                        useRootNavigator: true,
+                        context: context,
+                        sheetAnimationStyle: AnimationStyle(
+                          curve: Easing.emphasizedDecelerate,
+                          reverseCurve: Easing.emphasizedAccelerate,
+                        ),
+                        showDragHandle: true,
+                        isScrollControlled: true,
+                        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                        builder: (context) => DraggableScrollableSheet(
+                          initialChildSize: 0.6,
+                          minChildSize: 0.5,
+                          maxChildSize: 0.95,
+                          expand: false,
+                          snap: true,
+                          builder: (context, scrollController) {
+                            return CommentSheet(controller: scrollController);
+                          },
+                        ),
+                      );
+                    },
+                    icon: Symbols.comment,
+                  ),
+                  ButtonGroupItem(
+                    backgroundColor: liked ? Theme.of(context).colorScheme.primaryFixed : null,
+                    foregroundColor: liked ? Theme.of(context).colorScheme.onPrimaryFixed : null,
+                    height: 56,
+                    onPressed: () {
+                      setState(() {
+                        liked = !liked;
+                      });
+                    },
+                    width: widget.post.likes != 0 ? null : 64,
+                    icon: liked ? Icons.favorite : Symbols.favorite_border,
+                    label: widget.post.likes != 0
+                        ? Text(
+                            NumberFormat.compact().format(widget.post.likes),
+                            style: TextStyle(
+                              height: 1,
+                              fontSize: 18,
+                              fontFamily: "Google Sans Flex",
+                              fontVariations: [
+                                .weight(600),
+                                FontVariation("ROND", 100),
+                                .width(30),
+                              ],
+                            ),
+                          )
+                        : null,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        SizedBox(height: 8),
+      ],
     );
   }
 }
@@ -824,7 +451,7 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
       tag: widget.imagePost.postId.toString(),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: (widget.imagePost.aspectRatio * (MediaQuery.of(context).size.width)),
+          maxWidth: (MediaQuery.of(context).size.width),
           maxHeight: (1 / widget.imagePost.aspectRatio) * (MediaQuery.of(context).size.width),
         ),
         child: CarouselView(
@@ -845,7 +472,7 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
             );
           },
           itemSnapping: true,
-          itemExtent: widget.imagePost.aspectRatio * (MediaQuery.of(context).size.width),
+          itemExtent: (MediaQuery.of(context).size.width),
           shrinkExtent: 0,
           children: widget.imagePost.imagePaths
               .map(
@@ -856,7 +483,7 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
                     progressIndicatorBuilder: (context, url, downloadProgress) =>
                         Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                     fit: BoxFit.cover,
-                    imageUrl: "https://drive.google.com/uc?export=view&id=$e",
+                    imageUrl: e,
                   ),
                 ),
               )
@@ -906,7 +533,7 @@ class _ImagePostWidgetState extends State<ImagePostWidget> {
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
               fit: BoxFit.contain,
-              imageUrl: "https://drive.google.com/uc?export=view&id=${widget.imagePost.imagePath}",
+              imageUrl: widget.imagePost.imagePath,
             ),
           ),
         ),

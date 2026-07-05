@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/models.dart';
 import 'package:redesigned/core/services/app_service.dart';
+import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/screens/notifications/notifications_view_model.dart';
+import 'package:redesigned/widgets/utils/wave_divider.dart';
 
 class NotificationsView extends StatelessWidget {
   const NotificationsView({super.key});
@@ -15,18 +17,26 @@ class NotificationsView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        toolbarHeight: 64,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text(
-          "Notifications",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-        ),
-      ),
+
       body: ListView(
         children: [
+          SizedBox(height: 4),
+          Padding(
+            padding: .symmetric(vertical: 8, horizontal: 16),
+            child: Text(
+              "Notifications",
+              style: GoogleFonts.limelight(
+                textStyle: TextTheme.of(context).displaySmall!.copyWith(
+                  // fontFamily: "Google Sans Flex",
+                  color: ColorScheme.of(context).onSurfaceVariant,
+                  fontWeight: .w800,
+                  // fontVariations: [.weight(1000), .width(50)],
+                ),
+              ),
+            ),
+          ),
           SizedBox(
-            height: 55,
+            height: 56,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
@@ -35,8 +45,17 @@ class NotificationsView extends StatelessWidget {
                   (filter) => Padding(
                     padding: const EdgeInsets.only(right: 6),
                     child: FilterChip(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      shape: StadiumBorder(),
+                      selectedColor: ColorScheme.of(context).tertiaryContainer,
                       backgroundColor: Theme.of(context).colorScheme.surface,
+                      labelStyle: TextStyle(
+                        color: viewModel.selectedFilters.contains(filter)
+                            ? ColorScheme.of(context).onTertiaryContainer
+                            : null,
+                        fontFamily: "Google Sans Flex",
+                        fontVariations: [.weight(500), .width(70)],
+                      ),
+                      checkmarkColor: ColorScheme.of(context).onTertiaryContainer,
                       selected: viewModel.selectedFilters.contains(filter),
                       onSelected: (value) {
                         viewModel.toggleFilter(filter, value);
@@ -48,8 +67,13 @@ class NotificationsView extends StatelessWidget {
               ],
             ),
           ),
-          _buildHeader(context, "New"),
-          ...viewModel.allNotifications[0].map((e) => NotifWidget(notification: e)),
+          SizedBox(height: 8),
+          Padding(
+            padding: .symmetric(horizontal: 16),
+            child: ClipRect(child: WavyDivider()),
+          ),
+          // _buildHeader(context, "New"),
+          // ...viewModel.allNotifications[0].map((e) => NotifWidget(notification: e)),
           _buildHeader(context, "Today"),
           ...viewModel.allNotifications[1].map((e) => NotifWidget(notification: e)),
           _buildHeader(context, "Yesterday"),
@@ -98,8 +122,8 @@ class _NotifWidgetState extends State<NotifWidget> {
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(40),
+            ClipPath(
+              clipper: DynamicAvatarClipper(widget.notification.notifier.profilePictureShape),
               child: CachedNetworkImage(
                 height: 50,
                 width: 50,
@@ -133,8 +157,7 @@ class _NotifWidgetState extends State<NotifWidget> {
                                 child: Text(
                                   widget.notification.notifier.userName,
                                   overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 12,
+                                  style: TextTheme.of(context).titleSmall!.copyWith(
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0.2,
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -144,8 +167,7 @@ class _NotifWidgetState extends State<NotifWidget> {
                               const SizedBox(width: 12),
                               Text(
                                 widget.notification.time,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 12,
+                                style: TextTheme.of(context).bodySmall!.copyWith(
                                   fontWeight: FontWeight.w500,
                                   letterSpacing: 0.2,
                                   color: Theme.of(context).colorScheme.outline,
@@ -156,10 +178,10 @@ class _NotifWidgetState extends State<NotifWidget> {
                           const SizedBox(height: 4),
                           Text(
                             widget.notification.textContent,
-                            style: TextStyle(
-                              fontSize: 14,
+                            style: TextTheme.of(context).bodyLarge!.copyWith(
                               color: Theme.of(context).colorScheme.onSurface,
-                              fontWeight: FontWeight.w600,
+                              fontFamily: "Google Sans Flex",
+                              fontWeight: FontWeight.w500,
                               letterSpacing: 0,
                             ),
                           ),
@@ -168,9 +190,8 @@ class _NotifWidgetState extends State<NotifWidget> {
                               (widget.notification as CommentLikeNotficaiton).commentText,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                fontSize: 14,
+                              style: TextTheme.of(context).bodyMedium!.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             )
                           else if (type == NotifType.commentReply)
@@ -178,9 +199,8 @@ class _NotifWidgetState extends State<NotifWidget> {
                               (widget.notification as CommentReplyNotficaiton).commentText,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                fontSize: 14,
+                              style: TextTheme.of(context).bodyMedium!.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                         ],

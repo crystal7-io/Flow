@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/post.dart';
 import 'package:redesigned/core/services/app_service.dart';
+import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/widgets/profile_picture_viewer_model.dart';
 import 'package:redesigned/widgets/utils/m3expressive/button_group.dart';
 
@@ -13,7 +15,7 @@ class ExpressiveRectTween extends MaterialRectArcTween {
 
   @override
   Rect lerp(double t) {
-    final double curvedT = Easing.emphasizedDecelerate.transform(t);
+    final double curvedT = Curves.easeOut.transform(t);
     return super.lerp(curvedT);
   }
 }
@@ -27,9 +29,12 @@ class ProfilePictureViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final closeButtonAnim = CurvedAnimation(
+
+    // Background animation curve
+    final backgroundCurve = CurvedAnimation(
       parent: animation,
-      curve: const Interval(0.96, 1.0, curve: Easing.emphasizedDecelerate),
+      curve: Interval(0, 0.5, curve: Easing.standard),
+      reverseCurve: Interval(0.5, 1.0, curve: Easing.standard),
     );
 
     return ChangeNotifierProvider(
@@ -46,79 +51,201 @@ class ProfilePictureViewer extends StatelessWidget {
             child: AnimatedBuilder(
               animation: animation,
               builder: (context, child) {
+                // Determine if the route is currently reversing (popping)
+                final isPopping = animation.status == AnimationStatus.reverse;
+
                 return Scaffold(
-                  backgroundColor: colorScheme.surfaceContainer.withValues(alpha: animation.value),
-                  body: Stack(
-                    children: [
-                      child!,
-                      Positioned(
-                        top: MediaQuery.of(context).viewPadding.top + 16,
-                        right: 16,
-                        left: 16,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            _StaggeredBubble(
-                              animation: closeButtonAnim,
-                              alignment: Alignment.center,
-                              child: IconButton(
+                  backgroundColor: colorScheme.surfaceContainer.withValues(
+                    alpha: backgroundCurve.value,
+                  ),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // Safe area spacing for status bar
+                        SizedBox(height: MediaQuery.paddingOf(context).top + 16),
+
+                        // 1. Navigation Header
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
                                 icon: const Icon(Symbols.arrow_back, weight: 800),
                                 onPressed: () => Navigator.of(context).pop(),
                               ),
-                            ),
-                            _StaggeredBubble(
-                              animation: closeButtonAnim,
-                              alignment: Alignment.center,
-                              child: IconButton(
+                              IconButton(
                                 icon: const Icon(Symbols.more_vert, weight: 800),
                                 onPressed: () {},
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: MediaQuery.paddingOf(context).top + 56),
-                    Padding(
-                      padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
-                      child: Hero(
-                        tag: 'pfp_${post.postId}',
-                        createRectTween: (begin, end) =>
-                            ExpressiveRectTween(begin: begin, end: end),
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusGeometry.circular(MediaQuery.widthOf(context)),
-                          child: SizedBox(
-                            height: MediaQuery.widthOf(context) / 1.5,
-                            width: MediaQuery.widthOf(context),
-                            child: CachedNetworkImage(
-                              // color: colorScheme.primary,
-                              // colorBlendMode: BlendMode.modulate,
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
-                              placeholderFadeInDuration: const Duration(seconds: 0),
-                              progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-                                child: CircularProgressIndicator(value: downloadProgress.progress),
+                            ],
+                          ),
+                        ).animate(target: isPopping ? 0.0 : 1.0).fadeIn(duration: 50.ms),
+
+                        // 2. Profile Picture (Kept isolated from text exit anims)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Hero(
+                            tag: 'pfp_${post.person.id}',
+                            createRectTween: (begin, end) =>
+                                ExpressiveRectTween(begin: begin, end: end),
+                            child: ClipPath(
+                              clipper: DynamicAvatarClipper(post.person.profilePictureShape),
+                              child: CachedNetworkImage(
+                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                                placeholderFadeInDuration: const Duration(seconds: 0),
+                                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                      ),
+                                    ),
+                                fit: BoxFit.cover,
+                                imageUrl: post.person.pfpPath,
                               ),
-                              fit: BoxFit.cover,
-                              imageUrl: post.person.pfpPath,
                             ),
                           ),
                         ),
-                      ),
+
+                        // Wrapper Group for everything else that needs to drop away instantly on pop
+                        Column(
+                          children:
+                              [
+                                    // 3. Name Label
+                                    SizedBox(
+                                      width: MediaQuery.widthOf(context) - 48,
+                                      child: FittedBox(
+                                        child: Center(
+                                          child: RepaintBoundary(
+                                            child: Text(
+                                              post.person.name,
+                                              style: TextStyle(
+                                                color: colorScheme.onSurface,
+                                                fontFamily: "Google Sans Flex",
+                                                fontVariations: [
+                                                  FontVariation("ROND", 0),
+                                                  FontVariation.width(40),
+                                                  FontVariation("opsz", 600),
+                                                  FontVariation.weight(800),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    // 4. Bio Quote
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                                      child: Text(
+                                        '❝Everyone have freedom of thought❞',
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.petitFormalScript(
+                                          textStyle: Theme.of(context).textTheme.titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: colorScheme.primary,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+
+                                    // 5. Interaction Buttons Group
+                                    StandardButtonGroup(
+                                      spacing: 4,
+                                      alignment: MainAxisAlignment.center,
+                                      items: [
+                                        ButtonGroupItem(
+                                          roundBorder: !model.isFollowing,
+                                          width: MediaQuery.widthOf(context) - 148,
+                                          backgroundColor: model.isFollowing
+                                              ? colorScheme.surfaceContainerLowest
+                                              : colorScheme.tertiary,
+                                          foregroundColor: model.isFollowing
+                                              ? colorScheme.primary
+                                              : colorScheme.onTertiary,
+                                          height: 64,
+                                          icon: model.isFollowing ? Symbols.done : Symbols.add,
+                                          onPressed: model.toggleFollowing,
+                                          label: Text(model.isFollowing ? "Following" : "Follow"),
+                                        ),
+                                        ButtonGroupItem(
+                                          width: 72,
+                                          height: 64,
+                                          onPressed: model.toggleStar,
+                                          icon: model.isStarred ? Icons.star : Symbols.star_outline,
+                                          foregroundColor: model.isStarred
+                                              ? colorScheme.onSecondaryContainer
+                                              : colorScheme.onPrimary,
+                                          backgroundColor: model.isStarred
+                                              ? colorScheme.surfaceContainerLowest
+                                              : colorScheme.primary,
+                                        ),
+                                        ButtonGroupItem(
+                                          backgroundColor: colorScheme.primaryContainer,
+                                          foregroundColor: colorScheme.onPrimaryContainer,
+                                          width: 56,
+                                          height: 64,
+                                          onPressed: () {},
+                                          icon: Symbols.message,
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 24),
+
+                                    // 6. Stats Breakdown
+                                    SizedBox(
+                                      width: MediaQuery.widthOf(context) - 100,
+                                      child: FittedBox(
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            _buildStatPill(
+                                              context,
+                                              value: "243K",
+                                              label: "Followers",
+                                              colorScheme: colorScheme,
+                                            ),
+                                            SizedBox(width: MediaQuery.widthOf(context) / 4),
+                                            _buildStatPill(
+                                              context,
+                                              value: "140",
+                                              label: "Following",
+                                              colorScheme: colorScheme,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 40),
+
+                                    // 7. Media Gallery Grid Block
+                                    Container(
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color: colorScheme.surface,
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      child: _DynamicUploadsGrid(colorScheme: colorScheme),
+                                    ),
+                                    const SizedBox(height: 100),
+                                  ]
+                                  .animate(interval: 28.ms)
+                                  .fadeIn(duration: 120.ms, curve: Easing.linear)
+                                  .move(
+                                    begin: const Offset(0, 64),
+                                    duration: 400.ms,
+                                    curve: Easing.standard,
+                                  ),
+                        ).animate(target: isPopping ? 0.0 : 1.0).fadeIn(duration: 50.ms),
+                      ],
                     ),
-                    SizedBox(height: 16),
-                    _buildMetadata(context, animation, model, colorScheme),
-                    const SizedBox(height: 40),
-                    _buildUploads(context, animation, colorScheme),
-                    const SizedBox(height: 100),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
           );
         },
@@ -126,221 +253,34 @@ class ProfilePictureViewer extends StatelessWidget {
     );
   }
 
-  Widget _buildMetadata(
-    BuildContext context,
-    Animation<double> animation,
-    ProfilePictureViewerModel model,
-    ColorScheme colorScheme,
-  ) {
-    // Staggered timing for a high-end feel
-    final nameAnim = CurvedAnimation(
-      parent: animation,
-      curve: const Interval(0.80, 0.95, curve: Easing.emphasizedDecelerate),
-    );
-
-    // final profileAnim = CurvedAnimation(
-    //   parent: animation,
-    //   curve: const Interval(0.90, 1.0, curve: Easing.emphasizedDecelerate),
-    // );
-    final followingAnim = CurvedAnimation(
-      parent: animation,
-      curve: const Interval(0.85, 0.97, curve: Easing.emphasizedDecelerate),
-    );
-    final followersAnim = CurvedAnimation(
-      parent: animation,
-      curve: const Interval(0.92, 1.0, curve: Easing.emphasizedDecelerate),
-    );
-    final followingAnimStat = CurvedAnimation(
-      parent: animation,
-      curve: const Interval(0.94, 1.0, curve: Easing.emphasizedDecelerate),
-    );
-
+  Widget _buildStatPill(
+    BuildContext context, {
+    required String value,
+    required String label,
+    required ColorScheme colorScheme,
+  }) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Name and Username
-        _StaggeredBubble(
-          animation: nameAnim,
-          alignment: Alignment.topCenter,
-          child: SizedBox(
-            width: MediaQuery.widthOf(context) - 48,
-            child: FittedBox(
-              child: Text(
-                post.person.name,
-                style: TextStyle(
-                  fontFamily: 'Google Sans Flex',
-                  color: colorScheme.onSurface,
-                  height: 1,
-                  fontVariations: [
-                    //FontVariation.weight(1000.0), FontVariation.width(10)
-                    FontVariation.weight(600.0),
-                    FontVariation.opticalSize(200),
-                    FontVariation.width(5),
-                  ],
-                ),
-              ),
-            ),
+        Text(
+          value,
+          style: GoogleFonts.limelight(
+            fontSize: 64,
+            height: 1,
+            fontWeight: FontWeight.normal,
+            color: colorScheme.onSurface,
           ),
         ),
-        SizedBox(height: 16),
-        _StaggeredBubble(
-          animation: nameAnim,
-          alignment: Alignment.topCenter,
-          child: Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
-            child: Text(
-              '❝Everyone have freedom of thought❞',
-              textAlign: .center,
-              style: GoogleFonts.petitFormalScript(
-                textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.primary,
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 16),
-        // Action Buttons
-        _StaggeredBubble(
-          alignment: Alignment.center,
-          animation: followingAnim,
-          child: StandardButtonGroup(
-            spacing: 4,
-            alignment: MainAxisAlignment.center,
-            items: [
-              ButtonGroupItem(
-                roundBorder: !model.isFollowing,
-                width: MediaQuery.widthOf(context) - 148,
-                backgroundColor: model.isFollowing
-                    ? colorScheme.surfaceContainerLowest
-                    : colorScheme.tertiary,
-                foregroundColor: model.isFollowing ? colorScheme.primary : colorScheme.onTertiary,
-                height: 64,
-                icon: model.isFollowing ? Symbols.done : Symbols.add,
-                onPressed: model.toggleFollowing,
-                label: Text(
-                  model.isFollowing ? "Following" : "Follow",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              ButtonGroupItem(
-                width: 72,
-                height: 64,
-                onPressed: model.toggleStar,
-                icon: model.isStarred ? Icons.star : Symbols.star_outline,
-                foregroundColor: model.isStarred
-                    ? colorScheme.onSecondaryContainer
-                    : colorScheme.onPrimary,
-                backgroundColor: model.isStarred
-                    ? colorScheme.surfaceContainerLowest
-                    : colorScheme.primary,
-              ),
-              ButtonGroupItem(
-                backgroundColor: colorScheme.primaryContainer,
-                foregroundColor: colorScheme.onPrimaryContainer,
-                width: 56,
-                height: 64,
-                onPressed: () {},
-                icon: Symbols.message,
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 16),
-
-        // _HorizontalReveal(
-        //   animation: svgRevealAnim,
-        //   child: SvgPicture.asset(
-        //     "assets/zigzag.svg",
-        //     colorFilter: ColorFilter.mode(colorScheme.onSecondaryContainer, BlendMode.srcIn),
-        //   ),
-        // ),
-        SizedBox(
-          width: MediaQuery.widthOf(context) - 100,
-          child: FittedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildStatPill(
-                  context,
-                  icon: Icons.groups_rounded,
-                  value: "243K",
-                  label: "Followers",
-                  animation: followersAnim,
-                  colorScheme: colorScheme,
-                ),
-                SizedBox(width: MediaQuery.widthOf(context) / 4),
-                _buildStatPill(
-                  context,
-                  icon: Icons.person_add_rounded,
-                  value: "140",
-                  label: "Following",
-                  animation: followingAnimStat,
-                  colorScheme: colorScheme,
-                ),
-              ],
-            ),
+        Text(
+          label,
+          style: GoogleFonts.googleSansCode(
+            fontWeight: FontWeight.normal,
+            color: colorScheme.onSurface,
+            fontSize: 24,
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildStatPill(
-    BuildContext context, {
-    required IconData icon,
-    required String value,
-    required String label,
-    required Animation<double> animation,
-    required ColorScheme colorScheme,
-  }) {
-    return _StaggeredBubble(
-      animation: animation,
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            value,
-            style: GoogleFonts.limelight(
-              fontSize: 64,
-              height: 1,
-              fontWeight: FontWeight.normal,
-              color: colorScheme.onSurface,
-            ),
-          ),
-          Text(
-            label,
-            style: GoogleFonts.googleSansCode(
-              fontWeight: FontWeight.normal,
-              color: colorScheme.onSurface,
-              fontSize: 24,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUploads(BuildContext context, Animation<double> animation, ColorScheme colorScheme) {
-    final uploadsAnim = CurvedAnimation(
-      parent: animation,
-      curve: const Interval(0.92, 1.0, curve: Easing.emphasizedDecelerate),
-    );
-
-    return _StaggeredBubble(
-      animation: uploadsAnim,
-      alignment: Alignment.topCenter,
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: _DynamicUploadsGrid(colorScheme: colorScheme),
-      ),
     );
   }
 }
@@ -495,6 +435,32 @@ class _StaggeredBubble extends StatelessWidget {
       animation: animation,
       builder: (context, child) {
         return Transform.scale(scale: animation.value, alignment: alignment, child: child);
+      },
+      child: child,
+    );
+  }
+}
+
+class _StaggeredDownBubble extends StatelessWidget {
+  final Animation<double> animation;
+  final Widget child;
+  final Alignment alignment;
+
+  const _StaggeredDownBubble({
+    required this.animation,
+    required this.child,
+    required this.alignment,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        return Opacity(
+          opacity: animation.value,
+          child: Transform.translate(offset: Offset(0, 64 - animation.value * 64), child: child),
+        );
       },
       child: child,
     );

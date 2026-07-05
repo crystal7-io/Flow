@@ -31,29 +31,25 @@ class SearchMessageView extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(72),
         child: SafeArea(
-          child: TextField(
-            style: const TextStyle(
-              height: 1.5,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 24,
-                horizontal: 8,
-              ),
-              hintText: "Search Messages",
-              hintStyle: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                height: 1.5,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: IconButton(
-                  onPressed: () => viewModel.onBackPress(context),
-                  icon: const Icon(Icons.arrow_back),
+          child: Hero(
+            tag: "MsgSearchHero",
+            child: TextField(
+              style: const TextStyle(height: 1.5, fontSize: 16, fontWeight: FontWeight.w400),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+                hintText: "Search Messages",
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  height: 1.5,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: IconButton(
+                    onPressed: () => viewModel.onBackPress(context),
+                    icon: const Icon(Icons.arrow_back),
+                  ),
                 ),
               ),
             ),
@@ -68,19 +64,14 @@ class SearchMessageView extends StatelessWidget {
             child: ListView(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
-              children: viewModel.recents
-                  .map((e) => SuggestedWidget(person: e))
-                  .toList(),
+              children: viewModel.recents.map((e) => SuggestedWidget(person: e)).toList(),
             ),
           ),
           const SizedBox(height: 8),
           _header(context, "Suggested"),
           ...viewModel.suggested.map(
             (e) => ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 6,
-                horizontal: 12,
-              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
               onTap: () => viewModel.toggleSelection(e.userName),
               title: Text(e.name),
               subtitle: Text(e.userName),
@@ -99,10 +90,7 @@ class SearchMessageView extends StatelessWidget {
                 ),
               ),
               trailing: viewModel.selectedUserNames.contains(e.userName)
-                  ? const CircleAvatar(
-                      radius: 16,
-                      child: Icon(Symbols.done, weight: 800, size: 18),
-                    )
+                  ? const CircleAvatar(radius: 16, child: Icon(Symbols.done, weight: 800, size: 18))
                   : const SizedBox(),
             ),
           ),

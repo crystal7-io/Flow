@@ -3,9 +3,10 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:redesigned/data/mock_data.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import 'package:redesigned/core/utils/animations.dart';
+import 'package:redesigned/data/mock_data.dart';
 import 'package:redesigned/widgets/navigation/bottom_bar_transition.dart';
 
 class DisappearingBottomNavigationBar extends StatelessWidget {
@@ -24,29 +25,29 @@ class DisappearingBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomBarTransition(
       animation: barAnimation,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       child: NavigationBar(
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
         onDestinationSelected: onDestinationSelected,
         indicatorColor: Theme.of(context).colorScheme.secondaryContainer,
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         selectedIndex: selectedIndex,
         animationDuration: const Duration(milliseconds: 600),
         destinations: <Widget>[
           const NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
+            icon: Icon(Symbols.home),
+            selectedIcon: Icon(Symbols.home, fill: 1),
             label: "Home",
           ),
           const NavigationDestination(
-            icon: Icon(Icons.play_circle_outline),
-            selectedIcon: Icon(Icons.play_circle),
-            label: "Reels",
+            icon: Icon(Symbols.animated_images),
+            selectedIcon: Icon(Symbols.animated_images, fill: 1),
+            label: "Create",
           ),
           const NavigationDestination(
-            icon: Icon(Icons.chat_outlined),
-            selectedIcon: Icon(Icons.chat),
+            icon: Icon(Symbols.message),
+            selectedIcon: Icon(Symbols.message, fill: 1),
             label: "Message",
           ),
           NavigationDestination(
@@ -59,8 +60,8 @@ class DisappearingBottomNavigationBar extends StatelessWidget {
             label: "Alerts",
           ),
           const NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
+            icon: Icon(Symbols.settings),
+            selectedIcon: Icon(Symbols.settings, fill: 1),
             label: "Settings",
           ),
         ],
