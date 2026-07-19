@@ -450,12 +450,19 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
       tag: widget.imagePost.postId.toString(),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: (MediaQuery.of(context).size.width),
-          maxHeight: (1 / widget.imagePost.aspectRatio) * (MediaQuery.of(context).size.width),
+          maxWidth: (MediaQuery.widthOf(context)),
+          maxHeight:
+              (1 / widget.imagePost.aspectRatio) * (MediaQuery.widthOf(context)) -
+              (MediaQuery.widthOf(context) / 8 - 8),
         ),
-        child: CarouselView(
+        child: CarouselView.weighted(
+          consumeMaxWeight: false,
+          flexWeights: [7, 1],
           shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(24)),
           onTap: (int i) {
+            if (i == widget.imagePost.imagePaths.length) {
+              return;
+            }
             Navigator.of(context, rootNavigator: true).push(
               PageRouteBuilder(
                 transitionDuration: Durations.medium1,
@@ -471,22 +478,28 @@ class _CarouselPostWidgetState extends State<CarouselPostWidget> {
             );
           },
           itemSnapping: true,
-          itemExtent: (MediaQuery.of(context).size.width),
+          // itemExtent: (MediaQuery.widthOf(context)),
           shrinkExtent: 0,
-          children: widget.imagePost.imagePaths
-              .map(
-                (e) => Builder(
-                  builder: (BuildContext context) => CachedNetworkImage(
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                    placeholderFadeInDuration: const Duration(seconds: 0),
-                    progressIndicatorBuilder: (context, url, downloadProgress) =>
-                        Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                    fit: BoxFit.cover,
-                    imageUrl: e,
-                  ),
+          children: [
+            ...widget.imagePost.imagePaths.map(
+              (e) => Builder(
+                builder: (BuildContext context) => CachedNetworkImage(
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  placeholderFadeInDuration: const Duration(seconds: 0),
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                  fit: BoxFit.cover,
+                  imageUrl: e,
                 ),
-              )
-              .toList(),
+              ),
+            ),
+            Center(
+              child: SizedBox(
+                height: 56,
+                child: IconButton.outlined(onPressed: () {}, icon: Icon(Symbols.chevron_backward)),
+              ),
+            ),
+          ],
         ),
       ),
       // const Align(

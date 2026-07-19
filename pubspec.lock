@@ -29,10 +29,10 @@ packages:
     dependency: "direct main"
     description:
       name: androidx_graphics_shapes
-      sha256: "9920a4f0564e2fa8c794daf9b320fb7539893275abecac04f3b307a37f9cf828"
+      sha256: "214d7d2d201c17140b19ead6206e8322a5c0fbeed314a9ede49eaec2e3922ceb"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "1.6.0"
   animations:
     dependency: "direct main"
     description:
@@ -502,6 +502,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  flutter_localizations:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_masonry_view:
     dependency: "direct main"
     description:
@@ -812,10 +817,10 @@ packages:
     dependency: "direct main"
     description:
       name: libmonet
-      sha256: "83fed130d5753c20b4585e37ec38bf35575f748f910e05e80555db43c9ea605f"
+      sha256: "10c0fa94fbf4d007b999959f99d948d24139a50df63287a0ea000af3e95e9178"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0-dev.15"
+    version: "2.0.0-dev.17"
   lints:
     dependency: transitive
     description:
@@ -856,6 +861,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.19"
+  material3_expressive_loading_indicator:
+    dependency: "direct main"
+    description:
+      name: material3_expressive_loading_indicator
+      sha256: "3d5940dcdf02f488bc41c01e3105b355de59443ea89122f73500eeca83ebacc0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
+  material_3p:
+    dependency: "direct main"
+    description:
+      name: material_3p
+      sha256: b988abeacd1df81e41be004cdbbb818b15d1a576bd998a24784ce844f474df76
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   material_color_utilities:
     dependency: transitive
     description:
@@ -864,6 +885,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.13.0"
+  material_new_shapes:
+    dependency: transitive
+    description:
+      name: material_new_shapes
+      sha256: e4bc375205e187e8fb232573387112dd8c0dd45b03af8aa2b3c79eb4b9e3e0dc
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   material_shapes:
     dependency: "direct main"
     description:
@@ -876,10 +905,10 @@ packages:
     dependency: "direct main"
     description:
       name: material_symbols_icons
-      sha256: "10a74aaa9e566c92f8aa14809d2dd78156fb93743348ebffec0345c38eb35706"
+      sha256: "49c532dd0b74544e9d8d93ec0f821d52ec532e7c9263c889ebe71b1be4f34ba7"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2928.1"
+    version: "4.2951.0"
   meta:
     dependency: transitive
     description:
@@ -1176,6 +1205,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4+1"
+  skeletonizer:
+    dependency: "direct main"
+    description:
+      name: skeletonizer
+      sha256: "9f38f9b47ec3cf2235a6a4f154a88a95432bc55ba98b3e2eb6ced5c1974bc122"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.3"
   sky_engine:
     dependency: transitive
     description: flutter

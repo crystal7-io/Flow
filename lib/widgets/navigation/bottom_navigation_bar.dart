@@ -40,11 +40,11 @@ class DisappearingBottomNavigationBar extends StatelessWidget {
             selectedIcon: Icon(Symbols.home, fill: 1),
             label: "Home",
           ),
-          const NavigationDestination(
-            icon: Icon(Symbols.animated_images),
-            selectedIcon: Icon(Symbols.animated_images, fill: 1),
-            label: "Create",
-          ),
+          // const NavigationDestination(
+          //   icon: Icon(Symbols.animated_images),
+          //   selectedIcon: Icon(Symbols.animated_images, fill: 1),
+          //   label: "Create",
+          // ),
           const NavigationDestination(
             icon: Icon(Symbols.message),
             selectedIcon: Icon(Symbols.message, fill: 1),

@@ -5,8 +5,8 @@ class Profile extends Person {
   bool isProfilePrivate;
   bool isFollowing;
   String pronouns;
-  List<String> followerIDs;
-  List<String> followingIDs;
+  int followersCount;
+  int followingCount;
   List<String> postIDs;
 
   Profile({
@@ -18,8 +18,8 @@ class Profile extends Person {
     this.isProfilePrivate = false,
     this.isFollowing = false,
     this.pronouns = '',
-    this.followerIDs = const [],
-    this.followingIDs = const [],
+    this.followersCount = 0,
+    this.followingCount = 0,
     this.postIDs = const [],
   });
 
@@ -33,8 +33,8 @@ class Profile extends Person {
       isProfilePrivate: json['isProfilePrivate'] as bool? ?? false,
       isFollowing: json['isFollowing'] as bool? ?? false,
       pronouns: json['pronouns'] as String? ?? '',
-      followerIDs: List<String>.from(json['followerIDs'] ?? []),
-      followingIDs: List<String>.from(json['followingIDs'] ?? []),
+      followersCount: json['followersCount'] as int? ?? 0,
+      followingCount: json['followingCount'] as int? ?? 0,
       postIDs: List<String>.from(json['postIDs'] ?? []),
     );
   }
@@ -47,8 +47,8 @@ class Profile extends Person {
       'isProfilePrivate': isProfilePrivate,
       'isFollowing': isFollowing,
       'pronouns': pronouns,
-      'followerIDs': followerIDs,
-      'followingIDs': followingIDs,
+      'followersCount': followersCount,
+      'followingCount': followingCount,
       'postIDs': postIDs,
     });
     return data;

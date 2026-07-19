@@ -4,7 +4,7 @@ import 'package:redesigned/data/remote/remote_user_data_source.dart';
 
 /// [UserRepository] depends on [LocalUserDataSource] and [RemoteUserDataSource]
 /// for fetching data from local and remote sources
-/// This class acts as an abstraction layer between UserDataService and
+/// This class acts as an abstraction layer between [UserDataService] and
 /// local/remote data sources
 /// First the local data is feteched/updated and then remote data is fetched/updated.
 

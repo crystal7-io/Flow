@@ -3,7 +3,7 @@ part 'user.g.dart';
 
 @collection
 class User {
-  Id isarID = 0;
+  Id isarID = 1;
 
   final String id;
   String userName;

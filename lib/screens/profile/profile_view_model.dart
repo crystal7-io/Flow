@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:redesigned/core/models/profile.dart';
-import 'package:redesigned/data/repositories/profile_repository.dart';
+import 'package:redesigned/data/repositories/user_profile_repository.dart';
 
 abstract class IProfileViewModel {
   Profile? get profile;
@@ -18,14 +18,14 @@ abstract class IProfileViewModel {
 }
 
 class ProfileViewModel extends ChangeNotifier implements IProfileViewModel {
-  /// Constructor, it takes [ProfileRepository] as argument
+  /// Constructor, it takes [UserProfileRepository] as argument
   ProfileViewModel(this._repository);
 
   bool _isDataLoaded = false;
   @override
   bool get isDataLoaded => _isDataLoaded;
 
-  final ProfileRepository _repository;
+  final UserProfileRepository _repository;
 
   @override
   Profile? get profile => _repository.profile;

@@ -113,7 +113,7 @@ class _RootViewState extends State<RootView> with TickerProviderStateMixin {
                       onDestinationSelected: (int index) {
                         final routes = [
                           '/home',
-                          '/stories',
+                          // '/stories',
                           '/messages',
                           '/notification',
                           '/settings',

@@ -112,7 +112,7 @@ class _CommentSheetState extends State<CommentSheet> {
                   .animate()
                   .fadeIn(
                     delay: (index * 42).ms,
-                    duration: 400.ms,
+                    duration: 250.ms,
                     curve: Easing.standardDecelerate,
                   )
                   .move(begin: const Offset(0, 64), duration: 400.ms, curve: Easing.standard);

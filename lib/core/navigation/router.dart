@@ -7,6 +7,8 @@ import 'package:redesigned/core/services/app_service.dart';
 import 'package:redesigned/core/services/auth_service.dart';
 import 'package:redesigned/core/utils/screen_transitions.dart';
 import 'package:redesigned/data/mock_data.dart';
+import 'package:redesigned/data/remote/feed_data_source.dart';
+import 'package:redesigned/data/repositories/feed_repository.dart';
 import 'package:redesigned/screens/auth_screens/auth_controller_view.dart';
 import 'package:redesigned/screens/follow/follow_view.dart';
 import 'package:redesigned/screens/follow/follow_view_model.dart';
@@ -53,7 +55,8 @@ final router = GoRouter(
           path: '/home',
           pageBuilder: (context, state) => SlideBottomTransitionPage(
             child: ChangeNotifierProvider<HomeViewModel>(
-              create: (_) => HomeViewModel(context.read<AppService>()),
+              create: (_) =>
+                  HomeViewModel(context.read<AppService>(), FeedRepository(FeedDataSource())),
               child: const HomeScreen(),
             ),
             state: state,

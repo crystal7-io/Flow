@@ -25,13 +25,10 @@ class AppProvider extends StatelessWidget {
           create: (_) => CreatePostTransitionProvider(),
         ),
         ChangeNotifierProvider<UserDataService>(
-          create: (_) => UserDataService(
-            UserRepository(LocalUserDataSource(), RemoteUserDataSource()),
-          ),
+          create: (_) =>
+              UserDataService(UserRepository(LocalUserDataSource(), RemoteUserDataSource())),
         ),
-        Provider<NavigationService>(
-          create: (_) => NavigationService(context.read<GoRouter>()),
-        ),
+        Provider<NavigationService>(create: (_) => NavigationService(context.read<GoRouter>())),
       ],
       child: child,
     );

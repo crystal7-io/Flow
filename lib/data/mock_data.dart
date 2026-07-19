@@ -702,7 +702,7 @@ List<Account> accounts = [
       userName: "sarah.is.here3",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1ImyUUqXDNoOMAG-CQd6wAmCJpUS4F1nQ',
-      profilePictureShape: 'clamShell',
+      profilePictureShape: 'clover8Leaf',
     ),
     followers: [],
     following: [],

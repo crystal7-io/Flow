@@ -53,8 +53,11 @@ dependencies:
 
   # Implements new color generation algorithms introduced in M3E.
   # TODO: unpin version when 2.0.0 stable is released
-  libmonet: 2.0.0-dev.15
+  libmonet: 2.0.0-dev.17
   flutter_animate: ^4.5.2
+  material3_expressive_loading_indicator: ^0.1.2
+  material_3p: ^0.2.0
+  skeletonizer: ^2.1.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

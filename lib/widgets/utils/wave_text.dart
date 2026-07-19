@@ -3,13 +3,12 @@ import 'dart:math' as math;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-enum WaveStage { forward, reverseAndFill, done }
-
 class WaveText extends StatefulWidget {
-  const WaveText(this.text, {super.key, this.delay = Duration.zero});
+  const WaveText(this.text, {super.key, this.delay = Duration.zero, this.fontSize = 16});
 
   final String text;
   final Duration delay;
+  final double fontSize;
 
   @override
   State<WaveText> createState() => _WaveTextState();
@@ -17,8 +16,6 @@ class WaveText extends StatefulWidget {
 
 class _WaveTextState extends State<WaveText> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  final WaveStage _currentStage = WaveStage.forward;
-  // bool _isDelaying = true;
   Timer? _delayTimer;
 
   @override
@@ -26,17 +23,15 @@ class _WaveTextState extends State<WaveText> with SingleTickerProviderStateMixin
     super.initState();
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
 
-    // if (widget.delay == Duration.zero) {
-    //   _isDelaying = false;
-    //   _controller.forward();
-    // } else {
-    //   _delayTimer = Timer(widget.delay, () {
-    //     if (mounted) {
-    //       setState(() => _isDelaying = false);
-    //       _controller.forward();
-    //     }
-    //   });
-    // }
+    if (widget.delay == Duration.zero) {
+      _controller.repeat(reverse: true); // Continuous back-and-forth loop
+    } else {
+      _delayTimer = Timer(widget.delay, () {
+        if (mounted) {
+          _controller.repeat(reverse: true);
+        }
+      });
+    }
   }
 
   @override
@@ -55,7 +50,10 @@ class _WaveTextState extends State<WaveText> with SingleTickerProviderStateMixin
       builder: (context, child) {
         return RichText(
           text: TextSpan(
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: widget.fontSize,
+            ),
             children: widget.text.split('').mapIndexed((index, char) {
               final double totalLetters = widget.text.length.toDouble();
               final double phase = (index / totalLetters) * math.pi;
@@ -71,28 +69,12 @@ class _WaveTextState extends State<WaveText> with SingleTickerProviderStateMixin
                 waveIntensity = math.cos((distance / cutoff) * (math.pi / 2));
               }
 
-              double intensity = 0.0;
-
-              if (_currentStage == WaveStage.done) {
-                intensity = 1.0;
-              } else if (_currentStage == WaveStage.reverseAndFill) {
-                if (animationArc <= phase) {
-                  intensity = math.max(waveIntensity, 1.0);
-                } else {
-                  intensity = waveIntensity;
-                }
-              } else {
-                intensity = waveIntensity;
-              }
-
-              final double currentWeight = lerpDouble(600.0, 1000.0, intensity);
+              final double currentWeight = lerpDouble(600.0, 1000.0, waveIntensity);
 
               return TextSpan(
                 text: char,
                 style: TextStyle(
                   height: 1,
-
-                  fontSize: 56,
                   fontFamily: "Google Sans Flex",
                   fontVariations: [
                     FontVariation.weight(currentWeight),
