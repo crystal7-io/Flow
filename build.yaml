@@ -1,0 +1,10 @@
+targets:
+  $default:
+    sources:
+      - lib/core/models/**
+      - pubspec.yaml
+
+    builders:
+      isar_generator:
+        generate_for:
+          - lib/core/models/**

@@ -11,7 +11,7 @@ import 'package:redesigned/screens/home/home_view_model.dart';
 import 'package:redesigned/core/models/models.dart';
 import 'package:redesigned/screens/search/search_view_model.dart';
 import 'package:redesigned/widgets/utils/open_container.dart';
-import 'package:redesigned/widgets/post_widget.dart';
+import 'package:redesigned/widgets/post/mobile_post.dart';
 import 'package:redesigned/core/services/app_service.dart';
 import 'package:redesigned/screens/search/search_view.dart';
 import 'package:redesigned/widgets/utils/wave_divider.dart';

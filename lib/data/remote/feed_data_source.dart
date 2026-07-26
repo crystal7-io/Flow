@@ -1,5 +1,7 @@
 import 'package:collection/collection.dart';
+import 'package:isar/isar.dart';
 import 'package:redesigned/core/models/models.dart';
+import 'package:redesigned/core/models/post_like.dart';
 import 'package:redesigned/data/mock_data.dart';
 
 /// This class handles fetching feed data from remote data source.
@@ -9,7 +11,7 @@ class FeedDataSource {
   /// Constructor will initialize a randomized [List<Post>] instance.
   /// This will be used as feedCache
   FeedDataSource() {
-    setNewFeedCache();
+    _setNewFeedCache();
   }
 
   /// This holds a randomized feed data instance.
@@ -34,21 +36,36 @@ class FeedDataSource {
   /// This method will reset the feed and return a first set of Post items
   Future<List<Post>> refreshFeedData() async {
     // Reset Feed Cache
-    setNewFeedCache();
+    _setNewFeedCache();
 
     // Send a new set of feed
     return await fetchFeedData(0);
   }
 
   /// This private method is used to reset [_feedCache] to a new shuffled feed data
-  void setNewFeedCache() {
-    _feedCache = dummyPosts..shuffle();
+  Future<void> _setNewFeedCache() async {
+    final isar = Isar.getInstance();
+    if (isar == null) return;
+    final likedPostIds = (await isar.postLikes.where().postIdProperty().findAll()).toSet();
+
+    final posts = dummyPosts..shuffle();
+
+    _feedCache = posts.map((post) {
+      final isLiked = likedPostIds.contains(post.postId);
+
+      return switch (post) {
+        ImagePostObject p => p.copyWith(isLiked: isLiked),
+        CarouselPostObject p => p.copyWith(isLiked: isLiked),
+        VideoPostObject p => p.copyWith(isLiked: isLiked),
+        _ => post,
+      };
+    }).toList();
   }
 }
 
 List<Post> get dummyPosts => <Post>[
   CarouselPostObject(
-    postId: 001,
+    postId: "001",
     person: accounts[16].person,
     subTitle: "Lost in the intricate details of this architectural masterpiece",
     aspectRatio: 1 / 1,
@@ -63,7 +80,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 3, 24, 4, 25, 34),
   ),
   ImagePostObject(
-    postId: 003,
+    postId: "003",
     aspectRatio: 1,
     person: accounts[9].person,
     subTitle: "A Night view through my window",
@@ -74,7 +91,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 3, 14, 6, 24, 14),
   ),
   ImagePostObject(
-    postId: 005,
+    postId: "005",
     person: accounts[10].person,
     subTitle: "A wonderful scenery of hot air balloon . I wish I could visit there someday.",
     imagePath: "https://drive.google.com/uc?export=view&id=1VyZJ9yYhXcw-wCxsItBulgl3ARzTjALo",
@@ -106,7 +123,7 @@ List<Post> get dummyPosts => <Post>[
       "https://drive.google.com/uc?export=view&id=1O5rHhl8yg5XhPWdhddAu1Bw2VRyrWH43",
     ],
     dateTime: DateTime(2024, 2, 23, 3, 43, 21),
-    postId: 004,
+    postId: "004",
     subTitle: "Today's dish, mouth watering fried rice.",
     tags: [
       "#food",
@@ -130,7 +147,7 @@ List<Post> get dummyPosts => <Post>[
   ),
   ImagePostObject(
     aspectRatio: 0.9375,
-    postId: 006,
+    postId: "006",
     person: accounts[27].person,
     subTitle:
         "Ready to dive in?  Immerse yourself in breathtaking VR worlds. Explore our VR offers.",
@@ -140,7 +157,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 3, 16, 5, 24, 54),
   ),
   ImagePostObject(
-    postId: 007,
+    postId: "007",
     aspectRatio: 16 / 9,
     person: accounts[5].person,
     subTitle: "Chasing sunsets on the open road.",
@@ -152,7 +169,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 02, 18, 30, 00),
   ),
   CarouselPostObject(
-    postId: 008,
+    postId: "008",
     type: PostType.carosel,
     aspectRatio: 4 / 3,
     person: accounts[12].person,
@@ -166,7 +183,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 05, 11, 15, 22),
   ),
   ImagePostObject(
-    postId: 009,
+    postId: "009",
     aspectRatio: 1,
     person: accounts[15].person,
     subTitle: "My morning routine looks like this now.",
@@ -178,7 +195,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 10, 07, 45, 10),
   ),
   CarouselPostObject(
-    postId: 010,
+    postId: "010",
     type: PostType.carosel,
     aspectRatio: 1 / 1,
     person: accounts[22].person,
@@ -193,7 +210,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 12, 14, 20, 05),
   ),
   ImagePostObject(
-    postId: 011,
+    postId: "011",
     aspectRatio: 4 / 5,
     person: accounts[21].person,
     subTitle: "Finally finished reading this masterpiece.",
@@ -205,7 +222,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 15, 21, 10, 40),
   ),
   CarouselPostObject(
-    postId: 012,
+    postId: "012",
     type: PostType.carosel,
     aspectRatio: 1,
     person: accounts[2].person,
@@ -219,7 +236,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 18, 23, 15, 00),
   ),
   CarouselPostObject(
-    postId: 013,
+    postId: "013",
     type: PostType.carosel,
     aspectRatio: 4 / 5,
     person: accounts[7].person,
@@ -233,7 +250,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 20, 10, 05, 14),
   ),
   CarouselPostObject(
-    postId: 014,
+    postId: "014",
     type: PostType.carosel,
     aspectRatio: 4 / 5,
     person: accounts[14].person,
@@ -247,7 +264,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 22, 09, 30, 45),
   ),
   CarouselPostObject(
-    postId: 015,
+    postId: "015",
     type: PostType.carosel,
     aspectRatio: 4 / 3,
     person: accounts[18].person,
@@ -262,7 +279,7 @@ List<Post> get dummyPosts => <Post>[
     dateTime: DateTime(2024, 4, 25, 16, 40, 22),
   ),
   ImagePostObject(
-    postId: 016,
+    postId: "016",
     aspectRatio: 1.2,
     person: accounts[26].person,
     subTitle: "Freshly baked sourdough bread out of the oven!",

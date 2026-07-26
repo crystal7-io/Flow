@@ -4,7 +4,6 @@ import 'package:redesigned/core/models/comment.dart';
 import 'package:redesigned/core/models/notification.dart';
 import 'package:redesigned/core/models/person.dart';
 import 'package:redesigned/core/models/post.dart';
-import 'package:redesigned/core/models/reel_model.dart';
 import 'package:redesigned/core/models/story.dart';
 
 List<FollowPerson> followersList = [
@@ -75,7 +74,7 @@ List<FollowPerson> followersList = [
 
 List<Post> posts = <Post>[
   CarouselPostObject(
-    postId: 001,
+    postId: "001",
     person: accounts[8].person,
     subTitle: "Lost in the intricate details of this architectural masterpiece",
     aspectRatio: 1 / 1,
@@ -88,9 +87,9 @@ List<Post> posts = <Post>[
     type: PostType.carosel,
     dateTime: DateTime(2024, 3, 24, 4, 25, 34),
   ),
-  ReelPostObject(
+  VideoPostObject(
     aspectRatio: 5 / 4,
-    postId: 002,
+    postId: "002",
     person: accounts[22].person,
     subTitle: "Beautiful cloud mountain scenery",
     sourcePath: "https://drive.google.com/uc?export=view&id=1n6UUe6Yk1ZTB5DKP55lP6CNZia7_r7KE",
@@ -98,7 +97,7 @@ List<Post> posts = <Post>[
     dateTime: DateTime(2024, 3, 16, 5, 24, 54),
   ),
   ImagePostObject(
-    postId: 003,
+    postId: "003",
     aspectRatio: 1,
     person: accounts[9].person,
     subTitle: "A Night view through my window",
@@ -117,7 +116,7 @@ List<Post> posts = <Post>[
       "https://drive.google.com/uc?export=view&id=1O5rHhl8yg5XhPWdhddAu1Bw2VRyrWH43",
     ],
     dateTime: DateTime(2024, 2, 23, 3, 43, 21),
-    postId: 004,
+    postId: "004",
     subTitle: "Today's dish, mouth watering fried rice.",
     tags: [
       "#food",
@@ -140,7 +139,7 @@ List<Post> posts = <Post>[
     ],
   ),
   ImagePostObject(
-    postId: 005,
+    postId: "005",
     person: accounts[10].person,
     subTitle: "A wonderful scenery of hot air balloon . I wish I could visit there someday.",
     imagePath: "https://drive.google.com/uc?export=view&id=1VyZJ9yYhXcw-wCxsItBulgl3ARzTjALo",
@@ -162,7 +161,7 @@ List<Post> posts = <Post>[
   ),
   ImagePostObject(
     aspectRatio: 0.9375,
-    postId: 006,
+    postId: "006",
     person: accounts[27].person,
     subTitle:
         "Ready to dive in?  Immerse yourself in breathtaking VR worlds. Explore our VR offers.",
@@ -171,8 +170,7 @@ List<Post> posts = <Post>[
     dateTime: DateTime(2024, 3, 16, 5, 24, 54),
   ),
 ];
-
-Post getPostFromPostID(int id) {
+Post getPostFromPostID(String id) {
   for (var element in posts) {
     if (element.postId == id) {
       return element;
@@ -292,9 +290,9 @@ List<List<Notif>> notifications = [
     CommentLikeNotficaiton(
       notifier: accounts[21].person,
       time: '24 min',
-      postID: 001,
+      postID: "001",
       commentText: comments[0][1].text,
-      contextImagePath: getPostFromPostID(001).coverImagePath,
+      contextImagePath: getPostFromPostID("001").coverImagePath,
     ),
     StoryLikeNotification(
       notifier: accounts[16].person,
@@ -309,9 +307,9 @@ List<List<Notif>> notifications = [
       time: '34 min',
       reply: "Yes, that's what I thought",
       commentText: "Hey, this looks just like the previous post",
-      postID: 001,
+      postID: "001",
       isLiked: false,
-      contextImagePath: getPostFromPostID(001).coverImagePath,
+      contextImagePath: getPostFromPostID("001").coverImagePath,
     ),
     StoryLikeNotification(
       notifier: accounts[14].person,
@@ -322,9 +320,9 @@ List<List<Notif>> notifications = [
     CommentLikeNotficaiton(
       notifier: accounts[2].person,
       time: '3 min',
-      postID: 002,
+      postID: "002",
       commentText: comments[0][0].text,
-      contextImagePath: getPostFromPostID(002).coverImagePath,
+      contextImagePath: getPostFromPostID("002").coverImagePath,
     ),
     StoryLikeNotification(
       notifier: accounts[10].person,
@@ -335,15 +333,15 @@ List<List<Notif>> notifications = [
     CommentLikeNotficaiton(
       notifier: accounts[8].person,
       time: '5 hr',
-      postID: 001,
+      postID: "001",
       commentText: comments[0][1].text,
-      contextImagePath: getPostFromPostID(001).coverImagePath,
+      contextImagePath: getPostFromPostID("001").coverImagePath,
     ),
     PostLikeNotification(
       notifier: accounts[4].person,
       time: '9 hr',
-      postID: 002,
-      contextImagePath: getPostFromPostID(002).coverImagePath,
+      postID: "002",
+      contextImagePath: getPostFromPostID("002").coverImagePath,
     ),
   ],
   [
@@ -356,15 +354,15 @@ List<List<Notif>> notifications = [
     CommentLikeNotficaiton(
       notifier: accounts[0].person,
       time: '1 day',
-      postID: 004,
+      postID: "004",
       commentText: comments[0][1].text,
-      contextImagePath: getPostFromPostID(004).coverImagePath,
+      contextImagePath: getPostFromPostID("004").coverImagePath,
     ),
     PostLikeNotification(
       notifier: accounts[6].person,
       time: '1 day',
-      postID: 002,
-      contextImagePath: getPostFromPostID(002).coverImagePath,
+      postID: "002",
+      contextImagePath: getPostFromPostID("002").coverImagePath,
     ),
     StoryLikeNotification(
       notifier: accounts[12].person,
@@ -375,13 +373,12 @@ List<List<Notif>> notifications = [
     CommentLikeNotficaiton(
       notifier: accounts[3].person,
       time: '1 day',
-      postID: 003,
+      postID: "003",
       commentText: comments[0][0].text,
-      contextImagePath: getPostFromPostID(003).coverImagePath,
+      contextImagePath: getPostFromPostID("003").coverImagePath,
     ),
   ],
 ];
-
 List<String> downloadImages = [
   "https://img.freepik.com/free-photo/sunset-savannah_1048-4710.jpg?t=st=1713011145~exp=1713014745~hmac=c6681071fb5d115bd6169c2480887907acedd17e0b76976fe4bfb91a017a5070&w=1060",
 ];
@@ -1032,22 +1029,10 @@ List<ChatText> chatTexts = [
   ChatText(textid: 33, text: "Hey! You free to chat?", time: "8:01", sentByUser: true),
 ];
 
-List<Reel> reels = [
-  Reel(
-    person: accounts[13].person,
-    title: "Drawing still life",
-    description: "",
-    pathToMedia: "reels/v1.mp4",
-    postId: 006,
-    likes: 132,
-    playCount: 4231,
-  ),
-];
-
 const String linkToPfp =
     "https://drive.google.com/uc?export=view&id=1LB2B4h_hzLjZUb7AWAS8XNkrVa9JQ1yu";
 
-const filterItems = <String>["Profiles", "Posts", "Reels", "Photos"];
+const filterItems = <String>["Profiles", "Posts", "Videos", "Photos"];
 
 const recentSearchs = <String>[
   "furina_sunshine",

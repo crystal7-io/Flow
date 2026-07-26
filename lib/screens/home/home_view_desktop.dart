@@ -6,7 +6,7 @@ import 'package:redesigned/screens/home/home_view_model.dart';
 import 'package:redesigned/screens/home/home_data.dart';
 import 'package:redesigned/screens/home/stories_sheet_view.dart';
 import 'package:side_sheet/side_sheet.dart';
-import 'package:redesigned/widgets/post_widget.dart';
+import 'package:redesigned/widgets/post/desktop_post.dart';
 
 class DesktopHomeView extends StatefulWidget {
   const DesktopHomeView({super.key});
@@ -31,9 +31,7 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
               children: [
                 Expanded(
                   child: SearchBar(
-                    shadowColor: const WidgetStatePropertyAll(
-                      Colors.transparent,
-                    ),
+                    shadowColor: const WidgetStatePropertyAll(Colors.transparent),
                     leading: IconButton(
                       onPressed: null,
                       icon: const Icon(Symbols.search, weight: 600),
@@ -66,14 +64,11 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
                         child: CachedNetworkImage(
                           height: 64,
                           width: 64,
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
                           placeholderFadeInDuration: const Duration(seconds: 0),
                           placeholder: (context, url) => Icon(
                             Icons.account_circle_rounded,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                           fit: BoxFit.contain,
                           imageUrl: viewModel.profilePictureLink,
@@ -97,8 +92,7 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: ListView.separated(
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 8),
+                          separatorBuilder: (context, index) => const SizedBox(height: 8),
                           itemCount: viewModel.posts.length,
                           itemBuilder: ((context, index) => index == 0
                               ? Column(
@@ -106,8 +100,7 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         const Text(
                                           "Explore",
@@ -120,18 +113,13 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
                                             ? SizedBox(
                                                 height: 40,
                                                 child: TextButton.icon(
-                                                  onPressed: () =>
-                                                      SideSheet.right(
-                                                        width: 400,
-                                                        sheetBorderRadius: 14,
-                                                        context: context,
-                                                        body: StoriesSheetView(
-                                                          viewModel: viewModel,
-                                                        ),
-                                                      ),
-                                                  icon: const Icon(
-                                                    Icons.chevron_left,
+                                                  onPressed: () => SideSheet.right(
+                                                    width: 400,
+                                                    sheetBorderRadius: 14,
+                                                    context: context,
+                                                    body: StoriesSheetView(viewModel: viewModel),
                                                   ),
+                                                  icon: const Icon(Icons.chevron_left),
                                                   label: const Text("Stories"),
                                                 ),
                                               )
@@ -144,28 +132,21 @@ class _DesktopHomeViewState extends State<DesktopHomeView> {
                                       children: Filters.values
                                           .map(
                                             (e) => FilterChip(
-                                              color:
-                                                  const WidgetStatePropertyAll(
-                                                    Colors.transparent,
-                                                  ),
+                                              color: const WidgetStatePropertyAll(
+                                                Colors.transparent,
+                                              ),
                                               shape: RoundedRectangleBorder(
                                                 side: BorderSide(
                                                   color: Theme.of(
                                                     context,
                                                   ).colorScheme.outlineVariant,
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
+                                                borderRadius: BorderRadius.circular(20),
                                               ),
                                               label: Text(e.name),
-                                              selected: viewModel
-                                                  .selectedFilters
-                                                  .contains(e),
+                                              selected: viewModel.selectedFilters.contains(e),
                                               onSelected: (selected) {
-                                                viewModel.toggleFilter(
-                                                  e,
-                                                  selected,
-                                                );
+                                                viewModel.toggleFilter(e, selected);
                                               },
                                             ),
                                           )

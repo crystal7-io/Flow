@@ -30,7 +30,7 @@ class CommentReplyNotficaiton extends Notif {
   final String commentText;
   final String reply;
   final bool isLiked;
-  final int postID;
+  final String postID;
 }
 
 class CommentLikeNotficaiton extends Notif {
@@ -43,7 +43,7 @@ class CommentLikeNotficaiton extends Notif {
   }) : super(notifType: NotifType.commentLike, textContent: "liked your comment");
   String text = "";
   final String commentText;
-  final int postID;
+  final String postID;
 }
 
 class PostCommentNotficaiton extends Notif {
@@ -58,7 +58,7 @@ class PostCommentNotficaiton extends Notif {
   String text = "";
   final String reply;
   final bool isLiked;
-  final int postID;
+  final String postID;
 }
 
 class PostLikeNotification extends Notif {
@@ -68,7 +68,7 @@ class PostLikeNotification extends Notif {
     required this.postID,
     required super.contextImagePath,
   }) : super(notifType: NotifType.postLike, textContent: "Liked your Post");
-  final int postID;
+  final String postID;
 }
 
 class FollowNotification extends Notif {

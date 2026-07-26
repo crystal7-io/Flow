@@ -7,7 +7,9 @@ import 'package:redesigned/core/services/navigation_service.dart';
 import 'package:redesigned/core/services/user_data_service.dart';
 import 'package:redesigned/core/navigation/create_post_transition_provider.dart';
 import 'package:redesigned/data/local/local_user_data_source.dart';
+import 'package:redesigned/data/remote/post_data_source.dart';
 import 'package:redesigned/data/remote/remote_user_data_source.dart';
+import 'package:redesigned/data/repositories/post_repository.dart';
 import 'package:redesigned/data/repositories/user_repository.dart';
 
 class AppProvider extends StatelessWidget {
@@ -29,6 +31,9 @@ class AppProvider extends StatelessWidget {
               UserDataService(UserRepository(LocalUserDataSource(), RemoteUserDataSource())),
         ),
         Provider<NavigationService>(create: (_) => NavigationService(context.read<GoRouter>())),
+
+        // Post Repository Provider
+        Provider<PostRepository>(create: (_) => PostRepository(PostDataSource())),
       ],
       child: child,
     );

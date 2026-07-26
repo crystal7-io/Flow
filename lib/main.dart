@@ -1,9 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import 'package:libmonet/libmonet.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:redesigned/core/constants/app_config.dart';
+import 'package:redesigned/core/models/models.dart';
+import 'package:redesigned/core/models/post_like.dart';
 import 'package:redesigned/core/navigation/router.dart';
 import 'package:redesigned/core/services/app_provider.dart';
 import 'package:redesigned/core/services/app_service.dart';
@@ -16,12 +20,16 @@ import 'package:google_fonts/google_fonts.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final dir = await getApplicationDocumentsDirectory();
+  await Isar.open([UserSchema, PostLikeSchema], directory: dir.path);
+
   if (AppConfig.useAuth) {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   } else {
     // Ensure default user is initialized for local development
     await LocalUserDataSource().initializeDefaultUser();
   }
+
   // debugRepaintRainbowEnabled = true;
   runApp(Provider<GoRouter>(create: (_) => router, child: const MainApp()));
 }
