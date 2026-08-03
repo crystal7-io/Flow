@@ -190,7 +190,10 @@ class _MobilePostState extends State<MobilePost> {
                           expand: false,
                           snap: true,
                           builder: (context, scrollController) {
-                            return CommentSheet(controller: scrollController);
+                            return CommentSheet(
+                              controller: scrollController,
+                              postId: widget.post.postId,
+                            );
                           },
                         ),
                       );

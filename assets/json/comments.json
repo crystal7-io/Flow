@@ -1,174 +1,532 @@
 [
-    {
-        "id": "001",
-        "data": [
-            {
-                "text": "Wow, you look stunning!",
-                "likes": 123,
-                "dateTime": "2024-06-21T18:30:00+05:30"
-            },
-            {
-                "text": "Love the outfit! ",
-                "likes": 78,
-                "dateTime": "2024-06-21T18:45:00+05:30"
-            },
-            {
-                "text": "Beautiful picture! ",
-                "likes": 91,
-                "dateTime": "2024-06-21T19:00:00+05:30"
-            },
-            {
-                "text": "Miss you! When are we hanging out next?",
-                "likes": 45,
-                "dateTime": "2024-06-21T18:15:00+05:30"
-            },
-            {
-                "text": "Great pic! ",
-                "likes": 32,
-                "dateTime": "2024-06-21T18:20:00+05:30"
-            },
-            {
-                "text": "You always know how to take a good photo! ",
-                "likes": 102,
-                "dateTime": "2024-06-21T19:05:00+05:30"
-            },
-            {
-                "text": "Hey! ",
-                "likes": 15,
-                "dateTime": "2024-06-21T18:25:00+05:30"
-            },
-            {
-                "text": "Looking radiant! ✨",
-                "likes": 88,
-                "dateTime": "2024-06-21T18:50:00+05:30"
-            },
-            {
-                "text": "So pretty! ",
-                "likes": 64,
-                "dateTime": "2024-06-21T18:35:00+05:30"
-            },
-            {
-                "text": "This is such a vibe! ",
-                "likes": 57,
-                "dateTime": "2024-06-21T18:40:00+05:30"
-            },
-            {
-                "text": "Love your hair! ",
-                "likes": 115,
-                "dateTime": "2024-06-21T19:10:00+05:30"
-            },
-            {
-                "text": "Can't wait to see you again! ",
-                "likes": 28,
-                "dateTime": "2024-06-21T18:00:00+05:30"
-            },
-            {
-                "text": "Wish I was there! ",
-                "likes": 42,
-                "dateTime": "2024-06-21T18:55:00+05:30"
-            },
-            {
-                "text": "You inspire me! ",
-                "likes": 99,
-                "dateTime": "2024-06-21T19:15:00+05:30"
-            },
-            {
-                "text": "Sending you hugs! ",
-                "likes": 39,
-                "dateTime": "2024-06-21T18:05:00+05:30"
-            },
-            {
-                "text": "Fire fit! ",
-                "likes": 72,
-                "dateTime": "2024-06-21T18:10:00+05:30"
-            },
-            {
-                "text": "Looking good girl! ",
-                "likes": 85,
-                "dateTime": "2024-06-21T18:3嘁:00+05:30"
-            }
-        ]
-    },
-    {
-        "id": "003",
-        "data": [
-            [
-                {
-                    "text": "Werk!  This pose is everything ",
-                    "likes": 82,
-                    "dateTime": "2024-06-21T19:30:00+05:30"
-                },
-                {
-                    "text": "Such a beautiful soul, inside and out! ",
-                    "likes": 135,
-                    "dateTime": "2024-06-21T19:35:00+05:30"
-                },
-                {
-                    "text": "Can I get your stylist's number? ",
-                    "likes": 75,
-                    "dateTime": "2024-06-21T19:40:00+05:30"
-                },
-                {
-                    "text": "Making me want to pack my bags and travel too! ✈️",
-                    "likes": 54,
-                    "dateTime": "2024-06-21T19:45:00+05:30"
-                },
-                {
-                    "text": "You always brighten my day! ",
-                    "likes": 90,
-                    "dateTime": "2024-06-21T19:50:00+05:30"
-                },
-                {
-                    "text": "This picture deserves all the likes! ",
-                    "likes": 110,
-                    "dateTime": "2024-06-21T19:55:00+05:30"
-                },
-                {
-                    "text": "Goals! ",
-                    "likes": 40,
-                    "dateTime": "2024-06-21T20:00:00+05:30"
-                },
-                {
-                    "text": "Sending you positive vibes! ✨",
-                    "likes": 67,
-                    "dateTime": "2024-06-21T20:05:00+05:30"
-                },
-                {
-                    "text": "Is that a new filter? You look amazing! ",
-                    "likes": 96,
-                    "dateTime": "2024-06-21T20:10:00+05:30"
-                },
-                {
-                    "text": "Queen vibes! ",
-                    "likes": 81,
-                    "dateTime": "2024-06-21T20:15:00+05:30"
-                },
-                {
-                    "text": "Can't wait to see what you're up to next! ",
-                    "likes": 59,
-                    "dateTime": "2024-06-21T20:20:00+05:30"
-                },
-                {
-                    "text": "This picture is pure summer magic! ☀️",
-                    "likes": 70,
-                    "dateTime": "2024-06-21T20:25:00+05:30"
-                },
-                {
-                    "text": "Obsessed with this look! ",
-                    "likes": 108,
-                    "dateTime": "2024-06-21T19:20:00+05:30"
-                },
-                {
-                    "text": "Where'd you take this picture? ",
-                    "likes": 61,
-                    "dateTime": "2024-06-21T18:孑:00+05:30"
-                },
-                {
-                    "text": "You're glowing! ",
-                    "likes": 48,
-                    "dateTime": "2024-06-21T19:25:00+05:30"
-                }
-            ]
-        ]
-    }
+  {
+    "id": "c001_1",
+    "postId": "001",
+    "userId": "8",
+    "text": "The symmetry and detail on the ceiling are absolutely mind-blowing! Where was this taken?",
+    "dateTime": "2024-03-24T05:00:00.000Z",
+    "likes": 12430,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_2",
+    "postId": "001",
+    "userId": "1",
+    "text": "Looks like Sagrada Família in Barcelona!",
+    "dateTime": "2024-03-24T05:12:00.000Z",
+    "likes": 420,
+    "isLiked": false,
+    "replyToCommentId": "c001_1"
+  },
+  {
+    "id": "c001_3",
+    "postId": "001",
+    "userId": "0",
+    "text": "Agreed, classic Catalan Gothic influence.",
+    "dateTime": "2024-03-24T05:30:00.000Z",
+    "likes": 88,
+    "isLiked": false,
+    "replyToCommentId": "c001_2"
+  },
+  {
+    "id": "c001_4",
+    "postId": "001",
+    "userId": "3",
+    "text": "Incredible dynamic range on these shots. What camera body and lens setup did you use?",
+    "dateTime": "2024-03-24T05:15:00.000Z",
+    "likes": 3210,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_5",
+    "postId": "001",
+    "userId": "16",
+    "text": "Slide 2 is pure art! The light hits the stone perfectly.",
+    "dateTime": "2024-03-24T05:40:00.000Z",
+    "likes": 890,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_6",
+    "postId": "001",
+    "userId": "5",
+    "text": "Human craftsmanship at its peak.",
+    "dateTime": "2024-03-24T06:01:00.000Z",
+    "likes": 541,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_7",
+    "postId": "001",
+    "userId": "6",
+    "text": "I could stare at this for hours and still find new details.",
+    "dateTime": "2024-03-24T06:15:00.000Z",
+    "likes": 230,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_8",
+    "postId": "001",
+    "userId": "4",
+    "text": "Was this taken during golden hour?",
+    "dateTime": "2024-03-24T06:30:00.000Z",
+    "likes": 112,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_9",
+    "postId": "001",
+    "userId": "15",
+    "text": "Added to my bucket list immediately!",
+    "dateTime": "2024-03-24T07:10:00.000Z",
+    "likes": 78,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_10",
+    "postId": "001",
+    "userId": "17",
+    "text": "The third slide perspective is insane 🤯",
+    "dateTime": "2024-03-24T07:45:00.000Z",
+    "likes": 304,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_11",
+    "postId": "001",
+    "userId": "11",
+    "text": "Masterpiece shot mate!",
+    "dateTime": "2024-03-24T08:00:00.000Z",
+    "likes": 12,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_12",
+    "postId": "001",
+    "userId": "12",
+    "text": "How long did it take to build this?",
+    "dateTime": "2024-03-24T08:20:00.000Z",
+    "likes": 65,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_13",
+    "postId": "001",
+    "userId": "28",
+    "text": "Construction started in 1882 and still ongoing!",
+    "dateTime": "2024-03-24T08:40:00.000Z",
+    "likes": 890,
+    "isLiked": false,
+    "replyToCommentId": "c001_12"
+  },
+  {
+    "id": "c001_14",
+    "postId": "001",
+    "userId": "2",
+    "text": "Breathtaking angles 🤍",
+    "dateTime": "2024-03-24T09:00:00.000Z",
+    "likes": 44,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_15",
+    "postId": "001",
+    "userId": "24",
+    "text": "Is this edited or raw color grading?",
+    "dateTime": "2024-03-24T09:15:00.000Z",
+    "likes": 19,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c001_16",
+    "postId": "001",
+    "userId": "25",
+    "text": "Looks like warm cinematic tone curve tweaks.",
+    "dateTime": "2024-03-24T09:30:00.000Z",
+    "likes": 102,
+    "isLiked": false,
+    "replyToCommentId": "c001_15"
+  },
+  {
+    "id": "c001_17",
+    "postId": "001",
+    "userId": "23",
+    "text": "Insane composition!",
+    "dateTime": "2024-03-24T10:00:00.000Z",
+    "likes": 5,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c003_1",
+    "postId": "003",
+    "userId": "9",
+    "text": "Furina vibes! The night aesthetic is super chill 🌙",
+    "dateTime": "2024-03-14T06:30:00.000Z",
+    "likes": 142,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c003_2",
+    "postId": "003",
+    "userId": "2",
+    "text": "Hydro Archon supremacy! 💧",
+    "dateTime": "2024-03-14T06:35:00.000Z",
+    "likes": 34,
+    "isLiked": false,
+    "replyToCommentId": "c003_1"
+  },
+  {
+    "id": "c003_3",
+    "postId": "003",
+    "userId": "7",
+    "text": "Nothing beats a quiet room and night view.",
+    "dateTime": "2024-03-14T07:00:00.000Z",
+    "likes": 55,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c003_4",
+    "postId": "003",
+    "userId": "1",
+    "text": "What city is this?",
+    "dateTime": "2024-03-14T08:12:00.000Z",
+    "likes": 12,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c005_1",
+    "postId": "005",
+    "userId": "15",
+    "text": "Cappadocia is magical! You definitely need to go someday 🎈",
+    "dateTime": "2024-03-16T06:00:00.000Z",
+    "likes": 4500,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c005_2",
+    "postId": "005",
+    "userId": "0",
+    "text": "Rest in peace to a legend. Beautiful memory shared.",
+    "dateTime": "2024-03-16T06:20:00.000Z",
+    "likes": 8900,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c005_3",
+    "postId": "005",
+    "userId": "22",
+    "text": "Forever in our hearts ❤️",
+    "dateTime": "2024-03-16T06:45:00.000Z",
+    "likes": 1200,
+    "isLiked": false,
+    "replyToCommentId": "c005_2"
+  },
+  {
+    "id": "c005_4",
+    "postId": "005",
+    "userId": "25",
+    "text": "Gone but never forgotten 🕊️",
+    "dateTime": "2024-03-16T07:10:00.000Z",
+    "likes": 2300,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c005_5",
+    "postId": "005",
+    "userId": "14",
+    "text": "Sending love and prayers.",
+    "dateTime": "2024-03-16T08:00:00.000Z",
+    "likes": 560,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c004_1",
+    "postId": "004",
+    "userId": "19",
+    "text": "Drop the recipe right now! That wok hei gloss looks insane 🍳🔥",
+    "dateTime": "2024-02-23T04:00:00.000Z",
+    "likes": 320,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c004_2",
+    "postId": "004",
+    "userId": "13",
+    "text": "Is this fully vegetarian?",
+    "dateTime": "2024-02-23T04:15:00.000Z",
+    "likes": 42,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c006_1",
+    "postId": "006",
+    "userId": "5",
+    "text": "The resolution on these new displays is getting ridiculously crisp. VR is maturing.",
+    "dateTime": "2024-03-16T06:00:00.000Z",
+    "likes": 18400,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c006_2",
+    "postId": "006",
+    "userId": "3",
+    "text": "How's motion sickness on this model though?",
+    "dateTime": "2024-03-16T06:10:00.000Z",
+    "likes": 512,
+    "isLiked": false,
+    "replyToCommentId": "c006_1"
+  },
+  {
+    "id": "c006_3",
+    "postId": "006",
+    "userId": "6",
+    "text": "Take my money! Where do we sign up for early access?",
+    "dateTime": "2024-03-16T06:30:00.000Z",
+    "likes": 2100,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c006_4",
+    "postId": "006",
+    "userId": "24",
+    "text": "Ready Player One is becoming reality.",
+    "dateTime": "2024-03-16T07:00:00.000Z",
+    "likes": 1420,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c006_5",
+    "postId": "006",
+    "userId": "4",
+    "text": "Are there Unity SDKs ready for development?",
+    "dateTime": "2024-03-16T07:15:00.000Z",
+    "likes": 320,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c006_6",
+    "postId": "006",
+    "userId": "11",
+    "text": "What is the refresh rate? 120Hz?",
+    "dateTime": "2024-03-16T07:40:00.000Z",
+    "likes": 210,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c007_1",
+    "postId": "007",
+    "userId": "8",
+    "text": "Route 66 vibes! Endless horizons are the best therapy.",
+    "dateTime": "2024-04-02T19:00:00.000Z",
+    "likes": 1200,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c007_2",
+    "postId": "007",
+    "userId": "21",
+    "text": "Orange skies hit different on the highway.",
+    "dateTime": "2024-04-02T19:20:00.000Z",
+    "likes": 310,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c008_1",
+    "postId": "008",
+    "userId": "0",
+    "text": "Coffee converts bugs into features ☕💻 What tech stack are you on?",
+    "dateTime": "2024-04-05T12:00:00.000Z",
+    "likes": 2300,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c008_2",
+    "postId": "008",
+    "userId": "1",
+    "text": "Flutter & Dart all day!",
+    "dateTime": "2024-04-05T12:15:00.000Z",
+    "likes": 890,
+    "isLiked": false,
+    "replyToCommentId": "c008_1"
+  },
+  {
+    "id": "c008_3",
+    "postId": "008",
+    "userId": "20",
+    "text": "Espresso or V60 pour over?",
+    "dateTime": "2024-04-05T12:30:00.000Z",
+    "likes": 120,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c009_1",
+    "postId": "009",
+    "userId": "18",
+    "text": "That aesthetic is immaculate! Natural sunlight hits different.",
+    "dateTime": "2024-04-10T08:00:00.000Z",
+    "likes": 9800,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c009_2",
+    "postId": "009",
+    "userId": "27",
+    "text": "Where did you buy that mug?",
+    "dateTime": "2024-04-10T08:20:00.000Z",
+    "likes": 340,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c011_1",
+    "postId": "011",
+    "userId": "26",
+    "text": "10/10 recommendation! The plot twist in chapter 14 blew my mind.",
+    "dateTime": "2024-04-15T21:30:00.000Z",
+    "likes": 15600,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c011_2",
+    "postId": "011",
+    "userId": "10",
+    "text": "NO SPOILERS PLEASE! I'm on chapter 10!",
+    "dateTime": "2024-04-15T21:40:00.000Z",
+    "likes": 2100,
+    "isLiked": false,
+    "replyToCommentId": "c011_1"
+  },
+  {
+    "id": "c011_3",
+    "postId": "011",
+    "userId": "13",
+    "text": "Adding this to my GoodReads immediately 📚",
+    "dateTime": "2024-04-15T22:00:00.000Z",
+    "likes": 3400,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c011_4",
+    "postId": "011",
+    "userId": "12",
+    "text": "His previous book was slightly better written, but this was still solid.",
+    "dateTime": "2024-04-15T22:15:00.000Z",
+    "likes": 820,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c013_1",
+    "postId": "013",
+    "userId": "7",
+    "text": "Hot chocolate, rainy window, and good music = perfection 🌧️",
+    "dateTime": "2024-04-20T10:30:00.000Z",
+    "likes": 12400,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c013_2",
+    "postId": "013",
+    "userId": "17",
+    "text": "Needs a Lofi playlist running in the background.",
+    "dateTime": "2024-04-20T10:45:00.000Z",
+    "likes": 1890,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c015_1",
+    "postId": "015",
+    "userId": "28",
+    "text": "Kyoto in evening light is unmatched! Hope you visited Gion.",
+    "dateTime": "2024-04-25T17:00:00.000Z",
+    "likes": 22100,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c015_2",
+    "postId": "015",
+    "userId": "23",
+    "text": "Pontocho alley at night is even better!",
+    "dateTime": "2024-04-25T17:10:00.000Z",
+    "likes": 3400,
+    "isLiked": false,
+    "replyToCommentId": "c015_1"
+  },
+  {
+    "id": "c015_3",
+    "postId": "015",
+    "userId": "16",
+    "text": "Did you try the local matcha soft serve?",
+    "dateTime": "2024-04-25T17:30:00.000Z",
+    "likes": 1100,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c015_4",
+    "postId": "015",
+    "userId": "22",
+    "text": "Missing Japan so much after looking at this 🥺",
+    "dateTime": "2024-04-25T18:00:00.000Z",
+    "likes": 4200,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c016_1",
+    "postId": "016",
+    "userId": "19",
+    "text": "Look at that crumb structure! Perfect fermentation 🎉",
+    "dateTime": "2024-04-28T08:30:00.000Z",
+    "likes": 980,
+    "isLiked": false,
+    "replyToCommentId": null
+  },
+  {
+    "id": "c016_2",
+    "postId": "016",
+    "userId": "9",
+    "text": "Nothing smells better than fresh bread out of the oven.",
+    "dateTime": "2024-04-28T09:00:00.000Z",
+    "likes": 450,
+    "isLiked": false,
+    "replyToCommentId": null
+  }
 ]

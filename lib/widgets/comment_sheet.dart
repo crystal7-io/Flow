@@ -2,28 +2,32 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_3p/material_loading_indicator.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/models.dart';
 import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/data/mock_data.dart';
+import 'package:redesigned/data/repositories/comment_repository.dart';
 
 class CommentSheet extends StatefulWidget {
-  const CommentSheet({super.key, required this.controller});
+  const CommentSheet({super.key, required this.controller, required this.postId});
   final ScrollController controller;
+  final String postId;
 
   @override
   State<CommentSheet> createState() => _CommentSheetState();
 }
 
 class _CommentSheetState extends State<CommentSheet> {
-  late List<Comment> _comments;
+  late Future<List<Comment>> _commentsFuture;
+  List<Comment> _comments = [];
   final TextEditingController _commentController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Initialize comments from mock data.
-    _comments = comments.isNotEmpty ? comments[0] : [];
+    _commentsFuture = context.read<CommentsRepository>().getCommentsForPost(postId: widget.postId);
   }
 
   @override
@@ -32,11 +36,14 @@ class _CommentSheetState extends State<CommentSheet> {
     super.dispose();
   }
 
-  void _addComment() {
-    if (_commentController.text.trim().isEmpty) return;
+  void _addComment() async {
+    final text = _commentController.text.trim();
+    if (text.isEmpty) return;
 
-    // If Logged in User Data is not pressent
-    // Use a default/mock person for the currently logged in user accounts[0].person
+    // Clear input field and unfocus
+    _commentController.clear();
+    FocusScope.of(context).unfocus();
+
     final currentUser = accounts.isNotEmpty
         ? accounts[0].person
         : Person(
@@ -46,22 +53,20 @@ class _CommentSheetState extends State<CommentSheet> {
             profilePicturePath: linkToPfp,
           );
 
+    final newComment = await context.read<CommentsRepository>().addComment(
+      postId: widget.postId,
+      person: currentUser,
+      text: text,
+    );
+
+    if (!mounted) return;
+
     setState(() {
-      _comments.insert(
-        0,
-        Comment(
-          person: currentUser,
-          text: _commentController.text.trim(),
-          dateTime: 'Just now',
-          likes: 0,
-          isLiked: false,
-          replies: [],
-        ),
-      );
+      _comments.insert(0, newComment);
     });
+
+    // Scroll to top for new comment
     widget.controller.animateTo(0, duration: Durations.medium4, curve: Easing.emphasizedDecelerate);
-    _commentController.clear();
-    FocusScope.of(context).unfocus();
   }
 
   String _formatDateTime(dynamic dateTime) {
@@ -100,22 +105,58 @@ class _CommentSheetState extends State<CommentSheet> {
           ),
         ),
 
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Expanded(
-          child: ListView.builder(
-            controller: widget.controller,
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
-            itemCount: _comments.length,
-            itemBuilder: (context, index) {
-              final comment = _comments[index];
-              return _buildCommentItem(comment)
-                  .animate()
-                  .fadeIn(
-                    delay: (index * 42).ms,
-                    duration: 250.ms,
-                    curve: Easing.standardDecelerate,
-                  )
-                  .move(begin: const Offset(0, 64), duration: 400.ms, curve: Easing.standard);
+          child: FutureBuilder<List<Comment>>(
+            future: _commentsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting && _comments.isEmpty) {
+                return const Center(
+                  child: SizedBox(height: 80, width: 80, child: IndeterminateLoadingIndicator()),
+                );
+              }
+
+              if (snapshot.hasError && _comments.isEmpty) {
+                return Center(
+                  child: Text(
+                    "Error loading comments",
+                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error),
+                  ),
+                );
+              }
+
+              // Store fetched list into state if not already set
+              if (snapshot.hasData && _comments.isEmpty) {
+                _comments = List.from(snapshot.data!);
+              }
+
+              if (_comments.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No comments yet",
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                controller: widget.controller,
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+                itemCount: _comments.length,
+                itemBuilder: (context, index) {
+                  final comment = _comments[index];
+                  return _buildCommentItem(comment)
+                      .animate()
+                      .fadeIn(
+                        delay: (index * 80).ms,
+                        duration: 250.ms,
+                        curve: Easing.standardDecelerate,
+                      )
+                      .move(begin: const Offset(0, 64), duration: 400.ms, curve: Easing.standard);
+                },
+              );
             },
           ),
         ),
@@ -130,18 +171,15 @@ class _CommentSheetState extends State<CommentSheet> {
               top: 8,
             ),
             child: Row(
-              crossAxisAlignment: .end,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // User Avatar
-
-                // Input text field
                 Expanded(
                   child: Container(
-                    alignment: .center,
+                    alignment: Alignment.center,
                     constraints: const BoxConstraints(minHeight: 56),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.surfaceBright,
-                      borderRadius: .circular(12),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     padding: const EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
                     child: TextField(
@@ -153,7 +191,7 @@ class _CommentSheetState extends State<CommentSheet> {
                         height: 1,
                       ),
                       decoration: InputDecoration(
-                        contentPadding: .symmetric(vertical: 0),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
                         hintText: "Add a comment...",
                         hintStyle: theme.textTheme.bodyLarge?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
@@ -166,12 +204,14 @@ class _CommentSheetState extends State<CommentSheet> {
                   ),
                 ),
 
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 SizedBox(
                   height: 56,
                   child: IconButton(
                     style: ButtonStyle(
-                      backgroundColor: .all(Theme.of(context).colorScheme.tertiaryContainer),
+                      backgroundColor: WidgetStateProperty.all(
+                        Theme.of(context).colorScheme.tertiaryContainer,
+                      ),
                     ),
                     onPressed: _addComment,
                     icon: Icon(
@@ -201,7 +241,6 @@ class _CommentSheetState extends State<CommentSheet> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Avatar
               ClipPath(
                 clipper: DynamicAvatarClipper(comment.person.profilePictureShape),
                 child: CachedNetworkImage(
@@ -219,7 +258,6 @@ class _CommentSheetState extends State<CommentSheet> {
               ),
               const SizedBox(width: 12),
 
-              // Username, Comment Bubble, Metadata
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,16 +267,15 @@ class _CommentSheetState extends State<CommentSheet> {
                       style: GoogleFonts.googleSansCode(
                         color: theme.colorScheme.onSurface,
                         fontSize: 14,
-                        fontWeight: .w400,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                     const SizedBox(height: 4),
 
-                    // Comment bubble wrapping to contents
                     Container(
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceBright,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(4),
                           bottomLeft: Radius.circular(20),
                           topRight: Radius.circular(20),
@@ -255,30 +292,8 @@ class _CommentSheetState extends State<CommentSheet> {
                       ),
                     ),
 
-                    // Small Like Icon button next to the bubble
-                    // IconButton(
-                    //   onPressed: () {
-                    //     setState(() {
-                    //       if (comment.isLiked) {
-                    //         comment.isLiked = false;
-                    //         comment.likes = (comment.likes > 0) ? comment.likes - 1 : 0;
-                    //       } else {
-                    //         comment.isLiked = true;
-                    //         comment.likes += 1;
-                    //       }
-                    //     });
-                    //   },
-                    //   icon: Icon(
-                    //     comment.isLiked ? Icons.favorite : Icons.favorite_border,
-                    //     color: comment.isLiked
-                    //         ? Colors.red
-                    //         : theme.colorScheme.onSurfaceVariant.withOpacity(0.6),
-                    //     size: 18,
-                    //   ),
-                    // ),
                     const SizedBox(height: 6),
 
-                    // Metadata: Time and Likes count
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Text(

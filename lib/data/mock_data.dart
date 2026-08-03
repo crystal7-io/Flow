@@ -1,6 +1,5 @@
 import 'package:redesigned/core/models/account.dart';
 import 'package:redesigned/core/models/chat.dart';
-import 'package:redesigned/core/models/comment.dart';
 import 'package:redesigned/core/models/notification.dart';
 import 'package:redesigned/core/models/person.dart';
 import 'package:redesigned/core/models/post.dart';
@@ -179,100 +178,68 @@ Post getPostFromPostID(String id) {
   throw Exception("POST NOT FOUND : $id");
 }
 
-List<List<Comment>> comments = [
-  [
-    Comment(
-      person: accounts[17].person,
-      text: "Wow, absolutely incredible work! This made my day.",
-      dateTime: "8 min",
-      replies: <CommentReply>[
-        CommentReply(
-          replyTo: accounts[25].person.userName,
-          person: accounts[21].person,
-          text: "Ysss",
-          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
-        ),
-        CommentReply(
-          replyTo: accounts[25].person.userName,
-          person: accounts[12].person,
-          text: "Mayb yess",
-          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
-        ),
-        CommentReply(
-          replyTo: accounts[25].person.userName,
-          person: accounts[15].person,
-          text: "This can be a serious thing if you think logically about it.",
-          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
-        ),
-        CommentReply(
-          replyTo: accounts[25].person.userName,
-          person: accounts[16].person,
-          text: "Lmaooo 😭",
-          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
-        ),
-        CommentReply(
-          replyTo: accounts[25].person.userName,
-          person: accounts[18].person,
-          text: "Agreed",
-          dateTime: DateTime(2024, 3, 4, 12, 24, 4),
-        ),
-      ],
-    ),
+// List<List<Comment>> comments = [
+//   [
+//     Comment(
+//       person: accounts[17].person,
+//       text: "Wow, absolutely incredible work! This made my day.",
+//       dateTime: "8 min",
+//     ),
 
-    Comment(
-      person: accounts[5].person,
-      text: "Honestly, I am such a huge fan of everything you do. Keep pushing forward! 🚀",
-      dateTime: "18 min",
-    ),
-    Comment(person: accounts[13].person, text: "Good work!!", dateTime: "26 min"),
-    Comment(
-      person: accounts[11].person,
-      text: "This is exactly what I needed to see today. Brilliant stuff.",
-      dateTime: "39 min",
-    ),
-    Comment(person: accounts[0].person, text: "So inspiring honestly.", dateTime: "42 min"),
-    Comment(
-      person: accounts[22].person,
-      text: "The dedication here is unmatched. Seriously impressive results!",
-      dateTime: "45 min",
-    ),
-    Comment(person: accounts[7].person, text: "Love this so much!", dateTime: "51 min"),
-    Comment(
-      person: accounts[19].person,
-      text: "You can really tell how much effort went into this. Outstanding job!",
-      dateTime: "58 min",
-    ),
-    Comment(person: accounts[3].person, text: "Pure perfection 💯", dateTime: "1 hr"),
-    Comment(
-      person: accounts[6].person,
-      text: "Count me in as a lifelong supporter, this is legendary.",
-      dateTime: "1 hr",
-    ),
-    Comment(person: accounts[1].person, text: "Keep it up!", dateTime: "2 hr"),
-    Comment(
-      person: accounts[14].person,
-      text: "I've been following your journey for a while and you just keep getting better.",
-      dateTime: "2 hr",
-    ),
-    Comment(
-      person: accounts[8].person,
-      text: "Such a vibe, love the energy here.",
-      dateTime: "3 hr",
-    ),
-    Comment(
-      person: accounts[2].person,
-      text: "This deserves way more recognition. Amazing work!",
-      dateTime: "3 hr",
-    ),
-    Comment(person: accounts[12].person, text: "So clean!", dateTime: "4 hr"),
-    Comment(
-      person: accounts[26].person,
-      text: "You genuinely inspire me to work harder. Thank you for sharing this!",
-      dateTime: "4 hr",
-    ),
-    Comment(person: accounts[4].person, text: "Simply awesome 🙌", dateTime: "5 hr"),
-  ],
-];
+//     Comment(
+//       person: accounts[5].person,
+//       text: "Honestly, I am such a huge fan of everything you do. Keep pushing forward! 🚀",
+//       dateTime: "18 min",
+//     ),
+//     Comment(person: accounts[13].person, text: "Good work!!", dateTime: "26 min"),
+//     Comment(
+//       person: accounts[11].person,
+//       text: "This is exactly what I needed to see today. Brilliant stuff.",
+//       dateTime: "39 min",
+//     ),
+//     Comment(person: accounts[0].person, text: "So inspiring honestly.", dateTime: "42 min"),
+//     Comment(
+//       person: accounts[22].person,
+//       text: "The dedication here is unmatched. Seriously impressive results!",
+//       dateTime: "45 min",
+//     ),
+//     Comment(person: accounts[7].person, text: "Love this so much!", dateTime: "51 min"),
+//     Comment(
+//       person: accounts[19].person,
+//       text: "You can really tell how much effort went into this. Outstanding job!",
+//       dateTime: "58 min",
+//     ),
+//     Comment(person: accounts[3].person, text: "Pure perfection 💯", dateTime: "1 hr"),
+//     Comment(
+//       person: accounts[6].person,
+//       text: "Count me in as a lifelong supporter, this is legendary.",
+//       dateTime: "1 hr",
+//     ),
+//     Comment(person: accounts[1].person, text: "Keep it up!", dateTime: "2 hr"),
+//     Comment(
+//       person: accounts[14].person,
+//       text: "I've been following your journey for a while and you just keep getting better.",
+//       dateTime: "2 hr",
+//     ),
+//     Comment(
+//       person: accounts[8].person,
+//       text: "Such a vibe, love the energy here.",
+//       dateTime: "3 hr",
+//     ),
+//     Comment(
+//       person: accounts[2].person,
+//       text: "This deserves way more recognition. Amazing work!",
+//       dateTime: "3 hr",
+//     ),
+//     Comment(person: accounts[12].person, text: "So clean!", dateTime: "4 hr"),
+//     Comment(
+//       person: accounts[26].person,
+//       text: "You genuinely inspire me to work harder. Thank you for sharing this!",
+//       dateTime: "4 hr",
+//     ),
+//     Comment(person: accounts[4].person, text: "Simply awesome 🙌", dateTime: "5 hr"),
+//   ],
+// ];
 
 List<List<Notif>> notifications = [
   [
@@ -287,13 +254,13 @@ List<List<Notif>> notifications = [
       time: '2 hr',
       contextImagePath: myStories[0].pathToMedia,
     ),
-    CommentLikeNotficaiton(
-      notifier: accounts[21].person,
-      time: '24 min',
-      postID: "001",
-      commentText: comments[0][1].text,
-      contextImagePath: getPostFromPostID("001").coverImagePath,
-    ),
+    // CommentLikeNotficaiton(
+    //   notifier: accounts[21].person,
+    //   time: '24 min',
+    //   postID: "001",
+    //   commentText: comments[0][1].text,
+    //   contextImagePath: getPostFromPostID("001").coverImagePath,
+    // ),
     StoryLikeNotification(
       notifier: accounts[16].person,
       time: '12 min',
@@ -317,26 +284,26 @@ List<List<Notif>> notifications = [
       storyNum: 1,
       contextImagePath: myStories[1].pathToMedia,
     ),
-    CommentLikeNotficaiton(
-      notifier: accounts[2].person,
-      time: '3 min',
-      postID: "002",
-      commentText: comments[0][0].text,
-      contextImagePath: getPostFromPostID("002").coverImagePath,
-    ),
+    // CommentLikeNotficaiton(
+    //   notifier: accounts[2].person,
+    //   time: '3 min',
+    //   postID: "002",
+    //   commentText: comments[0][0].text,
+    //   contextImagePath: getPostFromPostID("002").coverImagePath,
+    // ),
     StoryLikeNotification(
       notifier: accounts[10].person,
       time: '46 min',
       storyNum: 0,
       contextImagePath: myStories[0].pathToMedia,
     ),
-    CommentLikeNotficaiton(
-      notifier: accounts[8].person,
-      time: '5 hr',
-      postID: "001",
-      commentText: comments[0][1].text,
-      contextImagePath: getPostFromPostID("001").coverImagePath,
-    ),
+    // CommentLikeNotficaiton(
+    //   notifier: accounts[8].person,
+    //   time: '5 hr',
+    //   postID: "001",
+    //   commentText: comments[0][1].text,
+    //   contextImagePath: getPostFromPostID("001").coverImagePath,
+    // ),
     PostLikeNotification(
       notifier: accounts[4].person,
       time: '9 hr',
@@ -351,13 +318,13 @@ List<List<Notif>> notifications = [
       storyNum: 1,
       contextImagePath: myStories[1].pathToMedia,
     ),
-    CommentLikeNotficaiton(
-      notifier: accounts[0].person,
-      time: '1 day',
-      postID: "004",
-      commentText: comments[0][1].text,
-      contextImagePath: getPostFromPostID("004").coverImagePath,
-    ),
+    // CommentLikeNotficaiton(
+    //   notifier: accounts[0].person,
+    //   time: '1 day',
+    //   postID: "004",
+    //   commentText: comments[0][1].text,
+    //   contextImagePath: getPostFromPostID("004").coverImagePath,
+    // ),
     PostLikeNotification(
       notifier: accounts[6].person,
       time: '1 day',
@@ -370,13 +337,13 @@ List<List<Notif>> notifications = [
       storyNum: 1,
       contextImagePath: myStories[1].pathToMedia,
     ),
-    CommentLikeNotficaiton(
-      notifier: accounts[3].person,
-      time: '1 day',
-      postID: "003",
-      commentText: comments[0][0].text,
-      contextImagePath: getPostFromPostID("003").coverImagePath,
-    ),
+    // CommentLikeNotficaiton(
+    //   notifier: accounts[3].person,
+    //   time: '1 day',
+    //   postID: "003",
+    //   commentText: comments[0][0].text,
+    //   contextImagePath: getPostFromPostID("003").coverImagePath,
+    // ),
   ],
 ];
 List<String> downloadImages = [
@@ -895,6 +862,15 @@ Person getPersonFromUserName(String userName) {
     }
   }
   throw Exception("USER NOT FOUND : $userName");
+}
+
+Person getPersonFromUserId(String userId) {
+  for (var element in accounts) {
+    if (element.person.id == userId) {
+      return element.person;
+    }
+  }
+  throw Exception("USER NOT FOUND : $userId");
 }
 
 Account getAccountFromUserName(String userName) {

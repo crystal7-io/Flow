@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:isar/isar.dart';
 import 'package:redesigned/core/models/models.dart';
-import 'package:redesigned/core/models/post_like.dart';
+import 'package:redesigned/core/models/like/post_like.dart';
 import 'package:redesigned/data/mock_data.dart';
 
 /// This class handles fetching feed data from remote data source.

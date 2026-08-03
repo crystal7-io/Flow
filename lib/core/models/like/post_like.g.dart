@@ -17,21 +17,9 @@ const PostLikeSchema = CollectionSchema(
   name: r'PostLike',
   id: -72675558299802220,
   properties: {
-    r'createdAt': PropertySchema(
-      id: 0,
-      name: r'createdAt',
-      type: IsarType.dateTime,
-    ),
-    r'postId': PropertySchema(
-      id: 1,
-      name: r'postId',
-      type: IsarType.string,
-    ),
-    r'userId': PropertySchema(
-      id: 2,
-      name: r'userId',
-      type: IsarType.string,
-    )
+    r'createdAt': PropertySchema(id: 0, name: r'createdAt', type: IsarType.dateTime),
+    r'postId': PropertySchema(id: 1, name: r'postId', type: IsarType.string),
+    r'userId': PropertySchema(id: 2, name: r'userId', type: IsarType.string),
   },
   estimateSize: _postLikeEstimateSize,
   serialize: _postLikeSerialize,
@@ -45,18 +33,10 @@ const PostLikeSchema = CollectionSchema(
       unique: true,
       replace: false,
       properties: [
-        IndexPropertySchema(
-          name: r'userId',
-          type: IndexType.hash,
-          caseSensitive: true,
-        ),
-        IndexPropertySchema(
-          name: r'postId',
-          type: IndexType.hash,
-          caseSensitive: true,
-        )
+        IndexPropertySchema(name: r'userId', type: IndexType.hash, caseSensitive: true),
+        IndexPropertySchema(name: r'postId', type: IndexType.hash, caseSensitive: true),
       ],
-    )
+    ),
   },
   links: {},
   embeddedSchemas: {},
@@ -66,11 +46,7 @@ const PostLikeSchema = CollectionSchema(
   version: '3.1.0+1',
 );
 
-int _postLikeEstimateSize(
-  PostLike object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
+int _postLikeEstimateSize(PostLike object, List<int> offsets, Map<Type, List<int>> allOffsets) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.postId.length * 3;
   bytesCount += 3 + object.userId.length * 3;
@@ -151,10 +127,11 @@ extension PostLikeByIndex on IsarCollection<PostLike> {
   }
 
   Future<List<PostLike?>> getAllByUserIdPostId(
-      List<String> userIdValues, List<String> postIdValues) {
+    List<String> userIdValues,
+    List<String> postIdValues,
+  ) {
     final len = userIdValues.length;
-    assert(postIdValues.length == len,
-        'All index values must have the same length');
+    assert(postIdValues.length == len, 'All index values must have the same length');
     final values = <List<dynamic>>[];
     for (var i = 0; i < len; i++) {
       values.add([userIdValues[i], postIdValues[i]]);
@@ -163,11 +140,9 @@ extension PostLikeByIndex on IsarCollection<PostLike> {
     return getAllByIndex(r'userId_postId', values);
   }
 
-  List<PostLike?> getAllByUserIdPostIdSync(
-      List<String> userIdValues, List<String> postIdValues) {
+  List<PostLike?> getAllByUserIdPostIdSync(List<String> userIdValues, List<String> postIdValues) {
     final len = userIdValues.length;
-    assert(postIdValues.length == len,
-        'All index values must have the same length');
+    assert(postIdValues.length == len, 'All index values must have the same length');
     final values = <List<dynamic>>[];
     for (var i = 0; i < len; i++) {
       values.add([userIdValues[i], postIdValues[i]]);
@@ -176,11 +151,9 @@ extension PostLikeByIndex on IsarCollection<PostLike> {
     return getAllByIndexSync(r'userId_postId', values);
   }
 
-  Future<int> deleteAllByUserIdPostId(
-      List<String> userIdValues, List<String> postIdValues) {
+  Future<int> deleteAllByUserIdPostId(List<String> userIdValues, List<String> postIdValues) {
     final len = userIdValues.length;
-    assert(postIdValues.length == len,
-        'All index values must have the same length');
+    assert(postIdValues.length == len, 'All index values must have the same length');
     final values = <List<dynamic>>[];
     for (var i = 0; i < len; i++) {
       values.add([userIdValues[i], postIdValues[i]]);
@@ -189,11 +162,9 @@ extension PostLikeByIndex on IsarCollection<PostLike> {
     return deleteAllByIndex(r'userId_postId', values);
   }
 
-  int deleteAllByUserIdPostIdSync(
-      List<String> userIdValues, List<String> postIdValues) {
+  int deleteAllByUserIdPostIdSync(List<String> userIdValues, List<String> postIdValues) {
     final len = userIdValues.length;
-    assert(postIdValues.length == len,
-        'All index values must have the same length');
+    assert(postIdValues.length == len, 'All index values must have the same length');
     final values = <List<dynamic>>[];
     for (var i = 0; i < len; i++) {
       values.add([userIdValues[i], postIdValues[i]]);
@@ -214,8 +185,7 @@ extension PostLikeByIndex on IsarCollection<PostLike> {
     return putAllByIndex(r'userId_postId', objects);
   }
 
-  List<Id> putAllByUserIdPostIdSync(List<PostLike> objects,
-      {bool saveLinks = true}) {
+  List<Id> putAllByUserIdPostIdSync(List<PostLike> objects, {bool saveLinks = true}) {
     return putAllByIndexSync(r'userId_postId', objects, saveLinks: saveLinks);
   }
 }
@@ -231,10 +201,7 @@ extension PostLikeQueryWhereSort on QueryBuilder<PostLike, PostLike, QWhere> {
 extension PostLikeQueryWhere on QueryBuilder<PostLike, PostLike, QWhereClause> {
   QueryBuilder<PostLike, PostLike, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
+      return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
@@ -242,39 +209,25 @@ extension PostLikeQueryWhere on QueryBuilder<PostLike, PostLike, QWhereClause> {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: id, includeUpper: false),
-            )
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: id, includeLower: false),
-            );
+            .addWhereClause(IdWhereClause.lessThan(upper: id, includeUpper: false))
+            .addWhereClause(IdWhereClause.greaterThan(lower: id, includeLower: false));
       } else {
         return query
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: id, includeLower: false),
-            )
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: id, includeUpper: false),
-            );
+            .addWhereClause(IdWhereClause.greaterThan(lower: id, includeLower: false))
+            .addWhereClause(IdWhereClause.lessThan(upper: id, includeUpper: false));
       }
     });
   }
 
-  QueryBuilder<PostLike, PostLike, QAfterWhereClause> idGreaterThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<PostLike, PostLike, QAfterWhereClause> idGreaterThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.greaterThan(lower: id, includeLower: include),
-      );
+      return query.addWhereClause(IdWhereClause.greaterThan(lower: id, includeLower: include));
     });
   }
 
-  QueryBuilder<PostLike, PostLike, QAfterWhereClause> idLessThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<PostLike, PostLike, QAfterWhereClause> idLessThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.lessThan(upper: id, includeUpper: include),
-      );
+      return query.addWhereClause(IdWhereClause.lessThan(upper: id, includeUpper: include));
     });
   }
 
@@ -285,115 +238,130 @@ extension PostLikeQueryWhere on QueryBuilder<PostLike, PostLike, QWhereClause> {
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerId,
+          includeLower: includeLower,
+          upper: upperId,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
-  QueryBuilder<PostLike, PostLike, QAfterWhereClause> userIdEqualToAnyPostId(
-      String userId) {
+  QueryBuilder<PostLike, PostLike, QAfterWhereClause> userIdEqualToAnyPostId(String userId) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'userId_postId',
-        value: [userId],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'userId_postId', value: [userId]),
+      );
     });
   }
 
-  QueryBuilder<PostLike, PostLike, QAfterWhereClause> userIdNotEqualToAnyPostId(
-      String userId) {
+  QueryBuilder<PostLike, PostLike, QAfterWhereClause> userIdNotEqualToAnyPostId(String userId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'userId_postId',
-              lower: [],
-              upper: [userId],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'userId_postId',
-              lower: [userId],
-              includeLower: false,
-              upper: [],
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'userId_postId',
+                lower: [],
+                upper: [userId],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'userId_postId',
+                lower: [userId],
+                includeLower: false,
+                upper: [],
+              ),
+            );
       } else {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'userId_postId',
-              lower: [userId],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'userId_postId',
-              lower: [],
-              upper: [userId],
-              includeUpper: false,
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'userId_postId',
+                lower: [userId],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'userId_postId',
+                lower: [],
+                upper: [userId],
+                includeUpper: false,
+              ),
+            );
       }
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterWhereClause> userIdPostIdEqualTo(
-      String userId, String postId) {
+    String userId,
+    String postId,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'userId_postId',
-        value: [userId, postId],
-      ));
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'userId_postId', value: [userId, postId]),
+      );
     });
   }
 
-  QueryBuilder<PostLike, PostLike, QAfterWhereClause>
-      userIdEqualToPostIdNotEqualTo(String userId, String postId) {
+  QueryBuilder<PostLike, PostLike, QAfterWhereClause> userIdEqualToPostIdNotEqualTo(
+    String userId,
+    String postId,
+  ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'userId_postId',
-              lower: [userId],
-              upper: [userId, postId],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'userId_postId',
-              lower: [userId, postId],
-              includeLower: false,
-              upper: [userId],
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'userId_postId',
+                lower: [userId],
+                upper: [userId, postId],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'userId_postId',
+                lower: [userId, postId],
+                includeLower: false,
+                upper: [userId],
+              ),
+            );
       } else {
         return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'userId_postId',
-              lower: [userId, postId],
-              includeLower: false,
-              upper: [userId],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'userId_postId',
-              lower: [userId],
-              upper: [userId, postId],
-              includeUpper: false,
-            ));
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'userId_postId',
+                lower: [userId, postId],
+                includeLower: false,
+                upper: [userId],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'userId_postId',
+                lower: [userId],
+                upper: [userId, postId],
+                includeUpper: false,
+              ),
+            );
       }
     });
   }
 }
 
-extension PostLikeQueryFilter
-    on QueryBuilder<PostLike, PostLike, QFilterCondition> {
-  QueryBuilder<PostLike, PostLike, QAfterFilterCondition> createdAtEqualTo(
-      DateTime value) {
+extension PostLikeQueryFilter on QueryBuilder<PostLike, PostLike, QFilterCondition> {
+  QueryBuilder<PostLike, PostLike, QAfterFilterCondition> createdAtEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdAt',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'createdAt', value: value),
+      );
     });
   }
 
@@ -402,11 +370,9 @@ extension PostLikeQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'createdAt',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(include: include, property: r'createdAt', value: value),
+      );
     });
   }
 
@@ -415,11 +381,9 @@ extension PostLikeQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'createdAt',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(include: include, property: r'createdAt', value: value),
+      );
     });
   }
 
@@ -430,22 +394,21 @@ extension PostLikeQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'createdAt',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'createdAt',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(FilterCondition.equalTo(property: r'id', value: value));
     });
   }
 
@@ -454,11 +417,9 @@ extension PostLikeQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(include: include, property: r'id', value: value),
+      );
     });
   }
 
@@ -467,11 +428,9 @@ extension PostLikeQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(include: include, property: r'id', value: value),
+      );
     });
   }
 
@@ -482,13 +441,15 @@ extension PostLikeQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'id',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
@@ -497,11 +458,9 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'postId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'postId', value: value, caseSensitive: caseSensitive),
+      );
     });
   }
 
@@ -511,12 +470,14 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'postId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'postId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -526,12 +487,14 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'postId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'postId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -543,14 +506,16 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'postId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'postId',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -559,11 +524,9 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'postId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.startsWith(property: r'postId', value: value, caseSensitive: caseSensitive),
+      );
     });
   }
 
@@ -572,53 +535,47 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'postId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.endsWith(property: r'postId', value: value, caseSensitive: caseSensitive),
+      );
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> postIdContains(
-      String value,
-      {bool caseSensitive = true}) {
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'postId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.contains(property: r'postId', value: value, caseSensitive: caseSensitive),
+      );
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> postIdMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'postId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'postId',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> postIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'postId',
-        value: '',
-      ));
+      return query.addFilterCondition(FilterCondition.equalTo(property: r'postId', value: ''));
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> postIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'postId',
-        value: '',
-      ));
+      return query.addFilterCondition(FilterCondition.greaterThan(property: r'postId', value: ''));
     });
   }
 
@@ -627,11 +584,9 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'userId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'userId', value: value, caseSensitive: caseSensitive),
+      );
     });
   }
 
@@ -641,12 +596,14 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'userId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'userId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -656,12 +613,14 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'userId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'userId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -673,14 +632,16 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'userId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'userId',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -689,11 +650,9 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'userId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.startsWith(property: r'userId', value: value, caseSensitive: caseSensitive),
+      );
     });
   }
 
@@ -702,62 +661,54 @@ extension PostLikeQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'userId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.endsWith(property: r'userId', value: value, caseSensitive: caseSensitive),
+      );
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> userIdContains(
-      String value,
-      {bool caseSensitive = true}) {
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'userId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.contains(property: r'userId', value: value, caseSensitive: caseSensitive),
+      );
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> userIdMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'userId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'userId',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> userIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'userId',
-        value: '',
-      ));
+      return query.addFilterCondition(FilterCondition.equalTo(property: r'userId', value: ''));
     });
   }
 
   QueryBuilder<PostLike, PostLike, QAfterFilterCondition> userIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'userId',
-        value: '',
-      ));
+      return query.addFilterCondition(FilterCondition.greaterThan(property: r'userId', value: ''));
     });
   }
 }
 
-extension PostLikeQueryObject
-    on QueryBuilder<PostLike, PostLike, QFilterCondition> {}
+extension PostLikeQueryObject on QueryBuilder<PostLike, PostLike, QFilterCondition> {}
 
-extension PostLikeQueryLinks
-    on QueryBuilder<PostLike, PostLike, QFilterCondition> {}
+extension PostLikeQueryLinks on QueryBuilder<PostLike, PostLike, QFilterCondition> {}
 
 extension PostLikeQuerySortBy on QueryBuilder<PostLike, PostLike, QSortBy> {
   QueryBuilder<PostLike, PostLike, QAfterSortBy> sortByCreatedAt() {
@@ -797,8 +748,7 @@ extension PostLikeQuerySortBy on QueryBuilder<PostLike, PostLike, QSortBy> {
   }
 }
 
-extension PostLikeQuerySortThenBy
-    on QueryBuilder<PostLike, PostLike, QSortThenBy> {
+extension PostLikeQuerySortThenBy on QueryBuilder<PostLike, PostLike, QSortThenBy> {
   QueryBuilder<PostLike, PostLike, QAfterSortBy> thenByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
@@ -848,31 +798,27 @@ extension PostLikeQuerySortThenBy
   }
 }
 
-extension PostLikeQueryWhereDistinct
-    on QueryBuilder<PostLike, PostLike, QDistinct> {
+extension PostLikeQueryWhereDistinct on QueryBuilder<PostLike, PostLike, QDistinct> {
   QueryBuilder<PostLike, PostLike, QDistinct> distinctByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdAt');
     });
   }
 
-  QueryBuilder<PostLike, PostLike, QDistinct> distinctByPostId(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PostLike, PostLike, QDistinct> distinctByPostId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'postId', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<PostLike, PostLike, QDistinct> distinctByUserId(
-      {bool caseSensitive = true}) {
+  QueryBuilder<PostLike, PostLike, QDistinct> distinctByUserId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'userId', caseSensitive: caseSensitive);
     });
   }
 }
 
-extension PostLikeQueryProperty
-    on QueryBuilder<PostLike, PostLike, QQueryProperty> {
+extension PostLikeQueryProperty on QueryBuilder<PostLike, PostLike, QQueryProperty> {
   QueryBuilder<PostLike, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');

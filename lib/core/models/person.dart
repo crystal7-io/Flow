@@ -1,17 +1,21 @@
+import 'package:isar/isar.dart';
+part 'person.g.dart';
+
+@embedded
 class Person {
   String id;
   String userName;
   String name;
   String profilePicturePath;
   String profilePictureShape;
-  final bool isStoryVisible;
-  final bool newStory;
+  bool isStoryVisible;
+  bool newStory;
 
   Person({
-    required this.id,
-    required this.userName,
-    required this.name,
-    required this.profilePicturePath,
+    this.id = '',
+    this.userName = '',
+    this.name = '',
+    this.profilePicturePath = '',
     this.profilePictureShape = 'circle',
     this.isStoryVisible = false,
     this.newStory = false,
@@ -41,16 +45,16 @@ class Person {
     };
   }
 
-  /// Alias for profilePicturePath used in some old components
+  @ignore
   String get pfpPath => profilePicturePath;
 }
 
 class FollowPerson extends Person {
   FollowPerson({
-    required super.id,
-    required super.name,
-    required super.userName,
-    required super.profilePicturePath,
+    super.id = '',
+    super.name = '',
+    super.userName = '',
+    super.profilePicturePath = '',
     super.profilePictureShape = 'circle',
     required this.isFollowing,
     super.isStoryVisible,

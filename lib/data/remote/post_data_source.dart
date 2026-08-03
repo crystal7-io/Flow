@@ -1,5 +1,5 @@
 import 'package:isar/isar.dart';
-import 'package:redesigned/core/models/post_like.dart';
+import 'package:redesigned/core/models/like/post_like.dart';
 
 /// Handles the operations related Post Database like Likes, Comments, etc
 class PostDataSource {
