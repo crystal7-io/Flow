@@ -8,8 +8,20 @@ import 'package:provider/provider.dart';
 import 'package:redesigned/core/models/models.dart';
 import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/data/mock_data.dart';
-import 'package:redesigned/data/repositories/comment_repository.dart';
+import 'package:redesigned/widgets/comment/comment_view_model.dart';
 
+/// Bottom sheet showing comments for a post, with a text field to add a new
+/// one at the bottom.
+///
+/// This is a dumb view now - all the fetching/pagination state lives in
+/// CommentsViewModel. Whoever opens this sheet is expected to wrap it in a
+/// ChangeNotifierProvider<CommentViewModel> scoped to the postId (see
+/// mobile_post.dart for how it's done), otherwise context.watch below will
+/// throw.
+///
+/// [controller] is handed to us by the DraggableScrollableSheet that hosts
+/// this widget - we attach a listener to it to detect when the user's
+/// scrolled near the bottom and trigger loading the next page.
 class CommentSheet extends StatefulWidget {
   const CommentSheet({super.key, required this.controller, required this.postId});
   final ScrollController controller;
@@ -20,23 +32,37 @@ class CommentSheet extends StatefulWidget {
 }
 
 class _CommentSheetState extends State<CommentSheet> {
-  late Future<List<Comment>> _commentsFuture;
-  List<Comment> _comments = [];
   final TextEditingController _commentController = TextEditingController();
+
+  /// How close to the bottom (in pixels) before we fire off the next page
+  /// request. Same value HomeViewModel uses for the main feed.
+  static const double _loadMoreThreshold = 200;
 
   @override
   void initState() {
     super.initState();
-    _commentsFuture = context.read<CommentsRepository>().getCommentsForPost(postId: widget.postId);
+    widget.controller.addListener(_onScroll);
   }
 
   @override
   void dispose() {
+    widget.controller.removeListener(_onScroll);
     _commentController.dispose();
     super.dispose();
   }
 
-  void _addComment() async {
+  void _onScroll() {
+    if (!widget.controller.hasClients) return;
+
+    final maxScroll = widget.controller.position.maxScrollExtent;
+    final currentOffset = widget.controller.offset;
+
+    if (maxScroll - currentOffset <= _loadMoreThreshold) {
+      context.read<CommentViewModel>().loadMoreComments();
+    }
+  }
+
+  void _addComment() {
     final text = _commentController.text.trim();
     if (text.isEmpty) return;
 
@@ -53,17 +79,7 @@ class _CommentSheetState extends State<CommentSheet> {
             profilePicturePath: linkToPfp,
           );
 
-    final newComment = await context.read<CommentsRepository>().addComment(
-      postId: widget.postId,
-      person: currentUser,
-      text: text,
-    );
-
-    if (!mounted) return;
-
-    setState(() {
-      _comments.insert(0, newComment);
-    });
+    context.read<CommentViewModel>().addComment(person: currentUser, text: text);
 
     // Scroll to top for new comment
     widget.controller.animateTo(0, duration: Durations.medium4, curve: Easing.emphasizedDecelerate);
@@ -90,6 +106,7 @@ class _CommentSheetState extends State<CommentSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final viewModel = context.watch<CommentViewModel>();
 
     return Column(
       children: [
@@ -106,60 +123,7 @@ class _CommentSheetState extends State<CommentSheet> {
         ),
 
         const SizedBox(height: 16),
-        Expanded(
-          child: FutureBuilder<List<Comment>>(
-            future: _commentsFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting && _comments.isEmpty) {
-                return const Center(
-                  child: SizedBox(height: 80, width: 80, child: IndeterminateLoadingIndicator()),
-                );
-              }
-
-              if (snapshot.hasError && _comments.isEmpty) {
-                return Center(
-                  child: Text(
-                    "Error loading comments",
-                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error),
-                  ),
-                );
-              }
-
-              // Store fetched list into state if not already set
-              if (snapshot.hasData && _comments.isEmpty) {
-                _comments = List.from(snapshot.data!);
-              }
-
-              if (_comments.isEmpty) {
-                return Center(
-                  child: Text(
-                    "No comments yet",
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                controller: widget.controller,
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
-                itemCount: _comments.length,
-                itemBuilder: (context, index) {
-                  final comment = _comments[index];
-                  return _buildCommentItem(comment)
-                      .animate()
-                      .fadeIn(
-                        delay: (index * 80).ms,
-                        duration: 250.ms,
-                        curve: Easing.standardDecelerate,
-                      )
-                      .move(begin: const Offset(0, 64), duration: 400.ms, curve: Easing.standard);
-                },
-              );
-            },
-          ),
-        ),
+        Expanded(child: _buildCommentsList(theme, viewModel)),
 
         // Bottom Comment Input Field
         SafeArea(
@@ -227,6 +191,60 @@ class _CommentSheetState extends State<CommentSheet> {
           ),
         ),
       ],
+    );
+  }
+
+  /// Handles the four states the list can be in: first load, error on first
+  /// load, empty, and loaded (optionally with a "loading next page" row
+  /// tacked on the end).
+  Widget _buildCommentsList(ThemeData theme, CommentViewModel viewModel) {
+    if (viewModel.isLoading) {
+      return const Center(
+        child: SizedBox(height: 80, width: 80, child: IndeterminateLoadingIndicator()),
+      );
+    }
+
+    if (viewModel.hasError && viewModel.comments.isEmpty) {
+      return Center(
+        child: Text(
+          "Error loading comments",
+          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error),
+        ),
+      );
+    }
+
+    if (viewModel.comments.isEmpty) {
+      return Center(
+        child: Text(
+          "No comments yet",
+          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+        ),
+      );
+    }
+
+    final comments = viewModel.comments;
+    final showLoader = viewModel.isLoadingNextPage;
+
+    return ListView.builder(
+      controller: widget.controller,
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+      itemCount: comments.length + (showLoader ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (index == comments.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: Center(
+              child: SizedBox(height: 80, width: 80, child: IndeterminateLoadingIndicator()),
+            ),
+          );
+        }
+
+        final comment = comments[index];
+        return _buildCommentItem(comment)
+            .animate()
+            .fadeIn(delay: (index * 80).ms, duration: 250.ms, curve: Easing.standardDecelerate)
+            .move(begin: const Offset(0, 64), duration: 400.ms, curve: Easing.standard);
+      },
     );
   }
 

@@ -8,7 +8,9 @@ import 'package:redesigned/core/models/post.dart';
 import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/core/utils/format_post_timestamp.dart';
 import 'package:redesigned/data/repositories/post_repository.dart';
-import 'package:redesigned/widgets/comment_sheet.dart';
+import 'package:redesigned/data/repositories/comment_repository.dart';
+import 'package:redesigned/widgets/comment/comment_view_model.dart';
+import 'package:redesigned/widgets/comment/comment_sheet.dart';
 import 'package:redesigned/widgets/profile_picture_viewer.dart';
 import 'package:redesigned/widgets/share_sheet.dart';
 import 'package:redesigned/widgets/utils/m3expressive/button_group.dart';
@@ -190,9 +192,15 @@ class _MobilePostState extends State<MobilePost> {
                           expand: false,
                           snap: true,
                           builder: (context, scrollController) {
-                            return CommentSheet(
-                              controller: scrollController,
-                              postId: widget.post.postId,
+                            return ChangeNotifierProvider<CommentViewModel>(
+                              create: (context) => CommentViewModel(
+                                context.read<CommentsRepository>(),
+                                widget.post.postId,
+                              ),
+                              child: CommentSheet(
+                                controller: scrollController,
+                                postId: widget.post.postId,
+                              ),
                             );
                           },
                         ),
