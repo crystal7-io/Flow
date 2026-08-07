@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_animate/flutter_animate.dart' hide ShimmerEffect;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_3p/material_loading_indicator.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -9,13 +9,14 @@ import 'package:redesigned/core/models/models.dart';
 import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/data/mock_data.dart';
 import 'package:redesigned/widgets/comment/comment_view_model.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// Bottom sheet showing comments for a post, with a text field to add a new
 /// one at the bottom.
 ///
 /// This is a dumb view now - all the fetching/pagination state lives in
 /// CommentsViewModel. Whoever opens this sheet is expected to wrap it in a
-/// ChangeNotifierProvider<CommentViewModel> scoped to the postId (see
+/// ChangeNotifierProvider&lt;CommentViewModel&gt; scoped to the postId (see
 /// mobile_post.dart for how it's done), otherwise context.watch below will
 /// throw.
 ///
@@ -85,22 +86,28 @@ class _CommentSheetState extends State<CommentSheet> {
     widget.controller.animateTo(0, duration: Durations.medium4, curve: Easing.emphasizedDecelerate);
   }
 
-  String _formatDateTime(dynamic dateTime) {
-    if (dateTime is String) {
-      return dateTime;
-    } else if (dateTime is DateTime) {
-      final difference = DateTime.now().difference(dateTime);
-      if (difference.inDays > 0) {
-        return '${difference.inDays}d ago';
-      } else if (difference.inHours > 0) {
-        return '${difference.inHours}h ago';
-      } else if (difference.inMinutes > 0) {
-        return '${difference.inMinutes}m ago';
-      } else {
-        return 'Just now';
-      }
+  String _formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays >= 365) {
+      final years = (difference.inDays / 365).floor();
+      return '${years}y ago';
+    } else if (difference.inDays >= 30) {
+      final months = (difference.inDays / 30).floor();
+      return '${months}mo ago';
+    } else if (difference.inDays >= 7) {
+      final weeks = (difference.inDays / 7).floor();
+      return '${weeks}w ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
     }
-    return 'Just now';
   }
 
   @override
@@ -199,8 +206,73 @@ class _CommentSheetState extends State<CommentSheet> {
   /// tacked on the end).
   Widget _buildCommentsList(ThemeData theme, CommentViewModel viewModel) {
     if (viewModel.isLoading) {
-      return const Center(
-        child: SizedBox(height: 80, width: 80, child: IndeterminateLoadingIndicator()),
+      // return const Center(
+      //   child: SizedBox(height: 80, width: 80, child: IndeterminateLoadingIndicator()),
+      // );
+      return ListView(
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          SizedBox(height: 16),
+          Skeletonizer(
+            effect: ShimmerEffect(
+              baseColor: ColorScheme.of(context).surfaceBright,
+              highlightColor: ColorScheme.of(context).surfaceContainerHighest,
+              duration: Duration(milliseconds: 1500),
+            ),
+            enabled: true,
+            child: CommentSkeleton(),
+          ),
+          SizedBox(height: 16),
+          Skeletonizer(
+            effect: ShimmerEffect(
+              baseColor: ColorScheme.of(context).surfaceBright,
+              highlightColor: ColorScheme.of(context).surfaceContainerHighest,
+              duration: Duration(milliseconds: 1500),
+            ),
+            enabled: true,
+            child: CommentSkeleton(),
+          ),
+          SizedBox(height: 16),
+          Skeletonizer(
+            effect: ShimmerEffect(
+              baseColor: ColorScheme.of(context).surfaceBright,
+              highlightColor: ColorScheme.of(context).surfaceContainerHighest,
+              duration: Duration(milliseconds: 1500),
+            ),
+            enabled: true,
+            child: CommentSkeleton(),
+          ),
+          SizedBox(height: 16),
+          Skeletonizer(
+            effect: ShimmerEffect(
+              baseColor: ColorScheme.of(context).surfaceBright,
+              highlightColor: ColorScheme.of(context).surfaceContainerHighest,
+              duration: Duration(milliseconds: 1500),
+            ),
+            enabled: true,
+            child: CommentSkeleton(),
+          ),
+          SizedBox(height: 16),
+          Skeletonizer(
+            effect: ShimmerEffect(
+              baseColor: ColorScheme.of(context).surfaceBright,
+              highlightColor: ColorScheme.of(context).surfaceContainerHighest,
+              duration: Duration(milliseconds: 1500),
+            ),
+            enabled: true,
+            child: CommentSkeleton(),
+          ),
+          SizedBox(height: 16),
+          Skeletonizer(
+            effect: ShimmerEffect(
+              baseColor: ColorScheme.of(context).surfaceBright,
+              highlightColor: ColorScheme.of(context).surfaceContainerHighest,
+              duration: Duration(milliseconds: 1500),
+            ),
+            enabled: true,
+            child: CommentSkeleton(),
+          ),
+        ],
       );
     }
 
@@ -315,7 +387,7 @@ class _CommentSheetState extends State<CommentSheet> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Text(
-                        "${_formatDateTime(comment.dateTime)}  •  ${comment.likes} Likes",
+                        "${_formatDateTime(comment.parsedDateTime)}  •  ${comment.likes} Likes",
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
@@ -325,6 +397,70 @@ class _CommentSheetState extends State<CommentSheet> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CommentSkeleton extends StatelessWidget {
+  const CommentSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final surfaceColor = ColorScheme.of(context).surfaceContainer;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Profile Picture Placeholder
+          Skeleton.leaf(
+            child: Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(color: surfaceColor, shape: BoxShape.circle),
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          // Content Placeholder
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Username Line
+                Container(width: 100, height: 14, color: surfaceColor),
+                const SizedBox(height: 4),
+
+                // Comment Bubble Placeholder
+                Skeleton.leaf(
+                  child: Container(
+                    width: double.infinity,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: surfaceColor,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(4),
+                        bottomLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 6),
+
+                // Date & Likes Meta Line
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Container(width: 110, height: 12, color: surfaceColor),
+                ),
+              ],
+            ),
           ),
         ],
       ),
