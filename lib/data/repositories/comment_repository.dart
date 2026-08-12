@@ -48,4 +48,9 @@ class CommentsRepository {
 
     return comment;
   }
+
+  /// Toggles a like to a comment
+  Future<void> toggleCommentLike({required String commentId, required String userId}) async {
+    await _commentsDataSource.toggleLike(userId: userId, commentId: commentId);
+  }
 }

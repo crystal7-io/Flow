@@ -194,8 +194,9 @@ class _MobilePostState extends State<MobilePost> {
                           builder: (context, scrollController) {
                             return ChangeNotifierProvider<CommentViewModel>(
                               create: (context) => CommentViewModel(
-                                context.read<CommentsRepository>(),
-                                widget.post.postId,
+                                commentsRepository: context.read<CommentsRepository>(),
+                                postId: widget.post.postId,
+                                currentUserId: 'test_user',
                               ),
                               child: CommentSheet(
                                 controller: scrollController,

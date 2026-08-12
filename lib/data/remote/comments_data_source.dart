@@ -70,6 +70,43 @@ class CommentsDataSource {
     });
   }
 
+  /// Toggles a like in the CommentLikes table and keeps [Comment.likes] / [Comment.isLiked] in sync.
+  Future<void> toggleLike({required String userId, required String commentId}) async {
+    final isar = Isar.getInstance();
+    if (isar == null) return;
+
+    await isar.writeTxn(() async {
+      final existingLike = await isar.commentLikes
+          .filter()
+          .userIdEqualTo(userId)
+          .and()
+          .commentIdEqualTo(commentId)
+          .findFirst();
+
+      final comment = await isar.comments.filter().commentIdEqualTo(commentId).findFirst();
+
+      if (existingLike != null) {
+        // Unlike: delete the record if it exists
+        await isar.commentLikes.delete(existingLike.id);
+        if (comment != null) {
+          comment.likes = comment.likes > 0 ? comment.likes - 1 : 0;
+          comment.isLiked = false;
+          await isar.comments.put(comment);
+        }
+      } else {
+        // Like: create the record if it doesn't exist
+        await isar.commentLikes.put(
+          CommentLike(userId: userId, commentId: commentId, createdAt: DateTime.now()),
+        );
+        if (comment != null) {
+          comment.likes += 1;
+          comment.isLiked = true;
+          await isar.comments.put(comment);
+        }
+      }
+    });
+  }
+
   /// Private method to seed initial mock comments from JSON asset into Isar on first launch.
   Future<void> _seedInitialCommentsIfNeeded() async {
     final isar = Isar.getInstance();

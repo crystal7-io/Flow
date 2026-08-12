@@ -18,12 +18,27 @@ class CommentViewModel extends ChangeNotifier {
   final CommentsRepository _commentsRepository;
   final String postId;
 
-  CommentViewModel(this._commentsRepository, this.postId) {
+  /// UserId of currently logged in user.
+  /// It will be used to add the userId to Comments and CommentLike
+  final String currentUserId;
+
+  CommentViewModel({
+    required this._commentsRepository,
+    required this.postId,
+    required this.currentUserId,
+  }) {
     getInitialComments();
   }
 
   List<Comment> _comments = [];
   List<Comment> get comments => _comments;
+
+  /// IDs of comments the current user has liked. Kept alongside
+  /// Comment.isLiked (rather than as the only source of truth) since the
+  /// list is what actually gets rendered - this is here mainly so the UI
+  /// can do quick "is this id liked" checks without scanning _comments.
+  final Set<String> _likedCommentIds = {};
+  Set<String> get likedCommentIds => _likedCommentIds;
 
   /// True only for the very first load (used to show the big centered
   /// spinner). Not used again after that, even while loading more pages.
@@ -52,6 +67,9 @@ class CommentViewModel extends ChangeNotifier {
 
     try {
       _comments = await _commentsRepository.getCommentsForPost(postId: postId);
+      _likedCommentIds
+        ..clear()
+        ..addAll(_comments.where((c) => c.isLiked).map((c) => c.commentId));
     } catch (e) {
       _hasError = true;
     } finally {
@@ -82,6 +100,7 @@ class CommentViewModel extends ChangeNotifier {
         _hasMoreData = false;
       } else {
         _comments.addAll(nextPage);
+        _likedCommentIds.addAll(nextPage.where((c) => c.isLiked).map((c) => c.commentId));
       }
     } catch (e) {
       // Leave _hasMoreData as-is so the next scroll tick just tries again
@@ -103,5 +122,42 @@ class CommentViewModel extends ChangeNotifier {
     );
     _comments.insert(0, newComment);
     notifyListeners();
+  }
+
+  /// Toggles like state for [commentId]. Updates the UI immediately
+  /// (optimistic), then calls the repository, which checks the DB itself
+  /// to decide whether to like or unlike. If the repository call fails,
+  /// the change is rolled back so the UI doesn't end up showing a like that
+  /// never actually got persisted.
+  Future<void> toggleCommentLike(String commentId) async {
+    final index = _comments.indexWhere((c) => c.commentId == commentId);
+    if (index == -1) return;
+
+    final comment = _comments[index];
+    final wasLiked = comment.isLiked;
+
+    // Optimistic update - flip immediately so the tap feels instant.
+    comment.isLiked = !wasLiked;
+    comment.likes += wasLiked ? -1 : 1;
+    if (comment.isLiked) {
+      _likedCommentIds.add(commentId);
+    } else {
+      _likedCommentIds.remove(commentId);
+    }
+    notifyListeners();
+
+    try {
+      await _commentsRepository.toggleCommentLike(userId: currentUserId, commentId: commentId);
+    } catch (e) {
+      // Roll back on failure so UI matches what's actually persisted.
+      comment.isLiked = wasLiked;
+      comment.likes += wasLiked ? 1 : -1;
+      if (wasLiked) {
+        _likedCommentIds.add(commentId);
+      } else {
+        _likedCommentIds.remove(commentId);
+      }
+      notifyListeners();
+    }
   }
 }

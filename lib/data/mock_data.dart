@@ -783,7 +783,7 @@ List<Account> accounts = [
       userName: "alkahol.iz.nat.fo.kidz",
       profilePicturePath:
           'https://drive.google.com/uc?export=view&id=1foQW29-ihziU6MMFYY7mc0VxLCYGkT81',
-      profilePictureShape: 'boom',
+      profilePictureShape: 'pixelCircle',
     ),
     followers: [],
     following: [],
@@ -907,14 +907,6 @@ List<Story> myStories = [
     type: StoryType.image,
     uploadTime: '23 min',
   ),
-];
-
-List<Note> notes = [
-  Note(person: accounts[9].person, note: "Goodbye"),
-  Note(person: accounts[10].person, note: "Finally completed my long work !"),
-  Note(person: accounts[24].person, note: "blahhh!"),
-  Note(person: accounts[16].person, note: "I'll be sleeping whole day today"),
-  Note(person: accounts[19].person, note: "I am never cooking fried tofu again 😭"),
 ];
 
 List<ChatText> chatTexts = [

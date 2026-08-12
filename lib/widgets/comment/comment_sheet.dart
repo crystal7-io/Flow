@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart' hide ShimmerEffect;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:material_3p/material_loading_indicator.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,7 @@ import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/data/mock_data.dart';
 import 'package:redesigned/widgets/comment/comment_view_model.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'dart:math';
 
 /// Bottom sheet showing comments for a post, with a text field to add a new
 /// one at the bottom.
@@ -298,6 +301,14 @@ class _CommentSheetState extends State<CommentSheet> {
     final showLoader = viewModel.isLoadingNextPage;
 
     return ListView.builder(
+      // separatorBuilder: (context, index) =>
+      //     Padding(
+      //           padding: .symmetric(vertical: 16, horizontal: 32),
+      //           child: WavyDivider(thickness: 1),
+      //         )
+      //         .animate()
+      //         .fadeIn(delay: (index * 100).ms, duration: 250.ms, curve: Easing.standardDecelerate)
+      //         .move(begin: const Offset(0, 86), duration: 400.ms, curve: Easing.standard),
       controller: widget.controller,
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
       itemCount: comments.length + (showLoader ? 1 : 0),
@@ -312,7 +323,7 @@ class _CommentSheetState extends State<CommentSheet> {
         }
 
         final comment = comments[index];
-        return _buildCommentItem(comment)
+        return _buildCommentItem(comment, viewModel)
             .animate()
             .fadeIn(delay: (index * 80).ms, duration: 250.ms, curve: Easing.standardDecelerate)
             .move(begin: const Offset(0, 64), duration: 400.ms, curve: Easing.standard);
@@ -320,11 +331,11 @@ class _CommentSheetState extends State<CommentSheet> {
     );
   }
 
-  Widget _buildCommentItem(Comment comment) {
+  Widget _buildCommentItem(Comment comment, CommentViewModel viewModel) {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -362,23 +373,55 @@ class _CommentSheetState extends State<CommentSheet> {
                     ),
                     const SizedBox(height: 4),
 
-                    Container(
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceBright,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(4),
-                          bottomLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      child: Text(
-                        comment.text,
-                        style: TextTheme.of(context).bodyLarge!.copyWith(
-                          color: theme.colorScheme.onSurface,
-                          fontFamily: "Google Sans Flex",
-                        ),
+                    GestureDetector(
+                      onDoubleTap: () {
+                        HapticFeedback.lightImpact();
+                        viewModel.toggleCommentLike(comment.commentId);
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            margin: .only(right: 12),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.surfaceBright,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4),
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              ),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                            child: Text(
+                              comment.text,
+                              style: TextTheme.of(context).bodyLarge!.copyWith(
+                                color: theme.colorScheme.onSurface,
+                                fontFamily: "Google Sans Flex",
+                              ),
+                            ),
+                          ),
+                          viewModel.likedCommentIds.contains(comment.commentId)
+                              ? Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      HapticFeedback.lightImpact();
+                                      viewModel.toggleCommentLike(comment.commentId);
+                                    },
+                                    child:
+                                        Icon(
+                                          Symbols.favorite,
+                                          fill: 1,
+                                          color: ColorScheme.of(context).error,
+                                        ).animate().scale(
+                                          curve: const EaseOutBackMore(),
+                                          duration: Duration(milliseconds: 300),
+                                        ),
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                        ],
                       ),
                     ),
 
@@ -387,9 +430,11 @@ class _CommentSheetState extends State<CommentSheet> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Text(
-                        "${_formatDateTime(comment.parsedDateTime)}  •  ${comment.likes} Likes",
+                        "${_formatDateTime(comment.parsedDateTime)}  •  ${NumberFormat.compact().format(comment.likes)} Likes",
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
+                          fontFamily: "Google Sans Flex",
+                          fontVariations: [.weight(500), .width(75)],
                         ),
                       ),
                     ),
@@ -465,5 +510,16 @@ class CommentSkeleton extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class EaseOutBackMore extends Curve {
+  final double overshoot;
+
+  const EaseOutBackMore([this.overshoot = 4]);
+
+  @override
+  double transformInternal(double t) {
+    return --t * t * ((overshoot + 1) * t + overshoot) + 1;
   }
 }
