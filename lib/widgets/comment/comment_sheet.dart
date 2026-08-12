@@ -11,6 +11,7 @@ import 'package:redesigned/core/models/models.dart';
 import 'package:redesigned/core/utils/dynamic_avatar_clipper.dart';
 import 'package:redesigned/data/mock_data.dart';
 import 'package:redesigned/widgets/comment/comment_view_model.dart';
+import 'package:redesigned/widgets/comment/swipe_to_reply.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'dart:math';
 
@@ -37,6 +38,7 @@ class CommentSheet extends StatefulWidget {
 
 class _CommentSheetState extends State<CommentSheet> {
   final TextEditingController _commentController = TextEditingController();
+  final FocusNode _commentFocusNode = FocusNode();
 
   /// How close to the bottom (in pixels) before we fire off the next page
   /// request. Same value HomeViewModel uses for the main feed.
@@ -52,6 +54,7 @@ class _CommentSheetState extends State<CommentSheet> {
   void dispose() {
     widget.controller.removeListener(_onScroll);
     _commentController.dispose();
+    _commentFocusNode.dispose();
     super.dispose();
   }
 
@@ -87,6 +90,22 @@ class _CommentSheetState extends State<CommentSheet> {
 
     // Scroll to top for new comment
     widget.controller.animateTo(0, duration: Durations.medium4, curve: Easing.emphasizedDecelerate);
+  }
+
+  /// Fired when a comment bubble is swiped past the reply threshold.
+  ///
+  /// There's no reply/threading backend yet, so for now this just seeds the
+  /// input field with an @mention and focuses it - a reasonable stand-in
+  /// until real reply functionality (e.g. parentCommentId) exists. Swap the
+  /// body of this out once that's wired up; SwipeToReplyBubble itself
+  /// doesn't need to change.
+  void _onReply(Comment comment) {
+    final mention = '@${comment.person.userName} ';
+    if (!_commentController.text.startsWith(mention)) {
+      _commentController.text = mention;
+      _commentController.selection = TextSelection.collapsed(offset: mention.length);
+    }
+    _commentFocusNode.requestFocus();
   }
 
   String _formatDateTime(DateTime dateTime) {
@@ -160,6 +179,7 @@ class _CommentSheetState extends State<CommentSheet> {
                       maxLines: 5,
                       minLines: 1,
                       controller: _commentController,
+                      focusNode: _commentFocusNode,
                       style: theme.textTheme.bodyLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                         height: 1,
@@ -301,14 +321,6 @@ class _CommentSheetState extends State<CommentSheet> {
     final showLoader = viewModel.isLoadingNextPage;
 
     return ListView.builder(
-      // separatorBuilder: (context, index) =>
-      //     Padding(
-      //           padding: .symmetric(vertical: 16, horizontal: 32),
-      //           child: WavyDivider(thickness: 1),
-      //         )
-      //         .animate()
-      //         .fadeIn(delay: (index * 100).ms, duration: 250.ms, curve: Easing.standardDecelerate)
-      //         .move(begin: const Offset(0, 86), duration: 400.ms, curve: Easing.standard),
       controller: widget.controller,
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
       itemCount: comments.length + (showLoader ? 1 : 0),
@@ -373,55 +385,58 @@ class _CommentSheetState extends State<CommentSheet> {
                     ),
                     const SizedBox(height: 4),
 
-                    GestureDetector(
-                      onDoubleTap: () {
-                        HapticFeedback.lightImpact();
-                        viewModel.toggleCommentLike(comment.commentId);
-                      },
-                      child: Stack(
-                        children: [
-                          Container(
-                            margin: .only(right: 12),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.surfaceBright,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4),
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
+                    SwipeToReplyBubble(
+                      onReply: () => _onReply(comment),
+                      child: GestureDetector(
+                        onDoubleTap: () {
+                          HapticFeedback.lightImpact();
+                          viewModel.toggleCommentLike(comment.commentId);
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              margin: .only(right: 12),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surfaceBright,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4),
+                                  bottomLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                              child: Text(
+                                comment.text,
+                                style: TextTheme.of(context).bodyLarge!.copyWith(
+                                  color: theme.colorScheme.onSurface,
+                                  fontFamily: "Google Sans Flex",
+                                ),
                               ),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                            child: Text(
-                              comment.text,
-                              style: TextTheme.of(context).bodyLarge!.copyWith(
-                                color: theme.colorScheme.onSurface,
-                                fontFamily: "Google Sans Flex",
-                              ),
-                            ),
-                          ),
-                          viewModel.likedCommentIds.contains(comment.commentId)
-                              ? Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.lightImpact();
-                                      viewModel.toggleCommentLike(comment.commentId);
-                                    },
-                                    child:
-                                        Icon(
-                                          Symbols.favorite,
-                                          fill: 1,
-                                          color: ColorScheme.of(context).error,
-                                        ).animate().scale(
-                                          curve: const EaseOutBackMore(),
-                                          duration: Duration(milliseconds: 300),
-                                        ),
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                        ],
+                            viewModel.likedCommentIds.contains(comment.commentId)
+                                ? Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        HapticFeedback.lightImpact();
+                                        viewModel.toggleCommentLike(comment.commentId);
+                                      },
+                                      child:
+                                          Icon(
+                                            Symbols.favorite,
+                                            fill: 1,
+                                            color: ColorScheme.of(context).error,
+                                          ).animate().scale(
+                                            curve: const EaseOutBackMore(),
+                                            duration: Duration(milliseconds: 300),
+                                          ),
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                          ],
+                        ),
                       ),
                     ),
 
